@@ -1,0 +1,5 @@
+
+%%%CALL -r 35 -i data/EN_35W3.data
+%%%OUTPUT
+Error in call. Please use:
+ -l <language>  [-r <randomnumber> -i <inputfile>]
