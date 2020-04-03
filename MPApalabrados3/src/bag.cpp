@@ -51,7 +51,7 @@ void Bag::define(const Language &l)
     
     for (int i = 0 ; i < letterSet.size() ; i++ ) {
         for ( int j = 0 ; j < l.getFrequency( letterSet[i] ) ; j++ ) {
-            set(n, i);
+            set(n, letterSet[i]);
             n ++ ;
         }
     }

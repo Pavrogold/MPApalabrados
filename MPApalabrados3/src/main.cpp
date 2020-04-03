@@ -105,27 +105,22 @@ int main(int nargs, char * args[]) {
             errorBreak (ERROR_ARGUMENTS, "") ; 
     }
     
-    cout << endl << "ID:" << random << endl ; 
-    
     if (lang == "")
         errorBreak(ERROR_ARGUMENTS, "");
     language.setLanguage(lang) ;
     
-    if (secuencia == ""){
+    if (secuencia == "")
         bag.define(language) ;
-        bag.setRandom(random);
-    }
-    else{
+    else
         bag.set(toISO(secuencia));
-    }
     
-    cout << "BAG ("<<bag.size()<<"): " << toUTF(bag.to_string()) << endl;
     player.add (bag.extract(7)) ;
     
+    
+    cout << endl << "ID:" << random ; 
     cout << "\nALLOWED LETTERS: " << toUTF(language.getLetterSet()) << endl;
     cout << "BAG ("<<bag.size()<<"): " << toUTF(bag.to_string()) << endl;
     cout << "PLAYER: " << toUTF(player.to_string()) << endl;
-    
     
     
     cout << "READ: ";
