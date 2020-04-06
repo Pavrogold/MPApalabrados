@@ -36,29 +36,13 @@ void Player::clear() {
     letters[0] = '\0' ;
 }
 
-bool Player:: isValid(const std::string &s) const 
-{
-    char copia [MAXPLAYER+1] ;
-    strcpy (copia, letters );
+bool Player:: isValid(const std::string &s) const {
     bool valid = true, encontrado ;
-    /* 
      Player tmp=*this;
+     
      if (!tmp.extract(s))
-        valid = false ;*/
-    
-    if ( s.length()>strlen(letters) || s.length()<1 )
         valid = false ;
-    
-    for ( int i = 0 ; i<s.size() && valid ; i++ ) {
-        encontrado = false ;
-        
-        for ( int j = 0 ; copia[j] != '\0' && !encontrado ; j++ ) 
-            if ( s[i]  == copia[j] ) {
-                encontrado = true ;
-                removeCString(copia, j) ;
-            }
-        valid = encontrado ;
-    }
+     
     return valid ;
 }
 

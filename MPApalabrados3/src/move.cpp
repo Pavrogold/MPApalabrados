@@ -98,6 +98,21 @@ void Move:: print(std::ostream &os) const {
 }
 
 void Move:: read(std::istream &is){
+    
+    char h;
+    string l;
+    int r, c;
+
+    is >> h ;
+    is >> r ;
+    is >> c ;
+    is >> l;
+
+    set(r, c, h, l) ;
+    
+    /*
+     * Comprobes if row and column are digits.
+     * 
     char h;
     string l;
     string fil, col;
@@ -115,4 +130,5 @@ void Move:: read(std::istream &is){
     int c = stoi(col);
     
     set(r, c, h, toUTF(l)) ;
+     */
 }
