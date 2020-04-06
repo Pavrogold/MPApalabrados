@@ -60,7 +60,7 @@ public:
 	 * @param s The string that is queried
 	 * @return @retval true if the move can be supported by the stored letters, @retval false otherwise
 	 */
-	bool isValid(const std::string s) const; 
+	bool isValid(const std::string &s) const; 
         
         
 	/**

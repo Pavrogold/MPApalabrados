@@ -4,23 +4,19 @@
  * @note To be implemented by students
  */
 #include <string>
+#include <cstring>
+#include <iostream>
 #include <cassert>
+#include <stdio.h>
+
 #include "move.h"
-#include "iostream"
+
 
 using namespace std;
 
-Move:: Move(){
-    row = 0;
-    column = 0;
-    ishorizontal = false;
-    letters = "";
-    score = 0;
-}
+Move:: Move() : row(0), column(0), ishorizontal(false), letters(""), score(0) {}
 
 void Move:: set(int &r, int &c, char &h, const std::string  &l){
-    
-    assert (r>=0 && c>=0);
     setRow(r);
     setCol(c);
     setHorizontal(h) ;
@@ -28,19 +24,20 @@ void Move:: set(int &r, int &c, char &h, const std::string  &l){
 }
 
 void Move:: setRow(int &r){
-    assert( r >= 0);
+    assert(r >= 0);
     row = r;
 }
 
 void Move:: setCol(int &c){
-    assert( c >= 0);
+    assert(c >= 0);
     column = c;
 }
 
 void Move:: setHorizontal(char &h){
-    
     if ( h == 'H' || h == 'h')
         ishorizontal = true;
+    else
+        ishorizontal = false ;
 }
 
 void Move:: setLetters(const std::string &l){
@@ -56,18 +53,15 @@ int Move:: findScore(const Language &l) const {
     if (!l.query(letters))
         n = -1;
     
-    else{
-    
-        for (int i = 0; i < letters.length(); i++){
+    else
+        for (int i = 0; i < letters.length(); i++)
             n += l.getScore(letters[i]);
-        }
-    }
     
     return n;
 }
 
 void Move:: setScore(int &s){
-    assert( s >= -2);
+    assert(s > -2);
     score = s;
 }
 
@@ -106,12 +100,19 @@ void Move:: print(std::ostream &os) const {
 void Move:: read(std::istream &is){
     char h;
     string l;
-    int r, c;
+    string fil, col;
     
-    is >> h ;
-    is >> r ;
-    is >> c ;
-    is >> l;
+    is >> h >> fil >> col >> l;
+    
+    assert (fil.length()<3 && col.length()<3);
+    
+    for (int i=0; i<fil.length(); i++)
+        assert (isdigit(fil[i]));
+    for (int i=0; i<col.length(); i++)
+        assert (isdigit(col[i]));
+    
+    int r = stoi(fil);
+    int c = stoi(col);
     
     set(r, c, h, toUTF(l)) ;
 }

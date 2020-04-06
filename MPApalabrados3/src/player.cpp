@@ -36,17 +36,20 @@ void Player::clear() {
     letters[0] = '\0' ;
 }
 
-bool Player:: isValid(const std::string s) const 
+bool Player:: isValid(const std::string &s) const 
 {
     char copia [MAXPLAYER+1] ;
     strcpy (copia, letters );
-    
-    bool valido = true, encontrado ;
+    bool valid = true, encontrado ;
+    /* 
+     Player tmp=*this;
+     if (!tmp.extract(s))
+        valid = false ;*/
     
     if ( s.length()>strlen(letters) || s.length()<1 )
-        valido = false ;
+        valid = false ;
     
-    for ( int i = 0 ; i<s.size() && valido ; i++ ) {
+    for ( int i = 0 ; i<s.size() && valid ; i++ ) {
         encontrado = false ;
         
         for ( int j = 0 ; copia[j] != '\0' && !encontrado ; j++ ) 
@@ -54,23 +57,26 @@ bool Player:: isValid(const std::string s) const
                 encontrado = true ;
                 removeCString(copia, j) ;
             }
-        valido = encontrado ;
+        valid = encontrado ;
     }
-    return valido ;
+    return valid ;
 }
 
 bool Player:: extract(const std::string &s)
 {
     bool valid=true;
-    char *p ;
+    char *ptr ;
     char final[MAXPLAYER+1];
+    
+    if ( s.length()>strlen(letters) || s.length()<1 )
+        valid = false ;
     
     strcpy(final, letters);
     for (int i=0; i<s.size() && valid; i++) {
-        p=strchr(final,s[i]);
-        if (p>0) {
-            removeCString(final,p-final);
-        } else
+        ptr=strchr(final,s[i]);
+        if (ptr!=nullptr)       //ptr>0
+            removeCString(final,ptr-final);
+        else
             valid = false;
     }
     if (valid) {
@@ -79,21 +85,17 @@ bool Player:: extract(const std::string &s)
     }
     return valid;
     
-    /* bool valido = isValid (s), encontrado ;
+    /* bool valid = isValid (s), encontrado ;
     
-    for ( int i=0 ; s[i] != '\0' && valido ; i++ )
-    {
+    for ( int i=0 ; i<s.size() && valid ; i++ ) {
         encontrado = false ;
-        
         for (int j = 0 ; letters[j] != '\0' && !encontrado ; j++ )
-        
-            if ( s[i] == letters[j] )
-            {
+            if ( s[i] == letters[j] ) {
                 encontrado = true ;
                 removeCString(letters, j) ;
             }
     }
-    return valido ; */
+    return valid ; */
 }
 
 void Player:: add(const string frombag){

@@ -61,11 +61,11 @@ int main(int nargs, char * args[]) {
     Language language;
     Move move;
     
-    string word, lang="", goodmoves="", badmoves="", ifilename="", ofilename="", result;
-    int random=-1, nwords=0, score=0 ;
-    const string END="@" ; 
+    cout << endl << endl ;
     
-    bool valid, is_word, barg=false ;
+    string word, lang="", goodmoves="", badmoves="", ifilename="", ofilename="", secuencia="", result;
+    int random=-1, nwords=0, score=0, word_score;
+    const string END="@" ; 
     
     ifstream ifile; 
     ofstream ofile;
@@ -73,13 +73,15 @@ int main(int nargs, char * args[]) {
     ostream *output;
     
     input=&cin ;
-    string secuencia="" ;
+    output=&cout ;
+    //ofile.open("example.txt");
+    //output=&ofile;
+    move.print(*output);
     
     if (nargs<1 || nargs>9 || nargs%2==0)
         errorBreak (ERROR_ARGUMENTS, "") ;
     
     string s;
-    
     for (int i=1 ; i<nargs;) {
         s=args[i++];
         
@@ -88,6 +90,8 @@ int main(int nargs, char * args[]) {
             language.setLanguage(lang);
         }
         else if (s=="-r") {
+            if (!isdigit(*args[i])) 
+                errorBreak (ERROR_ARGUMENTS, "") ; 
             random = atoi(args[i++]);
             bag.setRandom(random) ;
         }
@@ -98,9 +102,8 @@ int main(int nargs, char * args[]) {
                 errorBreak (ERROR_OPEN, ifilename) ;
             input=&ifile;
         }
-        else if (s=="-b") {
+        else if (s=="-b") 
             secuencia=args[i++] ;
-        }
         else
             errorBreak (ERROR_ARGUMENTS, "") ; 
     }
@@ -117,20 +120,15 @@ int main(int nargs, char * args[]) {
     player.add (bag.extract(7)) ;
     
     
-    cout << endl << "ID:" << random ; 
-    cout << "\nALLOWED LETTERS: " << toUTF(language.getLetterSet()) << endl;
-    cout << "BAG ("<<bag.size()<<"): " << toUTF(bag.to_string()) << endl;
-    cout << "PLAYER: " << toUTF(player.to_string()) << endl;
+    *output << endl << "ID:" << random ; 
+    *output << "\nALLOWED LETTERS: " << toUTF(language.getLetterSet()) << endl;
+    *output << "BAG ("<<bag.size()<<"): " << toUTF(bag.to_string()) << endl;
+    *output << "PLAYER: " << toUTF(player.to_string()) << endl;
     
     
-    cout << "READ: ";
+    *output << "READ: ";
     move.read(*input) ;
     word = move.getLetters() ;
-    
-    int word_score;
-    bool fichero = input!=&cin ;
-    
-    // @warning cout - cerr
     
     
     while (player.size()>1 && word != END) {
@@ -141,113 +139,44 @@ int main(int nargs, char * args[]) {
             player.add(bag.extract(7-player.size())) ;
             
             word_score = move.findScore(language);
-            score += word_score ;
             move.setScore(word_score);
+            score += word_score ;
             
-            is_word = language.query(word);
-            
-            if (is_word) {
-                cout << " FOUND!\n\n" ;
+            if (language.query(word)) {
+                *output << " FOUND!\n\n" ;
                 goodmoves += word + " - ";
                 nwords ++ ;
             }
             else {
-                cout << " NOT REGISTERED!\n\n" ;
+                *output << " NOT REGISTERED!\n\n" ;
                 badmoves += word + " - " ;
             } 
         } 
         
         else {
-            cout << "INVALID! LESS THAN 2 LETTERS OR LETTERS NOT FOUND IN PLAYER.\n\n" ; 
+            *output << "INVALID! LESS THAN 2 LETTERS OR LETTERS NOT FOUND IN PLAYER.\n\n" ; 
             badmoves += word + " - " ;
         }
-        cout << endl ;
 
-        cout << "BAG ("<<bag.size()<<"): " << toUTF(bag.to_string()) << endl;
-        cout << "PLAYER: " << toUTF(player.to_string()) << endl ;
-        cout << "READ: ";
+        *output << "\nBAG ("<<bag.size()<<"): " << toUTF(bag.to_string()) << endl;
+        *output << "PLAYER: " << toUTF(player.to_string()) << endl ;
+        *output << "READ: ";
+        move.read(*input) ;
         if (ifile.eof())
             errorBreak(ERROR_DATA, ifilename);
-        move.read(*input) ;
         word = move.getLetters() ;
-        cout << word << endl;
-        
+        *output << word << endl;
+        //move.print(*output);
     }
     
     if (input != &cin)
         ifile.close() ;
     
-    
-    /// @warning: Check arguments
-    /// @warning: Process arguments
-
-	/*
-	1. El main() recibe como parámetro obligatorio "-l <ID>" y co-
-	mo parámetros opcionales "-i <file>" y "-r <random>" ,
-	en cualquier orden entre los tres. Si se especifica "-i" se leen
-	los datos desde ese fichero, si no, se leen desde el teclado. Si
-	se especifica "-r" se define el aleatorio con el número indica-
-	do, si no, no se define aleatorio.
-         * OK
-         * 
-	2. Crear una instancia de la clase Language con el anterior ID y
-	mostrar el conjunto de caracteres permitido para ese lenguaje.
-	3. Crear una instancia de la clase Bag, inicializar el generador de
-	números aleatorios con el número aleatorio anterior, si es que
-	se ha indicado, y definir su contenido en base al lenguaje que
-	se ha declarado anteriormente.
-         * OK
-         * 
-	4. Crear una instancia de la clase Player y llenarla por comple-
-	to con caracteres de la bolsa. Este objeto player deberá estar
-	siempre ordenado de la A a la Z.
-         * OK
-         * 
-	5. Repetir la siguiente secuencia hasta que se lea un movimiento
-	con la palabra "@"
-         * OK
-         * 
-	a) Usar el método read(...) para leer un movimiento (desde
-	teclado o desde el fichero de entrada, según el parámetro
-	"-i" ). Los valores para isHorizontal, row y column se leen
-	pero se van a ignorar en el resto del programa, pues sólo se
-	usará letters. En las anteriores prácticas se han usado pa-
-	labras con letras controladas, pues, al fin y al cabo, todas
-	provenı́an de bag, las cuales provienen del diccionario, y
-	todas siguen el mismo patrón del juego scrabble: las letras
-	son mayúsculas, no contienen tildes ni diéresis, aunque al-
-	gunos caracteres internacionales están soportados, como
-	la Ñ. Aunque no se ha usado hasta ahora, al incluir langua-
-	ge.h en cualquier proyecto, también se incluye la definición
-	de esta constante:
-	static const std::string ALPHABET=toISO(” ABCDEFGHIJKLMNOPQRSTUVWXYZÑ”);
-	Esto quiere decir que cualquier palabra que se consulte en
-	el diccionario debe estar representada con caracteres de
-	ese ALPHABET Esta es la primera vez que exponemos el
-	programa a leer datos externos no controlados, por lo que
-	habrı́a que transformar cada palabra de juego que se lee,
-	a una palabra expresada en ese alfabeto. Y eso es lo que
-	hace la función normalizeWord(...)
-         * OK
-         * 
-	b) Si la palabra leı́da es válida para el valor de Player (al me-
-	nos ha de tener dos caracteres) entonces se anota la pala-
-	bra, se calcula la puntuación de la palabra según el diccio-
-	nario y se anota, se eliminan las letras de player, se sacan
-	nuevas letras de bag para rellenar player, y se sigue ju-
-	gando. Ya nos estamos acercando al ciclo de juego de la
-	práctica final.
-	c) Si la palabra leı́da no es compatible con el valor de player,
-	se desecha y se lee el siguiente movimiento.
-	6. Terminar con la llamada a HallOfFame para visualizar los re-
-	sultados.
-	7. Si en cualquier momento se presenta un error en los argumen-
-	tos, en la apertura de ficheros o en la lectura de datos del fiche-
-	ro, se debe usar la función errorBreak(...) para notificar el error
-	y parar el programa.
-	*/
+    if (output != &cout)
+        ofile.close() ;
 
     HallOfFame(lang, random, bag, player, nwords, score, goodmoves);
+    *output << endl ;
     return 0;
 }
 
