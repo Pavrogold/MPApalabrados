@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=MPApalabrados3
+PROJECTNAME=MPApalabrados4
 
 # Active Configuration
 DEFAULTCONF=Debug
