@@ -21,6 +21,9 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <logicalFolder name="src" displayName="src" projectFiles="true">
+        <itemPath>src/movelist.cpp</itemPath>
+      </logicalFolder>
       <itemPath>src/bag.cpp</itemPath>
       <itemPath>src/main.cpp</itemPath>
       <itemPath>src/move.cpp</itemPath>
@@ -41,6 +44,7 @@
   <sourceRootList>
     <Elem>../local/include</Elem>
     <Elem>include</Elem>
+    <Elem>src</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -87,6 +91,8 @@
       </item>
       <item path="src/move.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="src/movelist.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="src/player.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
@@ -129,6 +135,8 @@
       <item path="src/main.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/move.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/movelist.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/player.cpp" ex="false" tool="1" flavor2="0">
       </item>

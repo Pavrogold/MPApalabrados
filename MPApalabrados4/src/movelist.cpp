@@ -14,19 +14,22 @@
 using namespace std;
     
 void Movelist::allocate(int n) {
-    move=new Movelist [n];
+    moves=new Movelist [n];
 }
 
 void Movelist::deallocate() {
-    delete []move;
+    delete []moves;
 }
 
-void Movelist::copy(const Movelist &ml); { // hacer que this-> sea un clon de ml  @warning ??
-    move=ml;
+void Movelist::copy(const Movelist &ml) { // hacer que this-> sea un clon de ml  (cada elemento es igual, NO apuntan a la misma direccion)
+    nMove=ml.size();
+    allocate(nMove);
+    for (int i=0; i<nMove ; i++ ) 
+        moves[i]=ml.get(i);
 }
 
 Movelist:: Movelist(): nMove (0) {
-    allocate[5]; //numero inicial?
+    moves=nullptr;
 }
 
 Movelist:: Movelist(int nmov): nMove(0) {
@@ -40,13 +43,9 @@ Movelist::Movelist(const Movelist &orig) {
 Movelist:: ~Movelist() {
     deallocate();
 }
- /**
-    * @brief Assign the content of the parameter  object to *this
-    * @param orig Right hand side of an assignment
- */
         
-void Movelist:: assign (const Movelist& orig){
-    
+void Movelist:: assign (const Movelist& orig){  //el objeto apunta al mismo espacio de memoria que orig
+    this=&orig; // @warning ??
 }
 
     /**
@@ -57,17 +56,12 @@ void Movelist:: assign (const Movelist& orig){
 operator=(orig); */
 
 Move Movelist:: get(int p) {
-    assert (p>-1 && p<nMOve);
+    assert (p>-1 && p<nMove);
     return move[p];
 }
 
 void Movelist:: set(int p, const Move &m) {
     assert (p>-1 && p<nMove);
-    /*
-     assert (p>-1 &&p<=nMove);
-     * if (p==nMove)
-     *  ...
-     */
     move[p]=m;
 }
 
@@ -94,7 +88,6 @@ void Movelist:: add(const Move &mov) {
 
 void Movelist:: remove(const Move &mov) {
     int pos = find(mov);
-    
     if (pos!=-1) 
         remove(pos);
 }
@@ -104,7 +97,6 @@ void Movelist:: remove(int p) {
     for (int i=p; i<nMove-1; i++)
         move[i]=move[i+1];
     nMove--;
-    
 }
 
 void Movelist:: zip(const Language &l) {
@@ -118,42 +110,38 @@ void Movelist:: zip(const Language &l) {
     }
 }
 
-	/**
-	 * @brief Resets the set and leaves it empty 
-	 */
-   clear();
-	/**
-	 * @brief Computes the whole score of the list of movements by adding the individual scores of each movement contained in the set
-	 * of movements. It does not need the language to compute the scores because this is done inside each movement. 
-	 * See move.h for more details. If at least one movement scores -1, then 
-	 * the full list of movements will score -1.
-	 * @return The score of the full set of movements
-	 */
+void Movelist:: clear() {
+    deallocate();
+    moves=nullptr;
+    nMove=0;
+}
+
 int Movelist:: getScore() {
     int nscore=0, score=0;
-    for (int i=0; i<nMove && nscore!=-1; i++) {
-        nscore = move[i]->getScore();
+    bool valid=true;
+    for (int i=0; i<nMove && valid; i++) {
+        nscore = moves[i]->getScore();
         score += nscore;
+        if (nscore==-1) {
+            valid=false;
+            score=-1;
+        }
     }
+    return score;
 }
-	/**
-	 * @brief Insert the data of the list of movements into an ostream (either cout or file)
-	 * @param os The ostream
-	 * @param scores If true, it prints the scores of every single movement. False by default
-	 * @return true if there was no problen inserting/writing data
-	 */
-	bool print(std::ostream &os, bool scores=false) const;
-	/**
-	 * @brief Reads the movement from an istream until the last movement is marked
-	 * as a "H 0 0 @" movement, that is, "H 0 0 _" normalized
-	 * @param is The istream
-	 * @return True if there was no problem reading data, false otherwise.
-	 */
-	bool read(std::istream &is);
- 
- */
 
-bool Movelist::print(std::ostream &os, bool scores) const {
+bool Movelist:: read(const std::istream &is) {
+    bool res=true;
+    do {
+        moves[i]->read(is);
+        if (is.bad())
+            res=false;
+    } while ( (normalizeWord(moves[i]->getLetters())!="_" || moves[i]->getCol()!=0 &|| moves[i]->getRow()!=0 || !moves[i]->isHorizontal()) && res ) ;
+    return res;
+}
+ 
+
+bool Movelist::print(const std::ostream &os, bool scores) const {
     bool res=true;
     for (int i=0; i<size() && res; i++) {
         get(i).print(os);

@@ -109,26 +109,4 @@ void Move:: read(std::istream &is){
     is >> l;
 
     set(r, c, h, l) ;
-    
-    /*
-     * Comprobes if row and column are digits.
-     * 
-    char h;
-    string l;
-    string fil, col;
-    
-    is >> h >> fil >> col >> l;
-    
-    assert (fil.length()<3 && col.length()<3);
-    
-    for (int i=0; i<fil.length(); i++)
-        assert (isdigit(fil[i]));
-    for (int i=0; i<col.length(); i++)
-        assert (isdigit(col[i]));
-    
-    int r = stoi(fil);
-    int c = stoi(col);
-    
-    set(r, c, h, toUTF(l)) ;
-     */
 }

@@ -26,10 +26,12 @@ private:
 	 * @param n The number of movements to be reserved
 	 */
 	void allocate(int n);
+        
 	/**
 	 * @brief Frees the memory reserved
 	 */
 	void deallocate();
+        
 	/**
 	 * @brief Copy an existing set of movements
 	 * @param ml The set of movements to be copied
@@ -79,7 +81,7 @@ public:
 	 * @precond @p p must be in the interval [0, size()) otherwise, it throws an exception
 	 * @return A copy of the movement in the position p.
 	 */
-	 get(int p);
+	Move get(int p);
 
 	/**
 	 * @brief Inserts a new movement in the (already existing) position of the set of movements
@@ -87,49 +89,53 @@ public:
 	 * @precond @p p must be in the interval [0, size()) otherwise, it throws an exception
 	 * @param m The movement to insert
 	 */
-	set(p, m);
+	void set(p, m);
 
 	/**
 	 * @brief Query the number of existing movements in the class 
 	 * @return The size of the set of movements
 	 */
-	inline size() { };
+	inline size() ;
 
 	/**
 	 * @brief Searches a movement in the set of recorded movements. Two movements are equal if all their data members coincide.
 	 * @param mov The movement to be seeked
 	 * @return The position of the movement in the set, @retval -1 when the movement is not found
 	 */
-	find(mov);
+	int find(const Move &mov);
 
 	/**
 	 * @brief Adds a copy of the movement at the end of the existing set, incrementing its size in one more movement
 	 * @param mov The new movement
 	 */
-	add(mov);
+	void add(const Move &mov);
+        
 	/**
 	 * @brief Remove the movement from the list and reduces the size in one less movement. If the specified movement
 	 * does not exist, the method does nothing 
 	 * @param mov The movement to be removed
 	 */
-	remove(mov);
+	void remove(const Move &mov);
+        
 	/**
 	 * @brief Remove the movement stored in the position p and reduces the size in one less movement.
 	 * @param p The position to be removed
 	 * @precond @p p must be in the interval [0, size()) otherwise, it throws an exception
 	 */
-	remove(p);
+	void remove(int p);
+        
 	/**
-	 *	@brief Removes all the movements that contain a word that does not have at least 2 letters
+         * @brief Removes all the movements that contain a word that does not have at least 2 letters
 	 * or that does not exist in the given language 
 	 * @param l The language 
 	 */
-	zip(l);
+	void zip(const Language &l);
 
 	/**
 	 * @brief Resets the set and leaves it empty 
 	 */
-   clear();
+        void clear();
+   
 	/**
 	 * @brief Computes the whole score of the list of movements by adding the individual scores of each movement contained in the set
 	 * of movements. It does not need the language to compute the scores because this is done inside each movement. 
@@ -137,21 +143,23 @@ public:
 	 * the full list of movements will score -1.
 	 * @return The score of the full set of movements
 	 */
-	getScore();
+	int getScore();
 	/**
 	 * @brief Insert the data of the list of movements into an ostream (either cout or file)
 	 * @param os The ostream
 	 * @param scores If true, it prints the scores of every single movement. False by default
 	 * @return true if there was no problen inserting/writing data
 	 */
-	bool print(std::ostream &os, bool scores=false) const;
+	bool print(const std::ostream &os, bool scores=false) const;
 	/**
 	 * @brief Reads the movement from an istream until the last movement is marked
 	 * as a "H 0 0 @" movement, that is, "H 0 0 _" normalized
 	 * @param is The istream
 	 * @return True if there was no problem reading data, false otherwise.
 	 */
-	bool read(std::istream &is);
+	bool read(const std::istream &is);
+        
+        int getnMove () const ;
 	
 };
 

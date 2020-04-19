@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/bag.o \
 	${OBJECTDIR}/src/main.o \
 	${OBJECTDIR}/src/move.o \
+	${OBJECTDIR}/src/movelist.o \
 	${OBJECTDIR}/src/player.o
 
 
@@ -79,6 +80,11 @@ ${OBJECTDIR}/src/move.o: src/move.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/move.o src/move.cpp
+
+${OBJECTDIR}/src/movelist.o: src/movelist.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/movelist.o src/movelist.cpp
 
 ${OBJECTDIR}/src/player.o: src/player.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
