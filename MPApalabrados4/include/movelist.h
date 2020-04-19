@@ -5,6 +5,9 @@
  * @warning Review data types, consts and references
  */
 
+//Alumno 1: Pablo Millan Cubero
+//Alumno 2: Yesenia Gonzalez Davila 
+
 #ifndef MOVELIST_H
 #define MOVELIST_H
 
@@ -48,13 +51,13 @@ public:
 	 * @brief Constructor for @p n number of movements
 	 * @param nmov Number of movements to store
 	 */
-	Movelist(nmov);
+	Movelist(int nmov);
 
 	/**
 	 * @brief Copy constructor
 	 * @param orig The list of movements to be copied
 	 */
-	Movelist(orig); 
+	Movelist(const Movelist &orig); 
 
 	/**
 	 * @brief Destructor
@@ -81,7 +84,7 @@ public:
 	 * @precond @p p must be in the interval [0, size()) otherwise, it throws an exception
 	 * @return A copy of the movement in the position p.
 	 */
-	Move get(int p);
+	Move get(int p) const;
 
 	/**
 	 * @brief Inserts a new movement in the (already existing) position of the set of movements
@@ -89,13 +92,14 @@ public:
 	 * @precond @p p must be in the interval [0, size()) otherwise, it throws an exception
 	 * @param m The movement to insert
 	 */
-	void set(p, m);
+	void set(int p, const Move &m);
 
 	/**
 	 * @brief Query the number of existing movements in the class 
 	 * @return The size of the set of movements
 	 */
-	inline size() ;
+	//inline int size() const ;
+        int size() const ;
 
 	/**
 	 * @brief Searches a movement in the set of recorded movements. Two movements are equal if all their data members coincide.
@@ -143,23 +147,21 @@ public:
 	 * the full list of movements will score -1.
 	 * @return The score of the full set of movements
 	 */
-	int getScore();
+	int getScore() const;
 	/**
 	 * @brief Insert the data of the list of movements into an ostream (either cout or file)
 	 * @param os The ostream
 	 * @param scores If true, it prints the scores of every single movement. False by default
 	 * @return true if there was no problen inserting/writing data
 	 */
-	bool print(const std::ostream &os, bool scores=false) const;
+	bool print(std::ostream &os, bool scores=false) const;
 	/**
 	 * @brief Reads the movement from an istream until the last movement is marked
 	 * as a "H 0 0 @" movement, that is, "H 0 0 _" normalized
 	 * @param is The istream
 	 * @return True if there was no problem reading data, false otherwise.
 	 */
-	bool read(const std::istream &is);
-        
-        int getnMove () const ;
+	bool read(std::istream &is);
 	
 };
 

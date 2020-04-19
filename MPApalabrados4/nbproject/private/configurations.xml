@@ -13,6 +13,8 @@
         <gdb_interceptlist>
           <gdbinterceptoptions gdb_all="false" gdb_unhandled="true" gdb_unexpected="true"/>
         </gdb_interceptlist>
+        <gdb_signals>
+        </gdb_signals>
         <gdb_options>
           <DebugOptions>
           </DebugOptions>
@@ -24,11 +26,14 @@
       </nativedebugger>
       <runprofile version="9">
         <runcommandpicklist>
-          <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}"-l ES -r 100 -i data/ES_100_ERROR.data -b AEFCZDEEOILLCOSEAEPAESDAIEALAEOAOBUUXNEGTETIQOACEUOÑDSVAYANGJTBRUEORNORHLSIATRHIORPDUMNDACSMSNI</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" -l ES -r 100 -i data/ES_100_ERROR.data -b AEFCZDEEOILLCOSEAEPAESDAIEALAEOAOBUUXNEGTETIQOACEUOÑDSVAYANGJTBRUEORNORHLSIATRHIORPDUMNDACSMSNI</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}"-r 100 -p data/ES_100_ERROR.data</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -r 100 -p data/ES_100_ERROR.data</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -l EN -r 71 -p data/EN_71W20.data -b BUOGSDTFNNRODEIVQPETCAWPUMLATYDITLNAOESLAEEEIIANIKVSHOORARIOOIXTEGOBRGZMYAAUWAEERNFUIRTEDSCELJNHEI</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}" -l ES -r 100 -i data/ES_100_ERROR.data -b AEFCZDEEOILLCOSEAEPAESDAIEALAEOAOBUUXNEGTETIQOACEUOÑDSVAYANGJTBRUEORNORHLSIATRHIORPDUMNDACSMSNI</runcommand>
+        <runcommand>"${OUTPUT_PATH}" -l EN -r 71 -p data/EN_71W20.data -b BUOGSDTFNNRODEIVQPETCAWPUMLATYDITLNAOESLAEEEIIANIKVSHOORARIOOIXTEGOBRGZMYAAUWAEERNFUIRTEDSCELJNHEI</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <console-type>2</console-type>

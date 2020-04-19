@@ -14,7 +14,7 @@
 using namespace std;
     
 void Movelist::allocate(int n) {
-    moves=new Movelist [n];
+    moves=new Move [n];
 }
 
 void Movelist::deallocate() {
@@ -33,7 +33,7 @@ Movelist:: Movelist(): nMove (0) {
 }
 
 Movelist:: Movelist(int nmov): nMove(0) {
-    allocate[nmov];
+    allocate(nmov);
 }
 
 Movelist::Movelist(const Movelist &orig) {
@@ -45,7 +45,8 @@ Movelist:: ~Movelist() {
 }
         
 void Movelist:: assign (const Movelist& orig){  //el objeto apunta al mismo espacio de memoria que orig
-    this=&orig; // @warning ??
+    moves=orig.moves; //@warning ??
+    nMove=orig.nMove;
 }
 
     /**
@@ -55,34 +56,41 @@ void Movelist:: assign (const Movelist& orig){  //el objeto apunta al mismo espa
 	 
 operator=(orig); */
 
-Move Movelist:: get(int p) {
+Move Movelist:: get(int p) const {
     assert (p>-1 && p<nMove);
-    return move[p];
+    return moves[p];
 }
 
 void Movelist:: set(int p, const Move &m) {
     assert (p>-1 && p<nMove);
-    move[p]=m;
+    moves[p]=m;
 }
 
-inline int Movelist:: size() {
+int Movelist:: size() const {
     return nMove; 
 }
 
-int Movelist::find(const Move &mov) {
+int Movelist::find(const Move &mov) {  // Se ha añadido metodo en move para comparar dos moves (equals)
     bool found=false;
     int pos=-1;
     
-    for (int i=0; i<nMove && !found; i++) 
-        if (move[i]==mov) {
+    for (int i=0; i<nMove && !found; i++)  {
+        if (mov.equals(moves[i])) {
             found=true;
             pos=i;
         }
+    }
     return pos;
 }
 
+
+
 void Movelist:: add(const Move &mov) {
-    move[nMove]=mov;
+    Move *nuevo = new Move [nMove+1] ;
+    for (int i = 0; i < nMove; i++)
+        nuevo[i] = moves[i];
+    delete[] nuevo;
+    moves = nuevo;
     nMove++;
 }
 
@@ -95,14 +103,16 @@ void Movelist:: remove(const Move &mov) {
 void Movelist:: remove(int p) {
     assert (p>-1 && p<nMove);
     for (int i=p; i<nMove-1; i++)
-        move[i]=move[i+1];
+        moves[i]=moves[i+1];
     nMove--;
 }
 
 void Movelist:: zip(const Language &l) {
     string word;
+    Move mov;
     for (int i=0; i<nMove; ) {
-        word = move[i]->getLetters();
+        mov=moves[i];
+        word = mov.getLetters();
         if (!l.query(word) || word.size()<2 )
             remove (i);
         else
@@ -116,11 +126,13 @@ void Movelist:: clear() {
     nMove=0;
 }
 
-int Movelist:: getScore() {
+int Movelist:: getScore() const {
     int nscore=0, score=0;
     bool valid=true;
+    Move m;
     for (int i=0; i<nMove && valid; i++) {
-        nscore = moves[i]->getScore();
+        m=moves[i];
+        nscore =  m.getScore();
         score += nscore;
         if (nscore==-1) {
             valid=false;
@@ -130,18 +142,21 @@ int Movelist:: getScore() {
     return score;
 }
 
-bool Movelist:: read(const std::istream &is) {
+bool Movelist:: read(std::istream &is) {
     bool res=true;
+    int i=0;
+    Move m;
     do {
-        moves[i]->read(is);
+        moves[i].read(is);
         if (is.bad())
             res=false;
-    } while ( (normalizeWord(moves[i]->getLetters())!="_" || moves[i]->getCol()!=0 &|| moves[i]->getRow()!=0 || !moves[i]->isHorizontal()) && res ) ;
+        i++;
+    } while ( (normalizeWord(moves[i].getLetters())!="_" || moves[i].getCol()!=0 || moves[i].getRow()!=0 || !moves[i].isHorizontal()) && res ) ;
     return res;
 }
  
 
-bool Movelist::print(const std::ostream &os, bool scores) const {
+bool Movelist::print(std::ostream &os, bool scores) const {
     bool res=true;
     for (int i=0; i<size() && res; i++) {
         get(i).print(os);

@@ -11,6 +11,7 @@
       </logicalFolder>
       <itemPath>include/bag.h</itemPath>
       <itemPath>../local/include/language.h</itemPath>
+      <itemPath>include/movelist.h</itemPath>
       <itemPath>include/player.h</itemPath>
       <itemPath>../local/include/wordlist.h</itemPath>
     </logicalFolder>
@@ -83,6 +84,8 @@
       </item>
       <item path="include/move.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/movelist.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/player.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/bag.cpp" ex="false" tool="1" flavor2="0">
@@ -127,6 +130,8 @@
       <item path="include/mi_random.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/move.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/movelist.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/player.h" ex="false" tool="3" flavor2="0">
       </item>

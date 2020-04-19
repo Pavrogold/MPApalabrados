@@ -8,6 +8,8 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
+#include <cassert>
 
 #include "language.h"
 #include "wordlist.h"
@@ -61,8 +63,7 @@ int main(int nargs, char * args[]) {
             acceptedmovements, /// Movements accepted in the game
             rejectedmovements; /// Movements not accepted in the game
     
-    int 
-        random=-1;
+    int random=-1;
     
     string
         lang = "",
@@ -86,30 +87,34 @@ int main(int nargs, char * args[]) {
     if (nargs<1 || nargs>9 || nargs%2==0)
         errorBreak (ERROR_ARGUMENTS, "") ;
     
+    
+    
+    //else if + else final de error en caso de que no sea ninguna de las opciones validas
+    //isdigit solo acepta puntero a char.
+    string s;
     for (int i = 1; i < nargs; i++){
-        
-        if (arg[i] == "-r"){
-            if (!isdigit(args[i])) 
+        s=args[i];
+        i++;
+        if (s == "-r"){
+            if (!isdigit(*args[i])) 
                 errorBreak (ERROR_ARGUMENTS, "") ; 
-            random = atoi(arg[i++]);
+            random = atoi(args[i]);
             bag.setRandom(random);
         }
-        
-        if (arg[i] == "-l"){
-            lang = arg[i++];
+        else if (s == "-l"){
+            lang = args[i];
             language.setLanguage(lang);
         }
-            
-        if (arg[i] == "-p"){
-            savefile = arg[i++];
+        else if (s == "-p"){
+            savefile = args[i];
             playfile.open(savefile.c_str());
             if (!playfile) 
                 errorBreak (ERROR_OPEN, ifilename) ;
         }
-        
-        if (arg[i] == "-b"){
-            secuencia = toISO(arg[i++]);
-        }
+        else if (s == "-b")
+            secuencia = toISO(args[i]);
+        else 
+            errorBreak (ERROR_ARGUMENTS, "") ; 
     }
     
     if (savefile == "" || lang == "")
@@ -117,7 +122,12 @@ int main(int nargs, char * args[]) {
     
     cout << "\nConjunto de caracteres: " << language.getLetterSet() << endl;
     
-    bag.define(language);
+    // bag.define(language); --> secuencia -b!
+    if (secuencia == "")
+        bag.define(language) ;
+    else
+        bag.set(toISO(secuencia));
+    
     player.add(bag.extract(7));
     
     *output << endl << "ID:" << random ; 
@@ -154,7 +164,6 @@ int main(int nargs, char * args[]) {
             
             *output << "ACCEPTED: " << word << endl;
         }
-        
         else{
             
             rejectedmovements.add(move);
@@ -163,6 +172,13 @@ int main(int nargs, char * args[]) {
         }
     }
 
+    //faltaba:
+    if (input != &cin)
+        ifile.close() ;
+    
+    if (output != &cout)
+        ofile.close() ;
+    
     HallOfFame(language, random, bag, player, 
             movements, legalmovements, acceptedmovements, rejectedmovements);
     return 0;

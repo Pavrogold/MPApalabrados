@@ -110,3 +110,8 @@ void Move:: read(std::istream &is){
 
     set(r, c, h, l) ;
 }
+
+bool Move:: equals (const Move &mov) const {
+    bool equals = (mov.getLetters()==letters && mov.getCol()==column && mov.getRow()==row && mov.isHorizontal()==ishorizontal);
+    return equals;
+}
