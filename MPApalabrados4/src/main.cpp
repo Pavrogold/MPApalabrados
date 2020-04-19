@@ -7,7 +7,14 @@
 
 
 #include <iostream>
+#include <fstream>
 
+#include "language.h"
+#include "wordlist.h"
+#include "bag.h"
+#include "player.h"
+#include "move.h"
+#include "movelist.h"
 
 using namespace std;
 
@@ -53,60 +60,110 @@ int main(int nargs, char * args[]) {
             legalmovements,    /// Movements with legal words upon the dictionary
             acceptedmovements, /// Movements accepted in the game
             rejectedmovements; /// Movements not accepted in the game
-    /// ...
-    ///@warning: Complete the code
-    /// ...
-/*
-1. El main() recibe como parámetros obligatorios "-l <ID>" y
-"-p <playfile>" y como parámetro opcional "-r <random>" ,
-en cualquier orden entre los tres. En este caso, el parámetro
-"-p" hace referencia a una partida guardada, la cual, por aho-
-ra, sólo tiene los movimientos. Si se especifica "-r" se define
-el aleatorio con el número indicado, si no, no se define aleatorio.
- * 
-2. Crear una instancia de la clase Language con el anterior ID y
-mostrar el conjunto de caracteres permitido para ese lenguaje.
- * 
-3. Crear una instancia de la clase Bag, inicializar el generador de
-números aleatorios con el número aleatorio anterior, si es que
-se ha indicado, y definir su contenido en base al lenguaje que
-se ha declarado anteriormente.
- * 
-4. Crear una instancia de la clase Player y llenarla por comple-
-to con caracteres de la bolsa. Este objeto player deberá estar
-siempre ordenado de la A a la Z.
- * 
-5. Crear una instancia de la clase bf Movelist llamada original
-y leer todos los movimientos desde el fichero indicado en el
-parámetro -p usando el método read(...)
- * 
-6. Crear una instancia de Movelist llamada legal que contenga
-sólo los movimientos de original que están en el diccionario
-del lenguaje elegido. Usar, para ello, el método zip(...)
- * 
-7. Crear dos instancias adicionales de Movelist y llamarlas accepted
-y rejected
- * 
-8. Recorrer toda la lista de movimientos leı́da y, por cada uno de
-ellos.
-a) Si el movimiento está en el diccionario, añadir la palabra a
-la lista accepted , marcarla, calcular su puntuación, según
-el idioma, y mostrarlo en la pantalla.
-b) En otro caso añadirla a la lista rejected y marcarla.
-c) Todos estos mensajes en pantalla no afectan a la validación
-de la práctica, ası́ que el alumno puede implementarlas a
-su propio parecer.
- * 
-9. Terminar con la llamada a HallOfFame para visualizar los re-
-sultados. Esta llamada es la que se utilizará para validar los
-datos.
- * 
-10. Si en cualquier momento se presenta un error en los argumen-
-tos, en la apertura de ficheros o en la lectura de datos del fiche-
-ro, se debe usar la función errorBreak(...) para notificar el error
-y parar el programa.
-*/
-    HallOfFame(language, Id, bag, player, 
+    
+    int 
+        random=-1;
+    
+    string
+        lang = "",
+        ifilename = "",
+        ofilename="",
+        secuencia ="",
+        savefile ="",
+        word = "",
+        result;   
+    
+    ifstream ifile; 
+    ofstream ofile;
+    istream *input; 
+    ostream *output;
+    
+    ifstream playfile;
+    
+    input=&cin;
+    output=&cout;
+    
+    if (nargs<1 || nargs>9 || nargs%2==0)
+        errorBreak (ERROR_ARGUMENTS, "") ;
+    
+    for (int i = 1; i < nargs; i++){
+        
+        if (arg[i] == "-r"){
+            if (!isdigit(args[i])) 
+                errorBreak (ERROR_ARGUMENTS, "") ; 
+            random = atoi(arg[i++]);
+            bag.setRandom(random);
+        }
+        
+        if (arg[i] == "-l"){
+            lang = arg[i++];
+            language.setLanguage(lang);
+        }
+            
+        if (arg[i] == "-p"){
+            savefile = arg[i++];
+            playfile.open(savefile.c_str());
+            if (!playfile) 
+                errorBreak (ERROR_OPEN, ifilename) ;
+        }
+        
+        if (arg[i] == "-b"){
+            secuencia = toISO(arg[i++]);
+        }
+    }
+    
+    if (savefile == "" || lang == "")
+        errorBreak(ERROR_ARGUMENTS, "");
+    
+    cout << "\nConjunto de caracteres: " << language.getLetterSet() << endl;
+    
+    bag.define(language);
+    player.add(bag.extract(7));
+    
+    *output << endl << "ID:" << random ; 
+    *output << "\nALLOWED LETTERS: " << toUTF(language.getLetterSet()) << endl;
+    *output << "BAG ("<<bag.size()<<"): " << toUTF(bag.to_string()) << endl;
+    *output << "PLAYER: " << toUTF(player.to_string()) << endl;
+    
+    //leer el playfile e introducirlo en original
+    move.read(playfile);
+    word = move.getLetters();
+    
+    while (!playfile.eof()){
+        movements.add(move);
+        move.read(playfile);
+        word = move.getLetters();
+    }
+    
+    playfile.close();
+    word = "";
+    
+    //copiar original a legal y eliminar los no legales
+    legalmovements.assign(movements);
+    legalmovements.zip(language);
+    
+    for (int i = 0; i < legalmovements.size(); i++){
+        
+        move = legalmovements.get(i);
+        word = move.getLetters();
+        
+        if (player.isValid(word)){
+            
+            player.extract(word);
+            acceptedmovements.add(move);
+            
+            *output << "ACCEPTED: " << word << endl;
+        }
+        
+        else{
+            
+            rejectedmovements.add(move);
+            
+            *output << "REJECTED: " << word << endl;
+        }
+    }
+
+    HallOfFame(language, random, bag, player, 
             movements, legalmovements, acceptedmovements, rejectedmovements);
     return 0;
 }
