@@ -19,13 +19,14 @@ void Movelist::allocate(int n) {
 
 void Movelist::deallocate() {
     delete []moves;
+    moves=nullptr;
 }
 
 void Movelist::copy(const Movelist &ml) { // hacer que this-> sea un clon de ml  (cada elemento es igual, NO apuntan a la misma direccion)
-    nMove=ml.size();
-    allocate(nMove);
-    for (int i=0; i<nMove ; i++ ) 
-        moves[i]=ml.get(i);
+    nMove=0;
+    moves=nullptr;
+    for (int i=0; i<ml.size(); i++)
+        add(ml.get(i));
 }
 
 Movelist:: Movelist(): nMove (0) {
@@ -42,6 +43,7 @@ Movelist::Movelist(const Movelist &orig) {
 
 Movelist:: ~Movelist() {
     deallocate();
+    nMove=0;
 }
         
 void Movelist:: assign (const Movelist& orig){  //el objeto apunta al mismo espacio de memoria que orig
@@ -73,24 +75,23 @@ int Movelist:: size() const {
 int Movelist::find(const Move &mov) {  // Se ha añadido metodo en move para comparar dos moves (equals)
     bool found=false;
     int pos=-1;
-    
-    for (int i=0; i<nMove && !found; i++)  {
+    for (int i=0; i<nMove && !found; i++)  
         if (mov.equals(moves[i])) {
             found=true;
             pos=i;
         }
-    }
     return pos;
 }
 
-
-
 void Movelist:: add(const Move &mov) {
-    Move *nuevo = new Move [nMove+1] ;
-    for (int i = 0; i < nMove; i++)
-        nuevo[i] = moves[i];
-    delete[] nuevo;
-    moves = nuevo;
+    
+    Move *aux= new Move[nMove+1];
+    for(int i=0; i<nMove; i++){
+        aux[i]= moves[i];
+    }
+    deallocate();
+    moves= aux;
+    moves[nMove]= mov;
     nMove++;
 }
 
@@ -109,10 +110,8 @@ void Movelist:: remove(int p) {
 
 void Movelist:: zip(const Language &l) {
     string word;
-    Move mov;
     for (int i=0; i<nMove; ) {
-        mov=moves[i];
-        word = mov.getLetters();
+        word = moves[i].getLetters();
         if (!l.query(word) || word.size()<2 )
             remove (i);
         else
@@ -122,7 +121,6 @@ void Movelist:: zip(const Language &l) {
 
 void Movelist:: clear() {
     deallocate();
-    moves=nullptr;
     nMove=0;
 }
 
@@ -146,12 +144,14 @@ bool Movelist:: read(std::istream &is) {
     bool res=true;
     int i=0;
     Move m;
-    do {
-        moves[i].read(is);
-        if (is.bad())
+    m.read(is);
+    while ( (m.getLetters()!="@" || m.getCol()!=0 || m.getRow()!=0 || !m.isHorizontal())  && res ) {
+        add(m);
+        m.read(is);
+        
+        if (is.eof() || is.bad())
             res=false;
-        i++;
-    } while ( (normalizeWord(moves[i].getLetters())!="_" || moves[i].getCol()!=0 || moves[i].getRow()!=0 || !moves[i].isHorizontal()) && res ) ;
+    } 
     return res;
 }
  

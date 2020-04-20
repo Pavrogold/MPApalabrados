@@ -87,14 +87,12 @@ std::string Move:: getLetters() const {
 
 void Move:: print(std::ostream &os) const {
 
-    os << "row = " << row << endl;
-    os << "column = " << column << endl;
-    os << "letters = " << letters << endl;
-    
     if (ishorizontal)
         os << "H";
     else
         os << "V";
+    
+    os << " " << row << " " << column << " " << toUTF(letters) ;
 }
 
 void Move:: read(std::istream &is){
