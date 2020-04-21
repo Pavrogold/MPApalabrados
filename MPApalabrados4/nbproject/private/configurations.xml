@@ -13,8 +13,6 @@
         <gdb_interceptlist>
           <gdbinterceptoptions gdb_all="false" gdb_unhandled="true" gdb_unexpected="true"/>
         </gdb_interceptlist>
-        <gdb_signals>
-        </gdb_signals>
         <gdb_options>
           <DebugOptions>
           </DebugOptions>
@@ -26,18 +24,18 @@
       </nativedebugger>
       <runprofile version="9">
         <runcommandpicklist>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -l EN -r 71 -b BUOGSDTFNNRODEIVQPETCAWPUMLATYDITLNAOESLAEEEIIANIKVSHOORARIOOIXTEGOBRGZMYAAUWAEERNFUIRTEDSCELJNHEI</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}"  -l ES -r 17 -i data/ES_17W24.data -b CSJERPEOXPEEGRZCNROTEFAEDNAAOOAAIOIALSIUQATSEEEEUNMTACSDIACDODSDUAOLIMAYUGNARTÑBEBOVLHNSHOERLUI</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}"  -l ES -r 17 -p data/ES_17W24.data -b CSJERPEOXPEEGRZCNROTEFAEDNAAOOAAIOIALSIUQATSEEEEUNMTACSDIACDODSDUAOLIMAYUGNARTÑBEBOVLHNSHOERLUI</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}"  -r 100 -p data/ES_100_ERROR.data</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}"  -l ES -r 100 -p data/ES_100_ERROR.data</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}"  -l EN -r 71 -p data/EN_71W20.data -b BUOGSDTFNNRODEIVQPETCAWPUMLATYDITLNAOESLAEEEIIANIKVSHOORARIOOIXTEGOBRGZMYAAUWAEERNFUIRTEDSCELJNHEI</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}"   -r 2020 -l EN -p data/EMPTY.data</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}"   -l ES -r 17 -i data/ES_17W24.data -b CSJERPEOXPEEGRZCNROTEFAEDNAAOOAAIOIALSIUQATSEEEEUNMTACSDIACDODSDUAOLIMAYUGNARTÑBEBOVLHNSHOERLUI</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}"   -p data/FR_74W7.data -l FR -r 74 -b NUIIPOEHOAUEEEUTHFUTTSGAJEAISARENWUNPTDVQEXNRBMNAULDOOOFSTESVERILALCMGASESNOZDAYLRIEIKLECREAMIIRTBEE</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}"  -l ES -r 100 -p data/OPEN_ERROR.data</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}"  -r 100 -p data/ES_100_ERROR.data</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -r 100 -p data/ES_100_ERROR.data > fichero</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" </runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -r 100 -p data/ES_100_ERROR.data</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -r 2020 -l EN -p data/EMPTY.data</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -p data/FR_74W7.data -l FR -r 74 -b NUIIPOEHOAUEEEUTHFUTTSGAJEAISARENWUNPTDVQEXNRBMNAULDOOOFSTESVERILALCMGASESNOZDAYLRIEIKLECREAMIIRTBEE</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}"  -l ES -r 100 -p data/OPEN_ERROR.data</runcommand>
+        <runcommand>"${OUTPUT_PATH}" -p data/FR_74W7.data -l FR -r 74 -b NUIIPOEHOAUEEEUTHFUTTSGAJEAISARENWUNPTDVQEXNRBMNAULDOOOFSTESVERILALCMGASESNOZDAYLRIEIKLECREAMIIRTBEE</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <console-type>2</console-type>

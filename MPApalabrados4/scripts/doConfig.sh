@@ -78,7 +78,7 @@ GREEN='\033[0;32m'
 GRAY='\033[1;30m'
 WHITE='\033[1;37m'
 # Use of memory leak detector
-USE_VALGRIND=NO
+USE_VALGRIND=YES
 # Prints explanations of failed tests?
 DO_REPORT=NO
 # Forces the name of the ZIP. If left empty, the zip uses the name of the root foder

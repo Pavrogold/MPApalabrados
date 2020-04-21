@@ -85,7 +85,8 @@ int main(int nargs, char * args[]) {
     
     string s;
     for (int i=1 ; i<nargs;) {
-        s=args[i++];
+        s=args[i];
+        i++;
         
         if (s=="-l"){ 
             lang=args[i++] ;
@@ -94,12 +95,14 @@ int main(int nargs, char * args[]) {
         else if (s=="-r") {
             if (!isdigit(*args[i])) 
                 errorBreak (ERROR_ARGUMENTS, "") ; 
-            random = atoi(args[i++]);
+            random = atoi(args[i]);
+            i++;
             bag.setRandom(random) ;
         }
         
         else if (s == "-p" || s=="-i"){     // test con parametro -i?
-            savefile = args[i++];
+            savefile = args[i];
+            i++;
             playfile.open(savefile.c_str());
             if (!playfile) 
                 errorBreak (ERROR_OPEN, savefile) ;
@@ -111,8 +114,15 @@ int main(int nargs, char * args[]) {
             errorBreak (ERROR_ARGUMENTS, "") ; 
     }
     
-    if (savefile == "" || lang == "")
+    if (savefile == "" || lang == "") {
+        playfile.close();
+        if (input != &cin)
+            ifile.close() ;
+        if (output != &cout)
+            ofile.close() ;
         errorBreak(ERROR_ARGUMENTS, "");
+    }
+        
     
     if (secuencia == "")
         bag.define(language) ;
@@ -120,6 +130,8 @@ int main(int nargs, char * args[]) {
         bag.set(toISO(secuencia));
     
     player.add(bag.extract(7));
+    
+    
     
     *output << endl << "ID:" << random ; 
     *output << "\nALLOWED LETTERS: " << toUTF(language.getLetterSet()) << endl;
@@ -199,11 +211,6 @@ int main(int nargs, char * args[]) {
     if (output != &cout)
         ofile.close() ;
     
-    movements.~Movelist();        
-    legalmovements.~Movelist();    
-    acceptedmovements.~Movelist();
-    rejectedmovements.~Movelist(); 
-    
     return 0;
 }
 
@@ -221,7 +228,7 @@ void HallOfFame(const Language &l, int random, const Bag &b, const Player &p,
 }
 
 void errorBreak(int errorcode, const string &errordata) {
-    cerr << endl << "%%%OUTPUT" << endl;
+    cerr << endl << "%%%VALGRIND" << endl << "%%%OUTPUT" << endl;
     switch(errorcode) {
         case ERROR_ARGUMENTS:
             cerr<<"Error in call. Please use:\n -l <language> -p <playfile> [-r <randomnumber>]";

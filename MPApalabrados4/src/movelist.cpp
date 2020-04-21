@@ -22,11 +22,11 @@ void Movelist::deallocate() {
     moves=nullptr;
 }
 
-void Movelist::copy(const Movelist &ml) { // hacer que this-> sea un clon de ml  (cada elemento es igual, NO apuntan a la misma direccion)
-    nMove=0;
-    moves=nullptr;
+void Movelist::copy(const Movelist &ml) { 
+    nMove=ml.size();
+    moves=allocate(nMove);
     for (int i=0; i<ml.size(); i++)
-        add(ml.get(i));
+        moves[i]=ml.get(i);
 }
 
 Movelist:: Movelist(): nMove (0) {
@@ -46,9 +46,10 @@ Movelist:: ~Movelist() {
     nMove=0;
 }
         
-void Movelist:: assign (const Movelist& orig){  //el objeto apunta al mismo espacio de memoria que orig
-    moves=orig.moves; //@warning ??
-    nMove=orig.nMove;
+void Movelist:: assign (const Movelist& orig){
+    if (nMove>0)
+        deallocate();
+    copy(orig);
 }
 
     /**
