@@ -59,7 +59,7 @@ int main(int nargs, char * args[]) {
     Language language;
     Move move;
     Movelist movements,        /// Original list of movements
-            //legalmovements,    /// Movements with legal words upon the dictionary
+            legalmovements,    /// Movements with legal words upon the dictionary
             acceptedmovements, /// Movements accepted in the game
             rejectedmovements; /// Movements not accepted in the game
     
@@ -130,16 +130,13 @@ int main(int nargs, char * args[]) {
         bag.set(toISO(secuencia));
     
     player.add(bag.extract(7));
-    
-    
-    
+
     *output << endl << "ID:" << random ; 
     *output << "\nALLOWED LETTERS: " << toUTF(language.getLetterSet()) << endl;
     *output << "BAG ("<<bag.size()<<"): " << toUTF(bag.to_string()) << endl;
     *output << "PLAYER: " << toUTF(player.to_string()) << endl;
     *output << "READ: \n\n";
-    
-    
+
     
     //leer el playfile e introducirlo en movements
     if (!movements.read(*input))
@@ -152,29 +149,13 @@ int main(int nargs, char * args[]) {
         move.setScore(score);
         movements.set(i, move);
     }
-    /*
-    move.read(*input);
-    score=move.findScore(language);
-    move.setScore(score);
-    word = move.getLetters();
-    
-    while (player.size()>1 && !playfile.eof() && word !="@"){
-        movements.add(move);
-        move.read(*input);
-        score=move.findScore(language);
-        move.setScore(score);
-        if (ifile.eof())
-            errorBreak(ERROR_DATA, ifilename);
-        word = move.getLetters();
-    } */
-    
     
     
     //Copiar original a legal y eliminar los no legales
     //legalmovements.assign(movements); ->con assign se hace una soft copy, daba fallos al cerrar movements primero pero no legalmovements al final del main --->
     // y al modificar legalmovements con zip (y por tanto movements)
     //---> hardcopy con constructor;
-    Movelist legalmovements(movements);
+    legalmovements.assign(movements);
     legalmovements.zip(language);
     
     for (int i = 0; i < legalmovements.size(); i++){
@@ -197,8 +178,7 @@ int main(int nargs, char * args[]) {
         }
     }
     cout << endl ;
-    
-    
+
     
     HallOfFame(language, random, bag, player, 
             movements, legalmovements, acceptedmovements, rejectedmovements); 
