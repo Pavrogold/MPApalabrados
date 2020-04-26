@@ -103,7 +103,7 @@ public:
 	/**
 	 * @brief Reads from keyboard the values of the class, except score 
 	 */
-	void read(std::istream &is);
+	bool read(std::istream &is);
         
         bool equals (const Move &mov) const ;
 };

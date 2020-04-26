@@ -95,18 +95,22 @@ void Move:: print(std::ostream &os) const {
     os << " " << row << " " << column << " " << toUTF(letters) ;
 }
 
-void Move:: read(std::istream &is){
-    
+bool Move:: read(std::istream &is){
     char h;
     string l;
     int r, c;
+    bool res=true;
 
     is >> h ;
     is >> r ;
     is >> c ;
     is >> l;
-
-    set(r, c, h, l) ;
+    
+    if (is.eof() || is.bad()) {
+        res=false;
+    } else set(r, c, h, l) ;
+        
+    return res;
 }
 
 bool Move:: equals (const Move &mov) const {

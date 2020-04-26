@@ -24,21 +24,24 @@ void Movelist::deallocate() {
 
 void Movelist::copy(const Movelist &ml) { 
     nMove=ml.size();
-    moves=allocate(nMove);
+    allocate(nMove);
     for (int i=0; i<ml.size(); i++)
         moves[i]=ml.get(i);
 }
 
-Movelist:: Movelist(): nMove (0) {
-    moves=nullptr;
-}
+Movelist:: Movelist(): nMove (0), moves(nullptr) { }
 
 Movelist:: Movelist(int nmov): nMove(0) {
     allocate(nmov);
 }
 
 Movelist::Movelist(const Movelist &orig) {
-    copy(orig);
+     if (orig.size()==0) {
+       nMove=0;
+       moves=nullptr;
+       }
+     else
+       copy(orig);
 }
 
 Movelist:: ~Movelist() {
@@ -47,17 +50,12 @@ Movelist:: ~Movelist() {
 }
         
 void Movelist:: assign (const Movelist& orig){
-    if (nMove>0)
-        deallocate();
-    copy(orig);
+    if (nMove>0)               //si ya tiene espacio reservado se borra y nMove=0
+        clear();
+    
+    if (orig.size()!=0)       //si orig está vacio, se mantiene vacio y no se entra en copy
+        copy(orig);
 }
-
-    /**
-    * @brief Overloads the assignment operator
-    * @param orig Right hand side of the assignement
-    * @return this Left hand side of the assignement
-	 
-operator=(orig); */
 
 Move Movelist:: get(int p) const {
     assert (p>-1 && p<nMove);
@@ -69,11 +67,7 @@ void Movelist:: set(int p, const Move &m) {
     moves[p]=m;
 }
 
-int Movelist:: size() const {
-    return nMove; 
-}
-
-int Movelist::find(const Move &mov) {  // Se ha añadido metodo en move para comparar dos moves (equals)
+int Movelist::find(const Move &mov) const {  // Se ha añadido metodo en "move" para comparar los dos movimientos (equals)
     bool found=false;
     int pos=-1;
     for (int i=0; i<nMove && !found; i++)  
@@ -85,11 +79,11 @@ int Movelist::find(const Move &mov) {  // Se ha añadido metodo en move para com
 }
 
 void Movelist:: add(const Move &mov) {
-    
     Move *aux= new Move[nMove+1];
-    for(int i=0; i<nMove; i++){
+    
+    for(int i=0; i<nMove; i++)
         aux[i]= moves[i];
-    }
+    
     deallocate();
     moves= aux;
     moves[nMove]= mov;
@@ -97,15 +91,27 @@ void Movelist:: add(const Move &mov) {
 }
 
 void Movelist:: remove(const Move &mov) {
-    int pos = find(mov);
-    if (pos!=-1) 
-        remove(pos);
+    //int pos = find(mov);
+    //if (pos!=-1) 
+    //    remove(pos);
+    
+    for (int i=0; i<nMove; i++) 
+        if (mov.equals(moves[i]))
+            remove(i);
+     
 }
 
 void Movelist:: remove(int p) {
     assert (p>-1 && p<nMove);
     for (int i=p; i<nMove-1; i++)
         moves[i]=moves[i+1];
+    
+    Move *aux= new Move[nMove-1];
+    for(int i=0; i<nMove-1; i++)
+        aux[i]= moves[i];
+    
+    deallocate();
+    moves= aux;
     nMove--;
 }
 
@@ -127,16 +133,12 @@ void Movelist:: clear() {
 
 int Movelist:: getScore() const {
     int nscore=0, score=0;
-    bool valid=true;
-    Move m;
-    for (int i=0; i<nMove && valid; i++) {
-        m=moves[i];
-        nscore =  m.getScore();
-        score += nscore;
-        if (nscore==-1) {
-            valid=false;
+    for (int i=0; i<nMove && score!=-1; i++) {
+        nscore =  moves[i].getScore();
+        if (nscore==-1) 
             score=-1;
-        }
+        else
+            score+=nscore;
     }
     return score;
 }
@@ -145,13 +147,10 @@ bool Movelist:: read(std::istream &is) {
     bool res=true;
     int i=0;
     Move m;
-    m.read(is);
+    res=m.read(is);
     while ( (m.getLetters()!="@" || m.getCol()!=0 || m.getRow()!=0 || !m.isHorizontal())  && res ) {
         add(m);
-        m.read(is);
-        
-        if (is.eof() || is.bad())
-            res=false;
+        res=m.read(is);
     } 
     return res;
 }

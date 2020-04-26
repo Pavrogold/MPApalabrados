@@ -85,8 +85,7 @@ int main(int nargs, char * args[]) {
     
     string s;
     for (int i=1 ; i<nargs;) {
-        s=args[i];
-        i++;
+        s=args[i++];
         
         if (s=="-l"){ 
             lang=args[i++] ;
@@ -95,14 +94,12 @@ int main(int nargs, char * args[]) {
         else if (s=="-r") {
             if (!isdigit(*args[i])) 
                 errorBreak (ERROR_ARGUMENTS, "") ; 
-            random = atoi(args[i]);
-            i++;
+            random = atoi(args[i++]);
             bag.setRandom(random) ;
         }
         
         else if (s == "-p" || s=="-i"){     // test con parametro -i?
-            savefile = args[i];
-            i++;
+            savefile = args[i++];
             playfile.open(savefile.c_str());
             if (!playfile) 
                 errorBreak (ERROR_OPEN, savefile) ;
@@ -115,11 +112,12 @@ int main(int nargs, char * args[]) {
     }
     
     if (savefile == "" || lang == "") {
-        playfile.close();
+        /*
         if (input != &cin)
             ifile.close() ;
         if (output != &cout)
             ofile.close() ;
+        */
         errorBreak(ERROR_ARGUMENTS, "");
     }
         
@@ -152,9 +150,6 @@ int main(int nargs, char * args[]) {
     
     
     //Copiar original a legal y eliminar los no legales
-    //legalmovements.assign(movements); ->con assign se hace una soft copy, daba fallos al cerrar movements primero pero no legalmovements al final del main --->
-    // y al modificar legalmovements con zip (y por tanto movements)
-    //---> hardcopy con constructor;
     legalmovements.assign(movements);
     legalmovements.zip(language);
     
@@ -164,25 +159,35 @@ int main(int nargs, char * args[]) {
         word=move.getLetters();
         //word=toISO(move.getLetters());
         *output << "\n\nPLAYER: " << toUTF(player.to_string()) << endl;
+        *output << "WORD: " << toUTF(word) ;
         
         if (player.isValid(word)){
             player.extract(word);
             player.add(bag.extract(7-player.size())) ;
             acceptedmovements.add(move);
             
-            *output << "ACCEPTED: " << word << endl;
+            *output << "\tACCEPTED! " << endl;
         }
         else{
             rejectedmovements.add(move);
-            *output << "REJECTED: " << word << endl;
+            *output << "\tREJECTED! " << endl;
         }
     }
-    cout << endl ;
-
     
+    //BORRAR
+    
+    string pal="FROND";
+    char h1='h';
+    int r1=0;
+    int c1=0;
+    Move m1;
+    m1.set(r1, c1, h1, pal);
+    acceptedmovements.remove(m1);  
+    
+    
+    cout << endl ;
     HallOfFame(language, random, bag, player, 
             movements, legalmovements, acceptedmovements, rejectedmovements); 
-    
     cout << endl;
     
     playfile.close();

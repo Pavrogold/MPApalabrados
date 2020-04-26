@@ -99,14 +99,16 @@ public:
 	 * @return The size of the set of movements
 	 */
 	//inline int size() const ;
-        int size() const ;
+        inline int size() const {
+            return nMove;
+        }
 
 	/**
 	 * @brief Searches a movement in the set of recorded movements. Two movements are equal if all their data members coincide.
 	 * @param mov The movement to be seeked
 	 * @return The position of the movement in the set, @retval -1 when the movement is not found
 	 */
-	int find(const Move &mov);
+	int find(const Move &mov) const;
 
 	/**
 	 * @brief Adds a copy of the movement at the end of the existing set, incrementing its size in one more movement
@@ -148,6 +150,7 @@ public:
 	 * @return The score of the full set of movements
 	 */
 	int getScore() const;
+        
 	/**
 	 * @brief Insert the data of the list of movements into an ostream (either cout or file)
 	 * @param os The ostream
@@ -155,6 +158,7 @@ public:
 	 * @return true if there was no problen inserting/writing data
 	 */
 	bool print(std::ostream &os, bool scores=false) const;
+        
 	/**
 	 * @brief Reads the movement from an istream until the last movement is marked
 	 * as a "H 0 0 @" movement, that is, "H 0 0 _" normalized
