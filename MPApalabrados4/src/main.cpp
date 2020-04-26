@@ -1,6 +1,6 @@
 /**
  * @file main.cpp
- * @author DECSAI
+ * @author Yesenia González Dávila, Pablo Millán Cubero
  * @note To be implemented by students either completely or by giving them
  * key functions prototipes to guide the implementation
  */
