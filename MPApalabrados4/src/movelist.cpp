@@ -1,6 +1,6 @@
 /**
  * @file movelist.cpp
- * @author DECSAI
+ * @author Yesenia González Dávila, Pablo Millán Cubero
  * @note To be implemented by students
  * @warning Complete the code
  *  */
