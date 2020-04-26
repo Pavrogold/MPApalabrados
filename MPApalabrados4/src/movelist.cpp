@@ -4,6 +4,10 @@
  * @note To be implemented by students
  * @warning Complete the code
  *  */
+
+//Alumno 1: Pablo Millan Cubero
+//Alumno 2: Yesenia Gonzale Davila
+
 #include <iostream>
 #include <cassert>
 
@@ -45,15 +49,16 @@ Movelist::Movelist(const Movelist &orig) {
 }
 
 Movelist:: ~Movelist() {
-    deallocate();
-    nMove=0;
+    if (nMove!=0) {
+        deallocate();
+        nMove=0;
+    }
 }
         
 void Movelist:: assign (const Movelist& orig){
-    if (nMove>0)               //si ya tiene espacio reservado se borra y nMove=0
-        clear();
+    clear();                    //si ya tiene espacio reservado se borra y nMove=0
     
-    if (orig.size()!=0)       //si orig está vacio, se mantiene vacio y no se entra en copy
+    if (orig.size()!=0)         //si orig está vacio, se mantiene vacio y no se entra en copy
         copy(orig);
 }
 
@@ -84,7 +89,8 @@ void Movelist:: add(const Move &mov) {
     for(int i=0; i<nMove; i++)
         aux[i]= moves[i];
     
-    deallocate();
+    if (nMove!=0)
+        deallocate();
     moves= aux;
     moves[nMove]= mov;
     nMove++;
@@ -94,11 +100,9 @@ void Movelist:: remove(const Move &mov) {
     //int pos = find(mov);
     //if (pos!=-1) 
     //    remove(pos);
-    
     for (int i=0; i<nMove; i++) 
         if (mov.equals(moves[i]))
             remove(i);
-     
 }
 
 void Movelist:: remove(int p) {
@@ -106,13 +110,17 @@ void Movelist:: remove(int p) {
     for (int i=p; i<nMove-1; i++)
         moves[i]=moves[i+1];
     
-    Move *aux= new Move[nMove-1];
-    for(int i=0; i<nMove-1; i++)
-        aux[i]= moves[i];
-    
-    deallocate();
-    moves= aux;
-    nMove--;
+    //si nMove=0 -> assert
+    if (nMove!=1) {
+        Move *aux= new Move[nMove-1];
+        for(int i=0; i<nMove-1; i++)
+            aux[i]= moves[i];
+        deallocate();
+        moves= aux;
+        nMove--;
+    } //nMove=1, p=0 -> borrar la unica posicion que queda
+    else      
+        clear();
 }
 
 void Movelist:: zip(const Language &l) {
@@ -127,8 +135,10 @@ void Movelist:: zip(const Language &l) {
 }
 
 void Movelist:: clear() {
-    deallocate();
-    nMove=0;
+    if (nMove!=0) {
+        deallocate();
+        nMove=0;
+    }
 }
 
 int Movelist:: getScore() const {

@@ -5,6 +5,9 @@
  * key functions prototipes to guide the implementation
  */
 
+//Alumno 1: Pablo Millan Cubero
+//Alumno 2: Yesenia Gonzale Davila
+
 
 #include <iostream>
 #include <fstream>
@@ -172,18 +175,7 @@ int main(int nargs, char * args[]) {
             rejectedmovements.add(move);
             *output << "\tREJECTED! " << endl;
         }
-    }
-    
-    //BORRAR
-    
-    string pal="FROND";
-    char h1='h';
-    int r1=0;
-    int c1=0;
-    Move m1;
-    m1.set(r1, c1, h1, pal);
-    acceptedmovements.remove(m1);  
-    
+    } 
     
     cout << endl ;
     HallOfFame(language, random, bag, player, 

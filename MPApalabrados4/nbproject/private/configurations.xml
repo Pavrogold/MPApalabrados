@@ -29,15 +29,15 @@
           <runcommandpicklistitem>"${OUTPUT_PATH}"  -l ES -r 100 -p data/OPEN_ERROR.data</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}"  -r 100 -p data/ES_100_ERROR.data</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" -r 100 -p data/ES_100_ERROR.data > fichero</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" </runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" -r 100 -p data/ES_100_ERROR.data</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" -r 2020 -l EN -p data/EMPTY.data</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" -p data/FR_74W7.data -l FR -r 74 -b NUIIPOEHOAUEEEUTHFUTTSGAJEAISARENWUNPTDVQEXNRBMNAULDOOOFSTESVERILALCMGASESNOZDAYLRIEIKLECREAMIIRTBEE</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}"  -r 12 -l ES -b SEJSGDCFGNTIDLNOBREAOOCSRDEEEEIOUOIMRDCLACNERPASHADINLAYLARXTÑIOOABEUUEMEAITAAEUEUATQHNVOSZAPSO -p data/ES_12W3.data</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" -l ES -r 100 -p data/ES_100_ERROR.data</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" -l EN -r 71 -p data/EN_NW_71W20_U.data -b BUOGSDTFNNRODEIVQPETCAWPUMLATYDITLNAOESLAEEEIIANIKVSHOORARIOOIXTEGOBRGZMYAAUWAEERNFUIRTEDSCELJNHEI</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" </runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}" -l EN -r 71 -p data/EN_NW_71W20_U.data -b BUOGSDTFNNRODEIVQPETCAWPUMLATYDITLNAOESLAEEEIIANIKVSHOORARIOOIXTEGOBRGZMYAAUWAEERNFUIRTEDSCELJNHEI</runcommand>
+        <runcommand>"${OUTPUT_PATH}"</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <console-type>2</console-type>
