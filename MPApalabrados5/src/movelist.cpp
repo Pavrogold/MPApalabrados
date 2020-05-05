@@ -56,10 +56,12 @@ Movelist:: ~Movelist() {
 }
         
 void Movelist:: assign (const Movelist& orig){
-    clear();                    //si ya tiene espacio reservado se borra y nMove=0
+    if (this != orig) {
+        clear();                    //si ya tiene espacio reservado se borra y nMove=0  (=obj)
     
-    if (orig.size()!=0)         //si orig está vacio, se mantiene vacio y no se entra en copy
-        copy(orig);
+        if (orig.size()!=0)         //si orig está vacio, se mantiene vacio y no se entra en copy
+            copy(orig);
+    }
 }
 
 Move Movelist:: get(int p) const {
@@ -178,5 +180,10 @@ bool Movelist::print(std::ostream &os, bool scores) const {
             res=false;
     }
     return res;
+}
+
+Movelist& operator=(const Movelist &orig) const {
+    assign (orig); 
+    return *this;
 }
 

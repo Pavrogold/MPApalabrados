@@ -86,7 +86,6 @@ std::string Move:: getLetters() const {
 }
 
 void Move:: print(std::ostream &os) const {
-
     if (ishorizontal)
         os << "H";
     else
@@ -116,4 +115,25 @@ bool Move:: read(std::istream &is){
 bool Move:: equals (const Move &mov) const {
     bool equals = (mov.getLetters()==letters && mov.getCol()==column && mov.getRow()==row && mov.isHorizontal()==ishorizontal);
     return equals;
+}
+
+std::ostream& operator<<(std::ostream& os, const Move &m) {
+    if (m.isHorizontal())
+        os << "H";
+    else
+        os << "V";
+    
+    os << " " << m.getRow() << " " << m.getCol() << " " << m.getLetters() ; //toUTF?
+}
+
+std::istream& operator>>(std::istream& is, Move &m) {
+    char h;
+    string l;
+    int r, c;
+    bool res=true;
+
+    is >> h >> r >> c >> l ;
+    
+    assert (!is.eof() && !is.bad()) ;
+    m.set(r, c, h, l) ;
 }

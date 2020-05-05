@@ -175,7 +175,8 @@ public:
 	 * @param orig Right hand side of the assignement
 	 * @return this Left hand side of the assignement
 	 */
-	Movelist operator=( Movelist orig) const; 
+	Movelist& operator=(const Movelist &orig) const; 
+        
 	/**
 	 * @brief Overload the operator += It is equivalent to add a movement at the end of the set, increasing its size in one more movement
 	 * @param mov The new movement to be inserted
@@ -186,23 +187,25 @@ public:
 	friend std::ostream & operator<<(std::ostream & os,  Movelist  s);
 	friend std::istream & operator>>(std::istream & os, Movelist  s);
 
-	/**
-	 * @brief Overload of the insertion operator
-	 * @param os Output stream (cout)
-	 * @param m The class to be inserted in the stream
-	 * @return The output stream (cout)
-	 */
-	std::ostream & operator<<(std::ostream & os, const Movelist & i);
-
-	/**
-	 * @brief Overload of the extraction operator
-	 * @param os Input stream (cin)
-	 * @param m The class to be extracted from the stream
-	 * @return The input stream (cin)
-	 */
-	std::istream & operator>>(std::istream & is, Movelist & i);
+	
 	
 };
+
+    /**
+     * @brief Overload of the insertion operator
+     * @param os Output stream (cout)
+     * @param m The class to be inserted in the stream
+     * @return The output stream (cout)
+     */
+    std::ostream & operator<<(std::ostream & os, const Movelist & i);
+
+    /**
+     * @brief Overload of the extraction operator
+     * @param os Input stream (cin)
+     * @param m The class to be extracted from the stream
+     * @return The input stream (cin)
+     */
+    std::istream & operator>>(std::istream & is, Movelist & i);
 
 #endif
 
