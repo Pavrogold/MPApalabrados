@@ -117,12 +117,16 @@ void Tiles::print(std::ostream &os) const {
             *os << endl;
         }
     }
-    
 }
 
 bool Tiles::read(std::istream &is) {
     
-    
+    for (int i=0; i<columns; i++){
+            for (int j=0; j<rows; j++){
+                
+                *is >> cell[j][i];
+            }
+        }
     
 }
 
