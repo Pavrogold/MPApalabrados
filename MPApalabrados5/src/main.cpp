@@ -71,7 +71,7 @@ int main(int nargs, char * args[]) {
             rejected;           /// Movements not accepted in the game
     Tiles tablero;
     
-    int random=-1, score=0, p_size, b_size;
+    int random=-1, score=0, p_size, b_size, w, h;
     string lang = "", b_secuencia="",
            pfile_name="", mfile_name ="", ofilename="",  key="", word = "" ;
     
@@ -81,20 +81,22 @@ int main(int nargs, char * args[]) {
     ostream *output;
     
     input=&cin;
-    output != &cout;
+    output = &cout;
     
     if (nargs<1 || nargs>15 || nargs%2==0)
         errorBreak (ERROR_ARGUMENTS, "") ;
     
     string s;
     bool restored=false;
-    for (int i=1 ; i<nargs;) {
+    for (int i=1 ; i<nargs; ) {
         
-        s=args[i++];
+        s=args[i];
+        i++;
         if (s=="-open") {
             restored=true;
             
-            mfile_name = args[i++];
+            mfile_name = args[i];
+            i++;
             matchfile.open(mfile_name.c_str());
             if (!matchfile) //@warning
                 errorBreak (ERROR_OPEN, mfile_name) ;
@@ -133,41 +135,48 @@ int main(int nargs, char * args[]) {
         } 
         
         else if (s=="-p") {
-            pfile_name = args[i++];
+            pfile_name = args[i];
+            i++;
             playfile.open(pfile_name.c_str());
             if (!playfile) //@warning
                 errorBreak (ERROR_OPEN, pfile_name) ;
             input=&playfile;
+           
+            //cin.operator<<(original);   //???
             *input >> original; //@warning
             
             playfile.close();
             input=nullptr; //?
         } 
         
-        else if (!restored) {
             
-            if (s=="-l")
-                lang=args[i++] ;
-            else if (s=="-w") {
+        else    if (s=="-l" && !restored) {
+                lang=args[i] ;
+                i++;
+            }
+            else if (s=="-w" && !restored) {
                 if (!isdigit(*args[i])) //?
                     errorBreak (ERROR_ARGUMENTS, "") ; 
-                int w = atoi(args[i++]);
+                w = atoi(args[i]);
+                i++;
             }
-            else if (s=="-h") {
+            else if (s=="-h" && !restored) {
                 if (!isdigit(*args[i])) 
                     errorBreak (ERROR_ARGUMENTS, "") ; 
-                int h = atoi(args[i++]);
+                h = atoi(args[i]);
+                i++;
             }
-            else if (s=="-r") {
+            else if (s=="-r" && !restored) {
                 if (!isdigit(*args[i])) 
                     errorBreak (ERROR_ARGUMENTS, "") ; 
-                random = atoi(args[i++]);
+                random = atoi(args[i]);
+                i++;
                 bag.setRandom(random) ;
             }
-        }
         
         else if (s=="-save") {
-            ofilename = args[i++];
+            ofilename = args[i];
+            i++;
             //comprobar extension ?
             ofile.open(ofilename.c_str());
             if (!ofile) 
@@ -179,6 +188,8 @@ int main(int nargs, char * args[]) {
             errorBreak (ERROR_ARGUMENTS, "") ; 
     }
     
+    if (!restored)
+        tablero.setSize(w, h);
     
     if (pfile_name=="")
         errorBreak(ERROR_ARGUMENTS, "");
@@ -212,8 +223,8 @@ int main(int nargs, char * args[]) {
         //word=toISO(move.getLetters());
         //*output << "\n\nPLAYER: " << toUTF(player.to_string()) << endl;
         //*output << "WORD: " << toUTF(word) ;
-        
-        if (player.isValid(word)){
+        bool probando = true;
+        if (player.isValid(word) || probando){
             player.extract(word);
             player.add(bag.extract(7-player.size())) ;
             
@@ -222,6 +233,7 @@ int main(int nargs, char * args[]) {
             accepted.add(move);
             
             tablero.add (move);
+            cout << endl << endl << endl ;
             tablero.print(*output); //para comprobar salida (provisional)
         }
         else {
@@ -253,7 +265,7 @@ int main(int nargs, char * args[]) {
 
 
 void HallOfFame(const Language &l, int random, const Bag &b, const Player &p, 
-        const Movelist& original,const Movelist& legal,
+        const Tiles &t, const Movelist& original,const Movelist& legal,
         const Movelist& accepted,const Movelist& rejected) {
     cout << endl << "%%%OUTPUT" << endl << "LANGUAGE: "<<l.getLanguage()<< " ID: " << random << endl;
     cout << "BAG ("<<b.size()<<"): " << toUTF(b.to_string()) << endl;

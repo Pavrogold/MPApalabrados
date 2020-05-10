@@ -44,9 +44,9 @@ public:
     Tiles(const Tiles & orig);  
     
     
-	/**
-	 * @brief Basic destructor of the class 
-	 */
+    /**
+     * @brief Basic destructor of the class 
+     */
    ~Tiles(); 
    
 
@@ -150,7 +150,7 @@ private:
      * @brief Copy data from another object
      * @param t The object to be copied
      */
-    void copy( Tiles  t) const;
+    void copy(const Tiles &t) ;
 
 };
 

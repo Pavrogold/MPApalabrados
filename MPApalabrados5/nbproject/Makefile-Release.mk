@@ -39,7 +39,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/main.o \
 	${OBJECTDIR}/src/move.o \
 	${OBJECTDIR}/src/movelist.o \
-	${OBJECTDIR}/src/player.o
+	${OBJECTDIR}/src/player.o \
+	${OBJECTDIR}/src/tiles.o
 
 
 # C Compiler Flags
@@ -90,6 +91,11 @@ ${OBJECTDIR}/src/player.o: src/player.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/player.o src/player.cpp
+
+${OBJECTDIR}/src/tiles.o: src/tiles.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/tiles.o src/tiles.cpp
 
 # Subprojects
 .build-subprojects:

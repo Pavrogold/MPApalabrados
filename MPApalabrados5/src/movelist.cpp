@@ -56,7 +56,14 @@ Movelist:: ~Movelist() {
 }
         
 void Movelist:: assign (const Movelist& orig){
-    if (this != orig) {
+    //if (this != orig)
+    
+    bool equals = nMove==orig.size() ;
+    if (equals) 
+        for (int i=0; i<nMove && equals; i++ )
+            equals = moves[i].equals(orig.get(i));
+    
+    if (!equals) {
         clear();                    //si ya tiene espacio reservado se borra y nMove=0  (=obj)
     
         if (orig.size()!=0)         //si orig está vacio, se mantiene vacio y no se entra en copy
@@ -182,8 +189,12 @@ bool Movelist::print(std::ostream &os, bool scores) const {
     return res;
 }
 
-Movelist& operator=(const Movelist &orig) const {
+Movelist& Movelist:: operator=(const Movelist &orig) {
     assign (orig); 
     return *this;
 }
 
+std::istream &operator>>(std:: istream & is, Movelist &i) {
+    i.read(is);
+    return is;
+}

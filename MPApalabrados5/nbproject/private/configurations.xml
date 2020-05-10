@@ -13,6 +13,8 @@
         <gdb_interceptlist>
           <gdbinterceptoptions gdb_all="false" gdb_unhandled="true" gdb_unexpected="true"/>
         </gdb_interceptlist>
+        <gdb_signals>
+        </gdb_signals>
         <gdb_options>
           <DebugOptions>
           </DebugOptions>
@@ -24,18 +26,18 @@
       </nativedebugger>
       <runprofile version="9">
         <runcommandpicklist>
-          <runcommandpicklistitem>"${OUTPUT_PATH}"  -r 100 -p data/ES_100_ERROR.data</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -r 100 -p data/ES_100_ERROR.data > fichero</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -r 100 -p data/ES_100_ERROR.data</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -r 2020 -l EN -p data/EMPTY.data</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -p data/FR_74W7.data -l FR -r 74 -b NUIIPOEHOAUEEEUTHFUTTSGAJEAISARENWUNPTDVQEXNRBMNAULDOOOFSTESVERILALCMGASESNOZDAYLRIEIKLECREAMIIRTBEE</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}"  -r 12 -l ES -b SEJSGDCFGNTIDLNOBREAOOCSRDEEEEIOUOIMRDCLACNERPASHADINLAYLARXTÑIOOABEUUEMEAITAAEUEUATQHNVOSZAPSO -p data/ES_12W3.data</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" -l ES -r 100 -p data/ES_100_ERROR.data</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" -l EN -r 71 -p data/EN_NW_71W20_U.data -b BUOGSDTFNNRODEIVQPETCAWPUMLATYDITLNAOESLAEEEIIANIKVSHOORARIOOIXTEGOBRGZMYAAUWAEERNFUIRTEDSCELJNHEI</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" </runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -r 100 -i data/ES_100_ERROR.data</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -l ES -r 100 -p data/ES_100_ERROR.data -w 1 -h 15 </runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -open data/ES_2020.match -p data/EMPTY.data</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -open data/ES_2020_mini.match -p data/EMPTY.data</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -open data/ES_2020_mini.data -p data/EMPTY.data</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -open data/EMPTY.data -p  data/ES_2020_mini.data</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}"</runcommand>
+        <runcommand>"${OUTPUT_PATH}" -open data/EMPTY.data -p  data/ES_2020_mini.data</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <console-type>2</console-type>

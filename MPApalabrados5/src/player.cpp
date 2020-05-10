@@ -37,7 +37,7 @@ void Player::clear() {
 }
 
 bool Player:: isValid(const std::string &s) const {
-    bool valid = true, encontrado ;
+    bool valid = true ;
      Player tmp=*this;
      
      if (!tmp.extract(s))

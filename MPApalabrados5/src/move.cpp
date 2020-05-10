@@ -112,7 +112,7 @@ bool Move:: read(std::istream &is){
     return res;
 }
 
-bool Move:: equals (const Move &mov) const {
+bool Move:: equals (const Move &mov) const {    //@warning cambiar por operador
     bool equals = (mov.getLetters()==letters && mov.getCol()==column && mov.getRow()==row && mov.isHorizontal()==ishorizontal);
     return equals;
 }
@@ -124,16 +124,19 @@ std::ostream& operator<<(std::ostream& os, const Move &m) {
         os << "V";
     
     os << " " << m.getRow() << " " << m.getCol() << " " << m.getLetters() ; //toUTF?
+    
+    return os;
 }
 
 std::istream& operator>>(std::istream& is, Move &m) {
     char h;
     string l;
     int r, c;
-    bool res=true;
 
     is >> h >> r >> c >> l ;
     
     assert (!is.eof() && !is.bad()) ;
     m.set(r, c, h, l) ;
+    
+    return is;
 }

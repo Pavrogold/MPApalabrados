@@ -1,0 +1,27 @@
+
+%%%CALL -l ES -r 2020 -w 15 -h 15 -p data/ES_2020_155_A.data -save data/ES_2020_98.match -b  AENAXABUESITSMNYAATCPSTREUISAHDOOGOAEOAOAEIAELRISAURDAIETCVNMRNRUPOUDDDÑLFEILZBEOHGQOOECEELCSJN
+%%%VALGRIND
+%%%FROMFILE data/ES_2020_98.match
+%%%OUTPUT
+MPALABRADOS-V1
+98
+ES
+15 15
+A E A S T C D E O O A R T P C 
+B X Y R U H O A I L I U I U R 
+A I U . T I G . A E R E M R U 
+N S N . E S M . . O O D N . D 
+A T A . . P A . . . S E A . O 
+. E S . . A . . . . A . . . . 
+. . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . 
+
+7 ÑDDFLNV
+21 EILZBEOHGQOOECEELCSJN
