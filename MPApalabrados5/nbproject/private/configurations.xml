@@ -26,18 +26,18 @@
       </nativedebugger>
       <runprofile version="9">
         <runcommandpicklist>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -l ES -r 100 -p data/ES_100_ERROR.data</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -l EN -r 71 -p data/EN_NW_71W20_U.data -b BUOGSDTFNNRODEIVQPETCAWPUMLATYDITLNAOESLAEEEIIANIKVSHOORARIOOIXTEGOBRGZMYAAUWAEERNFUIRTEDSCELJNHEI</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" </runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -r 100 -i data/ES_100_ERROR.data</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -l ES -r 100 -p data/ES_100_ERROR.data -w 1 -h 15 </runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -open data/ES_2020.match -p data/EMPTY.data</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -open data/ES_2020_mini.match -p data/EMPTY.data</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -open data/ES_2020_mini.data -p data/EMPTY.data</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" -open data/EMPTY.data -p  data/ES_2020_mini.data</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -open EMPTY.match -p  data/ES_2020_mini.data</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -open data/EMPTY.match -p  data/ES_2020_mini.data</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -open data/DATA_ERROR.match -p  data/ES_2020_mini.data</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -open data/open/FR_2020_EU.match -p  data/playfile/FR_2020_27.data</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -l ES -w 10 -h 5 -p  data/playfile/ES_2020.data</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -l ES -w 10 -h 7 -p  data/playfile/ES_2020.data</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -open data/open/ES_PR.match -p data/playfile/ES_2020.data</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -open data/open/FR_2020_EU.match -p data/playfile/FR_2020_EU.data</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -open data/open/FR_2020_EU.match -p data/playfile/FR_2020_EU.data -save SAVE1.match</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}" -open data/EMPTY.data -p  data/ES_2020_mini.data</runcommand>
+        <runcommand>"${OUTPUT_PATH}" -open data/open/FR_2020_EU.match -p data/playfile/FR_2020_EU.data -save SAVE1.match</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <console-type>2</console-type>

@@ -69,7 +69,7 @@ char Tiles::get(int r, int c) const {
 }
 
 void Tiles::set(int r, int c, char l){
-    assert(r < rows && c < columns);
+    assert(r>=0 && r<rows && c>=0 && c<columns);
     
     cell[c][r] = l;
 }
@@ -80,7 +80,8 @@ void Tiles::add(const Move& m){
     int r = m.getRow();
     int c = m.getCol();
     
-    for (int i=0; i < s.length(); i++){
+    //si no cabe -> se añade el string cortado (o assert?)
+    for (int i=0; i<s.length() && r<=rows && c<=columns ; i++){
         set(r-1, c-1, s[i]);
         if (h)
             c++;

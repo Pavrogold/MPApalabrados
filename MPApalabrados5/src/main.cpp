@@ -71,17 +71,18 @@ int main(int nargs, char * args[]) {
             rejected;           /// Movements not accepted in the game
     Tiles tablero;
     
-    int random=-1, score=0, p_size, b_size, w, h;
+    int random=-1, score=0, p_size, b_size, w=-1, h=-1;
     string lang = "", b_secuencia="",
            pfile_name="", mfile_name ="", ofilename="",  key="", word = "" ;
+    const string FORMAT=".match";
     
     ifstream matchfile, playfile; 
     ofstream ofile;
-    istream *input, *i_playfile; 
+    istream *input ; 
     ostream *output;
     
     input=&cin;
-    output = &cout;
+    output=&cout;
     
     if (nargs<1 || nargs>15 || nargs%2==0)
         errorBreak (ERROR_ARGUMENTS, "") ;
@@ -90,15 +91,20 @@ int main(int nargs, char * args[]) {
     bool restored=false;
     for (int i=1 ; i<nargs; ) {
         
-        s=args[i];
-        i++;
+        s=args[i++];
         if (s=="-open") {
             restored=true;
             
-            mfile_name = args[i];
-            i++;
+            mfile_name = args[i++];
+            
+            //comprueba formato
+            int len=mfile_name.size();
+            string file_format=mfile_name.substr(len-FORMAT.size(), FORMAT.size());
+            if ( file_format != FORMAT )
+                errorBreak (ERROR_OPEN, mfile_name) ;
+            
             matchfile.open(mfile_name.c_str());
-            if (!matchfile) //@warning
+            if (!matchfile) 
                 errorBreak (ERROR_OPEN, mfile_name) ;
             input=&matchfile;
             
@@ -106,7 +112,7 @@ int main(int nargs, char * args[]) {
             if (key != PASSWORD) 
                 errorBreak (ERROR_DATA, mfile_name) ;
             
-            *input >> score ;
+            *input >> score ;   //@warning
             *input >> lang ;
             
             int r, c;
@@ -119,16 +125,14 @@ int main(int nargs, char * args[]) {
             string p_secuencia;
             *input >> p_secuencia ;
             player.add(toISO(p_secuencia));
-            if (player.size() != p_size) {
+            if (player.size() != p_size)
                 errorBreak (ERROR_DATA, mfile_name) ;
-            }
             
             *input >> b_size;
             *input >> b_secuencia;
             bag.set(toISO(b_secuencia));
-            if (bag.size() != b_size) {
+            if (bag.size() != b_size) 
                 errorBreak (ERROR_DATA, mfile_name) ;
-            }
             
             matchfile.close();
             input=nullptr; //?
@@ -138,46 +142,49 @@ int main(int nargs, char * args[]) {
             pfile_name = args[i];
             i++;
             playfile.open(pfile_name.c_str());
-            if (!playfile) //@warning
+            if (!playfile) 
                 errorBreak (ERROR_OPEN, pfile_name) ;
             input=&playfile;
            
-            //cin.operator<<(original);   //???
-            *input >> original; //@warning
+            *input >> original; 
             
             playfile.close();
             input=nullptr; //?
         } 
-        
             
-        else    if (s=="-l" && !restored) {
-                lang=args[i] ;
-                i++;
-            }
+        else if (!restored) {
+            if (s=="-l" && !restored) 
+            lang=args[i++] ;
+        
             else if (s=="-w" && !restored) {
                 if (!isdigit(*args[i])) //?
                     errorBreak (ERROR_ARGUMENTS, "") ; 
-                w = atoi(args[i]);
-                i++;
+                w = atoi(args[i++]);
             }
+        
             else if (s=="-h" && !restored) {
                 if (!isdigit(*args[i])) 
                     errorBreak (ERROR_ARGUMENTS, "") ; 
-                h = atoi(args[i]);
-                i++;
+                h = atoi(args[i++]);
             }
+        
             else if (s=="-r" && !restored) {
                 if (!isdigit(*args[i])) 
                     errorBreak (ERROR_ARGUMENTS, "") ; 
-                random = atoi(args[i]);
-                i++;
+                random = atoi(args[i++]);
                 bag.setRandom(random) ;
             }
-        
+        } 
+    
         else if (s=="-save") {
-            ofilename = args[i];
-            i++;
-            //comprobar extension ?
+            ofilename = args[i++];
+            
+            //comprueba formato
+            int len=ofilename.size();
+            string file_format=ofilename.substr(len-FORMAT.size(), FORMAT.size());
+            if ( file_format != FORMAT )
+                errorBreak (ERROR_OPEN, ofilename) ;
+            
             ofile.open(ofilename.c_str());
             if (!ofile) 
                 errorBreak (ERROR_OPEN, ofilename) ;
@@ -207,10 +214,9 @@ int main(int nargs, char * args[]) {
     }
     
     
-    *output << "\nALLOWED LETTERS: " << toUTF(language.getLetterSet()) << endl;
-    *output << "BAG ("<<bag.size()<<"): " << toUTF(bag.to_string()) << endl;
-    *output << "PLAYER: " << toUTF(player.to_string()) << endl;
-    
+    cout << "\nALLOWED LETTERS: " << toUTF(language.getLetterSet()) << endl;
+    cout << "BAG ("<<bag.size()<<"): " << toUTF(bag.to_string()) << endl;
+    cout << "PLAYER: " << toUTF(player.to_string()) << endl;
     
     //assign original to legal, and remove invalid moves
     legal = original;
@@ -221,32 +227,31 @@ int main(int nargs, char * args[]) {
         move=legal.get(i);  
         word=move.getLetters();
         //word=toISO(move.getLetters());
-        //*output << "\n\nPLAYER: " << toUTF(player.to_string()) << endl;
-        //*output << "WORD: " << toUTF(word) ;
-        bool probando = true;
-        if (player.isValid(word) || probando){
+        
+        if (player.isValid(word)) {
             player.extract(word);
             player.add(bag.extract(7-player.size())) ;
             
             score=move.findScore(language);
             move.setScore(score);
-            accepted.add(move);
+            accepted.add(move); //implementar += en movelist
             
             tablero.add (move);
             cout << endl << endl << endl ;
-            tablero.print(*output); //para comprobar salida (provisional)
+            tablero.print(cout); //para comprobar salida (provisional)
         }
         else {
             rejected.add(move);
-            *output << "\n >> REJECTED! " << endl;
+            cout << "\n >> REJECTED! " << endl;
         }
     } 
     
     
     //Resultado final:
+    cout << endl << endl ;
     *output << PASSWORD << endl ;
-    *output << score ;
-    *output << toUTF(language.getLetterSet()) << endl;
+    *output << score << endl ;
+    *output << lang << endl;
     *output << tablero.getHeight() << " " << tablero.getWidth() << endl ;
     tablero.print(*output);
     *output << endl ;
