@@ -72,6 +72,7 @@ void Tiles::set(int r, int c, char l){
     assert(r>=0 && r<rows && c>=0 && c<columns);
     
     cell[c][r] = l;
+    cout << "  " << cell[c][r] << endl ;
 }
 
 void Tiles::add(const Move& m){
@@ -99,7 +100,7 @@ void Tiles::print(std::ostream &os) const {
         
         for (int i=0; i<columns; i++){
             for (int j=0; j<rows; j++)
-                os << get(j, i) << " ";
+                os << cell[i][j] << " ";
             
             os << endl;
         }
@@ -107,14 +108,16 @@ void Tiles::print(std::ostream &os) const {
 }
 
 bool Tiles::read(std::istream &is) {
-    bool valid=true; //!
+    bool valid=true; 
+    char n ;
     
-    
-    //leer en copia y si es valido copiar, si hay error en la entrada tiles se queda vacio (??)
     for (int i=0; i<columns && valid; i++) {
         valid = !is.eof() && !is.bad();
-        for (int j=0; j<rows && valid ; j++)  //!
-            is >> cell[j][i];
+        for (int j=0; j<rows && valid ; j++)  {
+            is >> n ;
+            set (j, i, n) ;
+        }
+            
     }
     return valid;
 }

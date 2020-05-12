@@ -95,7 +95,8 @@ int main(int nargs, char * args[]) {
         if (s=="-open") {
             restored=true;
             
-            mfile_name = args[i++];
+            mfile_name = args[i];
+            i++;
             
             //comprueba formato
             int len=mfile_name.size();
@@ -112,11 +113,11 @@ int main(int nargs, char * args[]) {
             if (key != PASSWORD) 
                 errorBreak (ERROR_DATA, mfile_name) ;
             
-            *input >> score ;   //@warning
+            *input >> score ;  
             *input >> lang ;
             
-            *input >> r >> c;
-            //tablero.setSize(r, c);
+            *input >> r >> c ;
+            tablero.setSize(r, c);
             
             tablero.read(*input);
             
@@ -146,6 +147,8 @@ int main(int nargs, char * args[]) {
             input=&playfile;
            
             *input >> original; 
+            //if (original.size()==0)
+            //    errorBreak (ERROR_DATA, pfile_name) ;
             
             playfile.close();
             input=nullptr; 
@@ -186,7 +189,14 @@ int main(int nargs, char * args[]) {
             if (!ofile) 
                 errorBreak (ERROR_OPEN, ofilename) ;
             output=&ofile;
-        }     
+        }
+        
+        else if (s=="-b") { 
+            s=args[i];
+            i++;
+            b_secuencia = s ;
+            bag.set(toISO(b_secuencia));
+        }
         
         else
             errorBreak (ERROR_ARGUMENTS, "") ; 
@@ -208,9 +218,13 @@ int main(int nargs, char * args[]) {
     if (b_secuencia == "")
         bag.define(language) ;
     
+    if (player.size()<7)
+        player.add(bag.extract(7-player.size()));
+    
     if (ofilename=="") 
         cout << "\nOUTPUT: CONSOLE\n\n";
     
+    tablero.print(cout); 
     
     //cout << "\nALLOWED LETTERS: " << toUTF(language.getLetterSet()) << endl;
     //cout << "BAG ("<<bag.size()<<"): " << toUTF(bag.to_string()) << endl;
@@ -236,7 +250,7 @@ int main(int nargs, char * args[]) {
             
             tablero.add (move);
             cout << endl << endl << endl ;
-            tablero.print(cout); //para comprobar salida (provisional)
+            //tablero.print(cout); //para comprobar salida (provisional)
         }
         else {
             rejected += move;
@@ -271,10 +285,10 @@ void HallOfFame(const Language &l, int random, const Bag &b, const Player &p,
     cout << endl << "%%%OUTPUT" << endl << "LANGUAGE: "<<l.getLanguage()<< " ID: " << random << endl;
     cout << "BAG ("<<b.size()<<"): " << toUTF(b.to_string()) << endl;
     cout << "PLAYER (" <<p.size() << "): " << toUTF(p.to_string());
-    cout << endl << endl << "ORIGINAL ("<<original.size()<<"): "<<endl; cout << original ;
-    cout << endl << endl << "LEGAL ("<<legal.size()<<"): "<<endl; cout << legal ;
-    cout << endl << endl << "ACCEPTED ("<<accepted.size()<<") SCORE "<<accepted.getScore()<< ": "<<endl; cout << rejected;
-    cout << endl << endl << "REJECTED ("<<rejected.size()<<"): "<<endl; cout << rejected ;
+    cout << endl << "ORIGINAL ("<<original.size()<<"): "<<endl; cout << original ;
+    cout << endl << "LEGAL ("<<legal.size()<<"): "<<endl; cout << legal ;
+    cout << endl << "ACCEPTED ("<<accepted.size()<<") SCORE "<<accepted.getScore()<< ": "<<endl; cout << accepted ;
+    cout << endl << "REJECTED ("<<rejected.size()<<"): "<<endl; cout << rejected ;
     cout << endl;
 }
 

@@ -13,6 +13,8 @@
         <gdb_interceptlist>
           <gdbinterceptoptions gdb_all="false" gdb_unhandled="true" gdb_unexpected="true"/>
         </gdb_interceptlist>
+        <gdb_signals>
+        </gdb_signals>
         <gdb_options>
           <DebugOptions>
           </DebugOptions>
@@ -24,18 +26,18 @@
       </nativedebugger>
       <runprofile version="9">
         <runcommandpicklist>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -open data/EMPTY.match -p  data/ES_2020_mini.data</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -open data/DATA_ERROR.match -p  data/ES_2020_mini.data</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -open data/open/FR_2020_EU.match -p  data/playfile/FR_2020_27.data</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -l ES -w 10 -h 5 -p  data/playfile/ES_2020.data</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -l ES -w 10 -h 7 -p  data/playfile/ES_2020.data</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -open data/open/ES_PR.match -p data/playfile/ES_2020.data</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -open data/open/FR_2020_EU.match -p data/playfile/FR_2020_EU.data</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" -open data/open/FR_2020_EU.match -p data/playfile/FR_2020_EU.data -save SAVE1.match</runcommandpicklistitem>
           <runcommandpicklistitem> valgrind --leak-check=full --track-origins=yes "${OUTPUT_PATH}" -open data/open/FR_2020_EU.match -p data/playfile/FR_2020_EU.data -save SAVE1.match</runcommandpicklistitem>
           <runcommandpicklistitem>valgrind --leak-check=full --track-origins=yes "${OUTPUT_PATH}" -open data/open/FR_2020_EU.match -p data/playfile/FR_2020_EU.data -save SAVE1.match</runcommandpicklistitem>
+          <runcommandpicklistitem>valgrind --leak-check=full --track-origins=yes "${OUTPUT_PATH}" -r 100 -i data/ES_100_ERROR.data</runcommandpicklistitem>
+          <runcommandpicklistitem>valgrind --leak-check=full --track-origins=yes "${OUTPUT_PATH}"-l ES -r 100 -p data/ES_100_ERROR.data -w 1 -h 15 </runcommandpicklistitem>
+          <runcommandpicklistitem>valgrind --leak-check=full --track-origins=yes "${OUTPUT_PATH}" -l ES -r 100 -p data/ES_100_ERROR.data -w 1 -h 15</runcommandpicklistitem>
+          <runcommandpicklistitem> "${OUTPUT_PATH}" -l ES -r 100 -p data/ES_100_ERROR.data -w 1 -h 15</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -l ES -r 100 -p data/ES_100_ERROR.data -w 1 -h 15</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -l EN -r 2020 -w 20 -h 20 -p data/EU_2020_UNSORTED.data -b ABRRTUXISIIEOCEVTTEPMOEASIIOTVDONDNRLNRZTUIRLEAIORAAGTIUEFHECAEAAMNAGDGYEHLIEJBSOWDWNQSPULEFOYEKNO</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -open data/ES_2020.match -p data/EMPTY.data</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>valgrind --leak-check=full --track-origins=yes "${OUTPUT_PATH}" -open data/open/FR_2020_EU.match -p data/playfile/FR_2020_EU.data -save SAVE1.match</runcommand>
+        <runcommand>"${OUTPUT_PATH}" -open data/ES_2020.match -p data/EMPTY.data</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <console-type>2</console-type>

@@ -170,12 +170,13 @@ Movelist& Movelist:: operator+= (const Move &mov) {
 
 std::istream &operator>>(std:: istream &is, Movelist &i) { 
     Move move;
+    string s="";
     
     is >> move;
     
     while ( (move.getLetters()!="@" || move.getCol()!=0 || move.getRow()!=0 || !move.isHorizontal()) ) {
-        i += move;       
-        is >> move ;       //operator '>>' en move ya comprueba la entrada (assert)
+        i += move;
+        is >> move ;       
     } 
     
     return is;
