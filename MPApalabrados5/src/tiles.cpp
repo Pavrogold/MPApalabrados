@@ -42,7 +42,9 @@ void Tiles::setSize(int r, int c){
     rows = r;
     columns = c;
     
+    deallocate();
     allocate(r, c);
+    
     
     for (int i=0; i<columns; i++)
         for (int j=0; j<rows; j++)
@@ -72,7 +74,6 @@ void Tiles::set(int r, int c, char l){
     assert(r>=0 && r<rows && c>=0 && c<columns);
     
     cell[c][r] = l;
-    cout << "  " << cell[c][r] << endl ;
 }
 
 void Tiles::add(const Move& m){
@@ -100,7 +101,7 @@ void Tiles::print(std::ostream &os) const {
         
         for (int i=0; i<columns; i++){
             for (int j=0; j<rows; j++)
-                os << cell[i][j] << " ";
+                os << cell[j][i] << " ";
             
             os << endl;
         }
@@ -139,11 +140,26 @@ void Tiles::deallocate() {
 }
 
 void Tiles::copy (const Tiles  &t) {
-    deallocate();
-    setSize(t.getHeight(), t.getWidth());
+    bool same = true;
     
-    for (int i=0; i < t.getHeight(); i++){
-        for (int j=0; j < t.getWidth(); j++)
-            cell[i][j] = t.get(i, j);
+    if (t.getHeight() != rows || t.getWidth() != columns)
+        same = false;
+    
+    for (int i=0; i < t.getHeight() && same; i++){
+        for (int j=0; j < t.getWidth(); j++){
+                
+            if (get(j, i) != t.get(j, i))
+                same = false;      
+        }
+    }
+    
+    
+    if (!same){
+        setSize(t.getHeight(), t.getWidth());
+    
+        for (int i=0; i < t.getHeight(); i++){
+            for (int j=0; j < t.getWidth(); j++)
+                cell[i][j] = t.get(i, j);
+        }
     }
 }
