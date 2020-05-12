@@ -44,6 +44,7 @@ void Tiles::setSize(int r, int c){
     deallocate();
     allocate(r, c);
     
+    
     for (int i=0; i<columns; i++)
         for (int j=0; j<rows; j++)
             set(j, i, '.');
@@ -71,7 +72,11 @@ char Tiles::get(int r, int c) const {
 void Tiles::set(int r, int c, char l){
     assert(r>=0 && r<rows && c>=0 && c<columns);
     
+<<<<<<< HEAD
     cell[r][c] = l;
+=======
+    cell[c][r] = l;
+>>>>>>> ad23dcac52ce3301ff4c439de9262aedb34c75a3
 }
 
 void Tiles::add(const Move& m){
@@ -97,9 +102,16 @@ void Tiles::print(std::ostream &os) const {
     if (rows > 0 && columns > 0){
         //os << "Tiles:" << endl;
         
+<<<<<<< HEAD
         for (int i=0; i<rows; i++){
             for (int j=0; j<columns; j++)
                 os << cell[i][j] << " ";
+=======
+        for (int i=0; i<columns; i++){
+            for (int j=0; j<rows; j++)
+                os << cell[j][i] << " ";
+            
+>>>>>>> ad23dcac52ce3301ff4c439de9262aedb34c75a3
             os << endl;
         }
     }
@@ -134,12 +146,33 @@ void Tiles::deallocate() {
     }
 }
 
+<<<<<<< HEAD
 void Tiles::copy (const Tiles &t) {
     deallocate();
     setSize(t.getHeight(), t.getWidth());
+=======
+void Tiles::copy (const Tiles  &t) {
+    bool same = true;
     
-    for (int i=0; i < t.getHeight(); i++){
-        for (int j=0; j < t.getWidth(); j++)
-            cell[i][j] = t.get(i, j);
+    if (t.getHeight() != rows || t.getWidth() != columns)
+        same = false;
+    
+    for (int i=0; i < t.getHeight() && same; i++){
+        for (int j=0; j < t.getWidth(); j++){
+                
+            if (get(j, i) != t.get(j, i))
+                same = false;      
+        }
+    }
+    
+>>>>>>> ad23dcac52ce3301ff4c439de9262aedb34c75a3
+    
+    if (!same){
+        setSize(t.getHeight(), t.getWidth());
+    
+        for (int i=0; i < t.getHeight(); i++){
+            for (int j=0; j < t.getWidth(); j++)
+                cell[i][j] = t.get(i, j);
+        }
     }
 }
