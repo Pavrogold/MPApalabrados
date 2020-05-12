@@ -18,6 +18,9 @@
 #include "language.h"
 
 using namespace std;
+
+
+
     
 void Movelist::allocate(int n) {
     moves=new Move [n];
@@ -165,10 +168,10 @@ Movelist& Movelist:: operator+= (const Move &mov) {
 }
 
 
-std::istream &operator>>(std:: istream & is, Movelist &i) { 
-    Move tmp, move;
-    is.operator>>(move);
-    //is >> move;
+std::istream &operator>>(std:: istream &is, Movelist &i) { 
+    Move move;
+    
+    is >> move;
     
     while ( (move.getLetters()!="@" || move.getCol()!=0 || move.getRow()!=0 || !move.isHorizontal()) ) {
         i += move;       

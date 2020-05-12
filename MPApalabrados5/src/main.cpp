@@ -232,14 +232,14 @@ int main(int nargs, char * args[]) {
             
             score=move.findScore(language);
             move.setScore(score);
-            accepted.add(move); //implementar += en movelist
+            accepted += move ; //implementar += en movelist
             
             tablero.add (move);
             cout << endl << endl << endl ;
             tablero.print(cout); //para comprobar salida (provisional)
         }
         else {
-            rejected.add(move);
+            rejected += move;
             cout << "\n >> REJECTED! " << endl;     //salida solo en consola, no en savefile
         }
     } 
@@ -271,10 +271,10 @@ void HallOfFame(const Language &l, int random, const Bag &b, const Player &p,
     cout << endl << "%%%OUTPUT" << endl << "LANGUAGE: "<<l.getLanguage()<< " ID: " << random << endl;
     cout << "BAG ("<<b.size()<<"): " << toUTF(b.to_string()) << endl;
     cout << "PLAYER (" <<p.size() << "): " << toUTF(p.to_string());
-    cout << endl << endl << "ORIGINAL ("<<original.size()<<"): "<<endl; original.print(cout);
-    cout << endl << endl << "LEGAL ("<<legal.size()<<"): "<<endl; legal.print(cout);
-    cout << endl << endl << "ACCEPTED ("<<accepted.size()<<") SCORE "<<accepted.getScore()<< ": "<<endl; accepted.print(cout);
-    cout << endl << endl << "REJECTED ("<<rejected.size()<<"): "<<endl; rejected.print(cout);
+    cout << endl << endl << "ORIGINAL ("<<original.size()<<"): "<<endl; cout << original ;
+    cout << endl << endl << "LEGAL ("<<legal.size()<<"): "<<endl; cout << legal ;
+    cout << endl << endl << "ACCEPTED ("<<accepted.size()<<") SCORE "<<accepted.getScore()<< ": "<<endl; cout << rejected;
+    cout << endl << endl << "REJECTED ("<<rejected.size()<<"): "<<endl; cout << rejected ;
     cout << endl;
 }
 

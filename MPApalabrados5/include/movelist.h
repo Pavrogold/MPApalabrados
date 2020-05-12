@@ -184,7 +184,7 @@ public:
 	 */
 	Movelist & operator+=(const Move &mov);
 
-	friend std::ostream & operator<<(std::ostream & os, const Movelist  &i);
+	friend std::ostream & operator<<(std::ostream & os, const Movelist  &mlist);
 	friend std::istream & operator>>(std:: istream & is, Movelist  &i);
 
 	

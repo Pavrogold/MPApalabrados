@@ -110,8 +110,8 @@ public:
 
 	//new methods
 	// Friend functions
-	friend std::ostream& operator<<(std::ostream& os, Move  m);
-	friend std::istream& operator>>(std::istream& is, const Move  m);	
+	friend std::ostream& operator<<(std::ostream& os, const Move  &m);
+	friend std::istream& operator>>(std::istream& is, Move &m);	
 };
 
 
@@ -122,7 +122,7 @@ public:
      * @return The output stream (cout)
      */
     std::ostream& operator<<(std::ostream& os, const Move &m);
-        
+    
     /**
      * @brief Overload of the extraction operator
      * @param os Input stream (cin)

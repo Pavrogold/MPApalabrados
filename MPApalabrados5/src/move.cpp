@@ -117,6 +117,7 @@ bool Move:: equals (const Move &mov) const {    //@warning cambiar por operador
     return equals;
 }
 
+
 std::ostream& operator<<(std::ostream& os, const Move &m) {
     if (m.isHorizontal())
         os << "H";
