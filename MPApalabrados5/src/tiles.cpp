@@ -37,11 +37,11 @@ Tiles::~Tiles(){
 }
 
 void Tiles::setSize(int r, int c){
-    //assert(r < rows && c < columns);        // ???
-    
+    assert (r>0 && c>0);
     rows = r;
     columns = c;
     
+    deallocate();
     allocate(r, c);
     
     for (int i=0; i<columns; i++)
@@ -71,8 +71,7 @@ char Tiles::get(int r, int c) const {
 void Tiles::set(int r, int c, char l){
     assert(r>=0 && r<rows && c>=0 && c<columns);
     
-    cell[c][r] = l;
-    cout << "  " << cell[c][r] << endl ;
+    cell[r][c] = l;
 }
 
 void Tiles::add(const Move& m){
@@ -92,16 +91,15 @@ void Tiles::add(const Move& m){
 }
 
 void Tiles::print(std::ostream &os) const {
-    os << "Rows: " << rows << endl;
-    os << "Columns: " << columns << endl;
+    //os << "Rows: " << rows << endl;
+    //os << "Columns: " << columns << endl;
     
     if (rows > 0 && columns > 0){
-        os << "Tiles:" << endl;
+        //os << "Tiles:" << endl;
         
-        for (int i=0; i<columns; i++){
-            for (int j=0; j<rows; j++)
+        for (int i=0; i<rows; i++){
+            for (int j=0; j<columns; j++)
                 os << cell[i][j] << " ";
-            
             os << endl;
         }
     }
@@ -109,13 +107,11 @@ void Tiles::print(std::ostream &os) const {
 
 bool Tiles::read(std::istream &is) {
     bool valid=true; 
-    char n ;
     
-    for (int i=0; i<columns && valid; i++) {
+    for (int i=0; i<rows && valid; i++) {
         valid = !is.eof() && !is.bad();
-        for (int j=0; j<rows && valid ; j++)  {
-            is >> n ;
-            set (j, i, n) ;
+        for (int j=0; j<columns && valid ; j++)  {
+            is >> cell[i][j] ;
         }
             
     }
@@ -138,7 +134,7 @@ void Tiles::deallocate() {
     }
 }
 
-void Tiles::copy (const Tiles  &t) {
+void Tiles::copy (const Tiles &t) {
     deallocate();
     setSize(t.getHeight(), t.getWidth());
     

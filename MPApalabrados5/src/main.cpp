@@ -91,7 +91,8 @@ int main(int nargs, char * args[]) {
     bool restored=false;
     for (int i=1 ; i<nargs; ) {
         
-        s=args[i++];
+        s=args[i];
+        i++;
         if (s=="-open") {
             restored=true;
             
@@ -154,13 +155,17 @@ int main(int nargs, char * args[]) {
             input=nullptr; 
         } 
             
-        else if (s=="-l" && !restored) 
-            lang=args[i++] ;
+        else if (s=="-l" && !restored)  {
+            lang=args[i] ;
+            i++;
+        }
+            
         
         else if (s=="-w" && !restored) {
             if (!isdigit(*args[i])) //?
                 errorBreak (ERROR_ARGUMENTS, "") ; 
-            c = atoi(args[i++]);
+            c = atoi(args[i]);
+            i++;
         }
     
         else if (s=="-h" && !restored) {
@@ -172,12 +177,14 @@ int main(int nargs, char * args[]) {
         else if (s=="-r" && !restored) {
             if (!isdigit(*args[i])) 
                 errorBreak (ERROR_ARGUMENTS, "") ; 
-            random = atoi(args[i++]);
+            random = atoi(args[i]);
+            i++;
             bag.setRandom(random) ;
         } 
     
         else if (s=="-save") {
-            ofilename = args[i++];
+            ofilename = args[i];
+            i++;
             
             //comprueba formato
             int len=ofilename.size();
@@ -204,7 +211,7 @@ int main(int nargs, char * args[]) {
     
     if (r==-1 && c==-1)
         errorBreak(ERROR_ARGUMENTS, "");
-    else
+    else if (!restored)
         tablero.setSize(r, c);
     
     if (pfile_name=="")
@@ -224,8 +231,6 @@ int main(int nargs, char * args[]) {
     if (ofilename=="") 
         cout << "\nOUTPUT: CONSOLE\n\n";
     
-    tablero.print(cout); 
-    
     //cout << "\nALLOWED LETTERS: " << toUTF(language.getLetterSet()) << endl;
     //cout << "BAG ("<<bag.size()<<"): " << toUTF(bag.to_string()) << endl;
     //cout << "PLAYER: " << toUTF(player.to_string()) << endl;
@@ -234,6 +239,7 @@ int main(int nargs, char * args[]) {
     legal = original;
     legal.zip(language);
     
+    int total_score = 0;
     for (int i = 0; i < legal.size(); i++){
         
         move=legal.get(i);  
@@ -245,11 +251,11 @@ int main(int nargs, char * args[]) {
             player.add(bag.extract(7-player.size())) ;
             
             score=move.findScore(language);
+            total_score += score;
             move.setScore(score);
             accepted += move ; //implementar += en movelist
             
             tablero.add (move);
-            cout << endl << endl << endl ;
             //tablero.print(cout); //para comprobar salida (provisional)
         }
         else {
@@ -260,17 +266,16 @@ int main(int nargs, char * args[]) {
     
     
     //Resultado final:
-    cout << endl << endl ;
     *output << PASSWORD << endl ;
-    *output << score << endl ;
+    *output << total_score << endl ;
     *output << lang << endl;
     *output << tablero.getHeight() << " " << tablero.getWidth() << endl ;
     tablero.print(*output);
     *output << endl << player.size() << " " << toUTF(player.to_string()) << endl;
     *output << bag.size() << " " << toUTF(bag.to_string()) << endl;
     
-    HallOfFame(language, random, bag, player, tablero, original, legal, accepted, rejected); 
-    cout << endl;
+    //HallOfFame(language, random, bag, player, tablero, original, legal, accepted, rejected); 
+    //cout << endl;
     
     if (output != &cout)
         ofile.close() ;
