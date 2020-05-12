@@ -123,7 +123,7 @@ std::ostream& operator<<(std::ostream& os, const Move &m) {
     else
         os << "V";
     
-    os << " " << m.getRow() << " " << m.getCol() << " " << m.getLetters() ; //toUTF?
+    os << " " << m.getRow() << " " << m.getCol() << " " << toUTF(m.getLetters()) ;
     
     return os;
 }

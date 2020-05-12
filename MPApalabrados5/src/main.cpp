@@ -71,9 +71,9 @@ int main(int nargs, char * args[]) {
             rejected;           /// Movements not accepted in the game
     Tiles tablero;
     
-    int random=-1, score=0, p_size, b_size, w=-1, h=-1;
-    string lang = "", b_secuencia="",
-           pfile_name="", mfile_name ="", ofilename="",  key="", word = "" ;
+    int random=-1, score=0, p_size, b_size, r=-1, c=-1;
+    string lang = "", b_secuencia="", key="", word = "",
+           pfile_name="", mfile_name ="", ofilename="" ;
     const string FORMAT=".match";
     
     ifstream matchfile, playfile; 
@@ -115,9 +115,8 @@ int main(int nargs, char * args[]) {
             *input >> score ;   //@warning
             *input >> lang ;
             
-            int r, c;
             *input >> r >> c;
-            tablero.setSize(r, c);
+            //tablero.setSize(r, c);
             
             tablero.read(*input);
             
@@ -135,7 +134,7 @@ int main(int nargs, char * args[]) {
                 errorBreak (ERROR_DATA, mfile_name) ;
             
             matchfile.close();
-            input=nullptr; //?
+            input=nullptr;
         } 
         
         else if (s=="-p") {
@@ -149,31 +148,29 @@ int main(int nargs, char * args[]) {
             *input >> original; 
             
             playfile.close();
-            input=nullptr; //?
+            input=nullptr; 
         } 
             
-        else if (!restored) {
-            if (s=="-l" && !restored) 
+        else if (s=="-l" && !restored) 
             lang=args[i++] ;
         
-            else if (s=="-w" && !restored) {
-                if (!isdigit(*args[i])) //?
-                    errorBreak (ERROR_ARGUMENTS, "") ; 
-                w = atoi(args[i++]);
-            }
+        else if (s=="-w" && !restored) {
+            if (!isdigit(*args[i])) //?
+                errorBreak (ERROR_ARGUMENTS, "") ; 
+            c = atoi(args[i++]);
+        }
+    
+        else if (s=="-h" && !restored) {
+            if (!isdigit(*args[i])) 
+                errorBreak (ERROR_ARGUMENTS, "") ; 
+            r = atoi(args[i++]);
+        }
         
-            else if (s=="-h" && !restored) {
-                if (!isdigit(*args[i])) 
-                    errorBreak (ERROR_ARGUMENTS, "") ; 
-                h = atoi(args[i++]);
-            }
-        
-            else if (s=="-r" && !restored) {
-                if (!isdigit(*args[i])) 
-                    errorBreak (ERROR_ARGUMENTS, "") ; 
-                random = atoi(args[i++]);
-                bag.setRandom(random) ;
-            }
+        else if (s=="-r" && !restored) {
+            if (!isdigit(*args[i])) 
+                errorBreak (ERROR_ARGUMENTS, "") ; 
+            random = atoi(args[i++]);
+            bag.setRandom(random) ;
         } 
     
         else if (s=="-save") {
@@ -195,8 +192,10 @@ int main(int nargs, char * args[]) {
             errorBreak (ERROR_ARGUMENTS, "") ; 
     }
     
-    if (!restored)
-        tablero.setSize(w, h);
+    if (r==-1 && c==-1)
+        errorBreak(ERROR_ARGUMENTS, "");
+    else
+        tablero.setSize(r, c);
     
     if (pfile_name=="")
         errorBreak(ERROR_ARGUMENTS, "");
@@ -209,14 +208,13 @@ int main(int nargs, char * args[]) {
     if (b_secuencia == "")
         bag.define(language) ;
     
-    if (ofilename=="") {
+    if (ofilename=="") 
         cout << "\nOUTPUT: CONSOLE\n\n";
-    }
     
     
-    cout << "\nALLOWED LETTERS: " << toUTF(language.getLetterSet()) << endl;
-    cout << "BAG ("<<bag.size()<<"): " << toUTF(bag.to_string()) << endl;
-    cout << "PLAYER: " << toUTF(player.to_string()) << endl;
+    //cout << "\nALLOWED LETTERS: " << toUTF(language.getLetterSet()) << endl;
+    //cout << "BAG ("<<bag.size()<<"): " << toUTF(bag.to_string()) << endl;
+    //cout << "PLAYER: " << toUTF(player.to_string()) << endl;
     
     //assign original to legal, and remove invalid moves
     legal = original;
@@ -242,7 +240,7 @@ int main(int nargs, char * args[]) {
         }
         else {
             rejected.add(move);
-            cout << "\n >> REJECTED! " << endl;
+            cout << "\n >> REJECTED! " << endl;     //salida solo en consola, no en savefile
         }
     } 
     
@@ -254,12 +252,10 @@ int main(int nargs, char * args[]) {
     *output << lang << endl;
     *output << tablero.getHeight() << " " << tablero.getWidth() << endl ;
     tablero.print(*output);
-    *output << endl ;
-    *output << player.size() << " " << toUTF(player.to_string()) << endl;
+    *output << endl << player.size() << " " << toUTF(player.to_string()) << endl;
     *output << bag.size() << " " << toUTF(bag.to_string()) << endl;
     
-    HallOfFame(language, random, bag, player, 
-            tablero, original, legal, accepted, rejected); 
+    HallOfFame(language, random, bag, player, tablero, original, legal, accepted, rejected); 
     cout << endl;
     
     if (output != &cout)

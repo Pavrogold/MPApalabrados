@@ -182,9 +182,9 @@ public:
 	 * @param mov The new movement to be inserted
 	 * @return The left hand side of the operator
 	 */
-	Movelist & operator+=( Move &mov);
+	Movelist & operator+=(const Move &mov);
 
-	friend std::ostream & operator<<(std::ostream & os,  Movelist  s);
+	friend std::ostream & operator<<(std::ostream & os, const Movelist  &i);
 	friend std::istream & operator>>(std:: istream & is, Movelist  &i);
 
 	
@@ -197,7 +197,7 @@ public:
      * @param m The class to be inserted in the stream
      * @return The output stream (cout)
      */
-    std::ostream & operator<<(std::ostream & os, const Movelist & i);
+    std::ostream & operator<<(std::ostream & os, const Movelist &mlist);
 
     /**
      * @brief Overload of the extraction operator
@@ -206,6 +206,7 @@ public:
      * @return The input stream (cin)
      */
     std::istream & operator>>(std:: istream & is, Movelist & i);
+    
 
 #endif
 

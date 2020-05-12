@@ -10,6 +10,8 @@
 
 #include <iostream>
 #include <cassert>
+#include <fstream>
+#include <string>
 
 #include "movelist.h"
 #include "move.h"
@@ -54,22 +56,6 @@ Movelist:: ~Movelist() {
         nMove=0;
     }
 }
-        
-void Movelist:: assign (const Movelist& orig){
-    //if (this != orig)
-    
-    bool equals = nMove==orig.size() ;
-    if (equals) 
-        for (int i=0; i<nMove && equals; i++ )
-            equals = moves[i].equals(orig.get(i));
-    
-    if (!equals) {
-        clear();                    //si ya tiene espacio reservado se borra y nMove=0  (=obj)
-    
-        if (orig.size()!=0)         //si orig está vacio, se mantiene vacio y no se entra en copy
-            copy(orig);
-    }
-}
 
 Move Movelist:: get(int p) const {
     assert (p>-1 && p<nMove);
@@ -90,19 +76,6 @@ int Movelist::find(const Move &mov) const {  // Se ha añadido metodo en "move" 
             pos=i;
         }
     return pos;
-}
-
-void Movelist:: add(const Move &mov) {
-    Move *aux= new Move[nMove+1];
-    
-    for(int i=0; i<nMove; i++)
-        aux[i]= moves[i];
-    
-    if (nMove!=0)
-        deallocate();
-    moves= aux;
-    moves[nMove]= mov;
-    nMove++;
 }
 
 void Movelist:: remove(const Move &mov) {
@@ -162,6 +135,79 @@ int Movelist:: getScore() const {
     return score;
 }
 
+Movelist& Movelist:: operator=(const Movelist &orig) {
+    bool equals = nMove==orig.size() ;
+    
+    for (int i=0; i<nMove && equals; i++ )
+            equals = moves[i].equals(orig.get(i));
+    
+    if (!equals) {
+        clear();                    //si ya tiene espacio reservado se borra y nMove=0  (=obj)
+    
+        if (orig.size()!=0)         //si orig está vacio, se mantiene vacio y no se entra en copy
+            copy(orig);
+    }
+    return *this;
+}
+
+Movelist& Movelist:: operator+= (const Move &mov) {
+    Move *aux= new Move[nMove+1];
+    
+    for(int i=0; i<nMove; i++)
+        aux[i]= moves[i];
+    
+    if (nMove!=0)
+        deallocate();
+    
+    moves = aux;
+    moves[nMove]= mov;
+    nMove++;
+}
+
+
+std::istream &operator>>(std:: istream & is, Movelist &i) { 
+    Move tmp, move;
+    is.operator>>(move);
+    //is >> move;
+    
+    while ( (move.getLetters()!="@" || move.getCol()!=0 || move.getRow()!=0 || !move.isHorizontal()) ) {
+        i += move;       
+        is >> move ;       //operator '>>' en move ya comprueba la entrada (assert)
+    } 
+    
+    return is;
+}
+
+std::ostream &operator<<(std::ostream & os, const Movelist &mlist) {
+    Move m;
+    assert (!os.bad());
+    
+    for (int i=0; i<mlist.size(); i++) {
+        m=mlist.get(i) ;
+        os << m ;
+    }
+    
+    return os;
+}
+
+
+/*
+void Movelist:: assign (const Movelist& orig){
+    //if (this != orig)
+    
+    bool equals = nMove==orig.size() ;
+    if (equals) 
+        for (int i=0; i<nMove && equals; i++ )
+            equals = moves[i].equals(orig.get(i));
+    
+    if (!equals) {
+        clear();                    //si ya tiene espacio reservado se borra y nMove=0  (=obj)
+    
+        if (orig.size()!=0)         //si orig está vacio, se mantiene vacio y no se entra en copy
+            copy(orig);
+    }
+}  
+  
 bool Movelist:: read(std::istream &is) {
     bool res=true;
     int i=0;
@@ -172,10 +218,9 @@ bool Movelist:: read(std::istream &is) {
         res=m.read(is);
     } 
     return res;
-}
- 
-
-bool Movelist::print(std::ostream &os, bool scores) const {
+ }
+  
+ bool Movelist::print(std::ostream &os, bool scores) const {
     bool res=true;
     for (int i=0; i<size() && res; i++) {
         get(i).print(os);
@@ -189,12 +234,17 @@ bool Movelist::print(std::ostream &os, bool scores) const {
     return res;
 }
 
-Movelist& Movelist:: operator=(const Movelist &orig) {
-    assign (orig); 
-    return *this;
+ void Movelist:: add(const Move &mov) {
+    Move *aux= new Move[nMove+1];
+    
+    for(int i=0; i<nMove; i++)
+        aux[i]= moves[i];
+    
+    if (nMove!=0)
+        deallocate();
+    moves= aux;
+    moves[nMove]= mov;
+    nMove++;
 }
-
-std::istream &operator>>(std:: istream & is, Movelist &i) {
-    i.read(is);
-    return is;
-}
+  
+ */
