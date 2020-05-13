@@ -1,5 +1,5 @@
 
-%%%CALL -open data/ES_2020.match -p data/EMPTY.data
+%%%CALL -open data/ES_2020_98.match -p data/EMPTY.data
 %%%VALGRIND
 %%%OUTPUT
 98

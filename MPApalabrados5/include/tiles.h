@@ -112,19 +112,14 @@ public:
      */
     void add(const Move&m);
     
-
     /**
-     * @brief Prints the matrix in an ostream
-     * @param os Output stream (cout)
+     * @brief Auxiliar function: determina si las coordenadas del movimiento estan dentro del tablero
      */
-    void print(std::ostream &os) const;
+    bool inside (const Move &m) ;
     
-    
-    /**
-     * @brief Reads the matrix from an istream
-     * @param is Intput stream (cin)
-     */
-    bool read(std::istream &is);
+    //input-output operators
+    friend std::ostream& operator<<(std::ostream& os, const Tiles &t);
+    friend std::istream& operator>>(std::istream& is, Tiles &t);	
 
     
 private:
@@ -154,6 +149,21 @@ private:
 
 };
 
+std::ostream& operator<<(std::ostream& os, const Tiles &t);
+std::istream& operator>>(std::istream& is, Tiles &t);
+
+
+/**
+     * @brief Prints the matrix in an ostream
+     * @param os Output stream (cout)
+     */
+//    void print(std::ostream &os) const;
+
+    /**
+     * @brief Reads the matrix from an istream
+     * @param is Intput stream (cin)
+     */
+//    bool read(std::istream &is);
 
 #endif /* TILES_H */
 

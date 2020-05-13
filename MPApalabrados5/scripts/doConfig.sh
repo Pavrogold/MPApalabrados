@@ -75,12 +75,18 @@ CheckFolder ../local/lib LOCAL_LIB_FOLDER
 # Colors to be used in output of tests
 RED='\033[0;31m'
 GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[0;33m'
 GRAY='\033[1;30m'
 WHITE='\033[1;37m'
 # Use of memory leak detector
 USE_VALGRIND=NO
+# Seconds to wait before killing a (possibly) hang program
+SECS_WAIT=100
 # Prints explanations of failed tests?
-DO_REPORT=NO
+DO_REPORT=YES
+# Executes the script in interactive or batch mode
+DO_INTERACTIVE=YES
 # Forces the name of the ZIP. If left empty, the zip uses the name of the root foder
 ZIP_NAME=$PROJECT_NAME
 #ZIP_NAME="MPPractica"

@@ -136,11 +136,7 @@ std::istream& operator>>(std::istream& is, Move &m) {
 
     is >> h >> r >> c >> l ;
     
-    //assert (!is.eof() && !is.bad()) ;
-    
-    //si la entrada da error, el move se queda vacío (letters="")
-    //@warning
-    if ((!is.eof() && !is.bad()))
+    if (!is.eof() && !is.bad())
         m.set(r, c, h, l) ;
     else {
         r = c = 0;
@@ -148,7 +144,6 @@ std::istream& operator>>(std::istream& is, Move &m) {
         l="@";
         m.set(r, c, h, l) ;
     }
-        
     
     return is;
 }

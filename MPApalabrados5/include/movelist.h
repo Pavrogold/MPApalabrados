@@ -184,7 +184,7 @@ public:
 	 */
 	Movelist & operator+=(const Move &mov);
 
-	friend std::ostream & operator<<(std::ostream & os, const Movelist  &mlist);
+	friend std::ostream & operator<<(std::ostream & os, const Movelist  &i);
 	friend std::istream & operator>>(std:: istream & is, Movelist  &i);
 
 	
@@ -197,7 +197,7 @@ public:
      * @param m The class to be inserted in the stream
      * @return The output stream (cout)
      */
-    std::ostream & operator<<(std::ostream & os, const Movelist &mlist);
+    std::ostream & operator<<(std::ostream & os, const Movelist &i);
 
     /**
      * @brief Overload of the extraction operator

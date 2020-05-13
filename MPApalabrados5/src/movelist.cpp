@@ -54,6 +54,7 @@ Movelist::Movelist(const Movelist &orig) {
 }
 
 Movelist:: ~Movelist() {
+    //cout << "D - MOVELIST\n";
     if (nMove!=0) {
         deallocate();
         nMove=0;
@@ -165,30 +166,44 @@ Movelist& Movelist:: operator+= (const Move &mov) {
     moves = aux;
     moves[nMove]= mov;
     nMove++;
+    
+    return *this;
 }
 
 
 std::istream &operator>>(std:: istream &is, Movelist &i) { 
-    Move move;
-    string s="";
+    Move move ;
+    bool end = false ;
+    
+    i.clear();
     
     is >> move;
     
-    while ( (move.getLetters()!="@" || move.getCol()!=0 || move.getRow()!=0 || !move.isHorizontal()) ) {
+    if (is.eof() || is.bad()) 
+        end=true ; 
+    else
+        i += move ;
+    
+    //while ( (move.getLetters()!="@" || move.getCol()!=0 || move.getRow()!=0 || !move.isHorizontal()) && !end )
+    while ( move.getLetters()!="@" && !end ) {
+        is >> move ; 
         i += move;
-        is >> move ;       
+        if (is.eof() || is.bad()) {         //si se ha sobrepasado el final de fichero --> no finaliza correctamente -->
+            end=true ;                      //se vacia movelist --> en main movelist.size()==0 --> data_error
+            i.clear();
+        }
     } 
     
     return is;
 }
 
-std::ostream &operator<<(std::ostream & os, const Movelist &mlist) {
+std::ostream &operator<<(std::ostream & os, const Movelist &i) {
     Move m;
     assert (!os.bad());
     
-    for (int i=0; i<mlist.size(); i++) {
-        m=mlist.get(i) ;
-        os << m ;
+    for (int j=0; j<i.size(); j++) {
+        m=i.get(j) ;
+        os << m << " - " ;
     }
     
     return os;
