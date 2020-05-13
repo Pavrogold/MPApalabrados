@@ -33,7 +33,8 @@ Tiles::~Tiles(){
 }
 
 void Tiles::setSize(int r, int c){
-    assert (r>0 && c>0);
+    //assert(r < rows && c < columns);        // ???
+    
     rows = r;
     columns = c;
     
@@ -67,7 +68,11 @@ char Tiles::get(int r, int c) const {
 void Tiles::set(int r, int c, char l){
     assert(r>=0 && r<rows && c>=0 && c<columns);
     
+<<<<<<< HEAD
     cell[r][c] = l;
+=======
+    cell[c][r] = l;
+>>>>>>> e0f80dfce00f79ab10bb4033065bad11dad833e5
 }
 
 void Tiles::add(const Move& m){
@@ -86,6 +91,7 @@ void Tiles::add(const Move& m){
     }
 }
 
+<<<<<<< HEAD
 std::ostream& operator<<(std::ostream& os, const Tiles &t) {
     os << t.getHeight() << " " << t.getWidth() << endl;
     
@@ -95,10 +101,25 @@ std::ostream& operator<<(std::ostream& os, const Tiles &t) {
             for (int j=0; j<t.getWidth(); j++)
                 os << t.get(i,j) << " ";
             os << endl ;
+=======
+void Tiles::print(std::ostream &os) const {
+    os << "Rows: " << rows << endl;
+    os << "Columns: " << columns << endl;
+    
+    if (rows > 0 && columns > 0){
+        os << "Tiles:" << endl;
+        
+        for (int i=0; i<columns; i++){
+            for (int j=0; j<rows; j++)
+                os << cell[j][i] << " ";
+            
+            os << endl;
+>>>>>>> e0f80dfce00f79ab10bb4033065bad11dad833e5
         }
     }
 }
 
+<<<<<<< HEAD
 std::istream& operator>>(std::istream& is, Tiles &t) {
     bool valid = true ;
     char n;
@@ -108,6 +129,17 @@ std::istream& operator>>(std::istream& is, Tiles &t) {
         for (int j=0; j<t.getWidth() && valid ; j++)  {
             is >> n ;
             t.set(i, j, n) ;
+=======
+bool Tiles::read(std::istream &is) {
+    bool valid=true; 
+    char n ;
+    
+    for (int i=0; i<columns && valid; i++) {
+        valid = !is.eof() && !is.bad();
+        for (int j=0; j<rows && valid ; j++)  {
+            is >> n ;
+            set (j, i, n) ;
+>>>>>>> e0f80dfce00f79ab10bb4033065bad11dad833e5
         }
     }
 }
@@ -128,17 +160,32 @@ void Tiles::deallocate() {
     }
 }
 
+<<<<<<< HEAD
 void Tiles::copy (const Tiles &t) {
+=======
+void Tiles::copy (const Tiles  &t) {
+>>>>>>> e0f80dfce00f79ab10bb4033065bad11dad833e5
     bool same = true;
     
     if (t.getHeight() != rows || t.getWidth() != columns)
         same = false;
     
+<<<<<<< HEAD
     for (int i=0; i<t.getHeight() && same; i++)
         for (int j=0; j<t.getWidth() && same; j++)
             same = get(j, i) == t.get(j, i) ;
             //if (get(j, i) != t.get(j, i))
             //    same = false;    
+=======
+    for (int i=0; i < t.getHeight() && same; i++){
+        for (int j=0; j < t.getWidth(); j++){
+                
+            if (get(j, i) != t.get(j, i))
+                same = false;      
+        }
+    }
+    
+>>>>>>> e0f80dfce00f79ab10bb4033065bad11dad833e5
     
     if (!same){
         setSize(t.getHeight(), t.getWidth());
@@ -168,6 +215,7 @@ void Tiles::print(std::ostream &os) const {
         }
     }
 }
+<<<<<<< HEAD
  
 bool Tiles::read(std::istream &is) {
     bool valid=true; 
@@ -182,3 +230,6 @@ bool Tiles::read(std::istream &is) {
     return valid;
 }
  * */
+=======
+
+>>>>>>> e0f80dfce00f79ab10bb4033065bad11dad833e5
