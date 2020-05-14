@@ -19,8 +19,6 @@
 
 using namespace std;
 
-
-
     
 void Movelist::allocate(int n) {
     moves=new Move [n];
@@ -54,7 +52,6 @@ Movelist::Movelist(const Movelist &orig) {
 }
 
 Movelist:: ~Movelist() {
-    //cout << "D - MOVELIST\n";
     if (nMove!=0) {
         deallocate();
         nMove=0;

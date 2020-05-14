@@ -25,7 +25,7 @@ function doTest  {
         # Parse possible  Valgrind request
         if  grep --quiet $VALGRIND_MARK $1; 
         then
-            FORCE_VALGRIND=YES
+            FORCE_VALGRIND=YES 
         else
             FORCE_VALGRIND=NO
         fi

@@ -306,13 +306,15 @@ int main(int nargs, char * args[]) {
     
     
     //Final result:
-    //*output << PASSWORD << endl ;
-    cout << "%%%OUTPUT\n" ;
+    if (ofilename!="CONSOLE")
+        *output << PASSWORD << endl ;
+    else
+        cout << "%%%OUTPUT\n" ;
     *output << total_score << endl ;
     *output << lang << endl;
     *output << tablero ;
     *output << endl << player.size() << " " << toUTF(player.to_string()) << endl;
-    *output << bag.size() << " " << toUTF(bag.to_string()) ;
+    *output << bag.size() << " " << toUTF(bag.to_string()) << endl ;
     
     //HallOfFame(language, random, bag, player, tablero, original, legal, accepted, rejected); 
     

@@ -80,9 +80,9 @@ YELLOW='\033[0;33m'
 GRAY='\033[1;30m'
 WHITE='\033[1;37m'
 # Use of memory leak detector
-USE_VALGRIND=NO
+USE_VALGRIND=YES
 # Seconds to wait before killing a (possibly) hang program
-SECS_WAIT=100
+SECS_WAIT=60
 # Prints explanations of failed tests?
 DO_REPORT=YES
 # Executes the script in interactive or batch mode

@@ -13,8 +13,6 @@
         <gdb_interceptlist>
           <gdbinterceptoptions gdb_all="false" gdb_unhandled="true" gdb_unexpected="true"/>
         </gdb_interceptlist>
-        <gdb_signals>
-        </gdb_signals>
         <gdb_options>
           <DebugOptions>
           </DebugOptions>
@@ -26,18 +24,18 @@
       </nativedebugger>
       <runprofile version="9">
         <runcommandpicklist>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -l ES -r 2020 -w 15 -h 15 -p data/ES_2020_155_A.data -b  AENAXABUESITSMNYAATCPSTREUISAHDOOGOAEOAOAEIAELRISAURDAIETCVNMRNRUPOUDDDÑLFEILZBEOHGQOOECEELCSJN</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -l EN -r 2020 -w 20 -h 20 -p data/EU_2020_UNSORTED.data -b ABRRTUXISIIEOCEVTTEPMOEASIIOTVDONDNRLNRZTUIRLEAIORAAGTIUEFHECAEAAMNAGDGYEHLIEJBSOWDWNQSPULEFOYEKNO</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -l ES -r 2020 -w 15 -h 15 -p data/ES_2020_155_A.data -save data/ES_2020_98.match -b  AENAXABUESITSMNYAATCPSTREUISAHDOOGOAEOAOAEIAELRISAURDAIETCVNMRNRUPOUDDDÑLFEILZBEOHGQOOECEELCSJN</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -l ES</runcommandpicklistitem>
-          <runcommandpicklistitem>valgrind --leak-check=full --track-origins=yes "${OUTPUT_PATH}" -l ES</runcommandpicklistitem>
-          <runcommandpicklistitem>valgrind --leak-check=full --track-origins=yes "${OUTPUT_PATH}" -l EN -r 2020 -w 10 -h 5 -p data/EU_2020_UNSORTED.data -b ABRRTUXISIIEOCEVTTEPMOEASIIOTVDONDNRLNRZTUIRLEAIORAAGTIUEFHECAEAAMNAGDGYEHLIEJBSOWDWNQSPULEFOYEKNO</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -l EN -r 2020 -w 10 -h 5 -p data/EU_2020_UNSORTED.data -b ABRRTUXISIIEOCEVTTEPMOEASIIOTVDONDNRLNRZTUIRLEAIORAAGTIUEFHECAEAAMNAGDGYEHLIEJBSOWDWNQSPULEFOYEKNO</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -open data/ES_2020_98.match -p data/EMPTY.data</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" -l EN -r 100 -w 15 -h 15 -p data/EMPTY.data -b ACDMNRSCOKXNMRARIIIAZNERANDAGYGJTTBIELIESUOUPLAOVFETGEVLELQEOESTPITTIOHFOOBSERWROAIHDWEDAUENUEINYA) </runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" -l EN -r 100 -w 15 -h 15 -p data/EMPTY.data -b ACDMNRSCOKXNMRARIIIAZNERANDAGYGJTTBIELIESUOUPLAOVFETGEVLELQEOESTPITTIOHFOOBSERWROAIHDWEDAUENUEINYA</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -l ES -r 2020 -w 15 -h 15 -p data/ES_2020_155_A.data -save data/ES_2020_98.match -b  AENAXABUESITSMNYAATCPSTREUISAHDOOGOAEOAOAEIAELRISAURDAIETCVNMRNRUPOUDDDÑLFEILZBEOHGQOOECEELCSJN</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -open data/ES_2020_98.match -p data/EMPTY.data</runcommandpicklistitem>
+          <runcommandpicklistitem> valgrind --leak-check=full  "${OUTPUT_PATH}" -open data/ES_2020_98.match -p data/EMPTY.data</runcommandpicklistitem>
+          <runcommandpicklistitem>valgrind --leak-check=full -v  "${OUTPUT_PATH}" -open data/ES_2020_98.match -p data/EMPTY.data</runcommandpicklistitem>
+          <runcommandpicklistitem>valgrind --leak-check=full -v  "${OUTPUT_PATH}" -l EN -r 100 -w 15 -h 15 -p data/EMPTY.data -b ACDMNRSCOKXNMRARIIIAZNERANDAGYGJTTBIELIESUOUPLAOVFETGEVLELQEOESTPITTIOHFOOBSERWROAIHDWEDAUENUEINYA</runcommandpicklistitem>
+          <runcommandpicklistitem>valgrind --leak-check=full -v  "${OUTPUT_PATH}" -l EN -r 2020 -w 20 -h 20 -p data/EU_2020_UNSORTED.data -b ABRRTUXISIIEOCEVTTEPMOEASIIOTVDONDNRLNRZTUIRLEAIORAAGTIUEFHECAEAAMNAGDGYEHLIEJBSOWDWNQSPULEFOYEKNO</runcommandpicklistitem>
+          <runcommandpicklistitem>valgrind --leak-check=full -v  --track-origins=yes "${OUTPUT_PATH}" -l EN -r 2020 -w 20 -h 20 -p data/EU_2020_UNSORTED.data -b ABRRTUXISIIEOCEVTTEPMOEASIIOTVDONDNRLNRZTUIRLEAIORAAGTIUEFHECAEAAMNAGDGYEHLIEJBSOWDWNQSPULEFOYEKNO</runcommandpicklistitem>
+          <runcommandpicklistitem>valgrind --leak-check=full -v  --track-origins=yes "${OUTPUT_PATH}" -l ES -r 100 -p data/ES_100_ERROR.data -w 1 -h 15</runcommandpicklistitem>
+          <runcommandpicklistitem>valgrind --leak-check=full -v  --track-origins=yes "${OUTPUT_PATH}" -l ES -r 2020 -w 15 -h 15 -p data/ES_2020_155.data -b  AENAXABUESITSMNYAATCPSTREUISAHDOOGOAEOAOAEIAELRISAURDAIETCVNMRNRUPOUDDDÑLFEILZBEOHGQOOECEELCSJN</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}" -l EN -r 100 -w 15 -h 15 -p data/EMPTY.data -b ACDMNRSCOKXNMRARIIIAZNERANDAGYGJTTBIELIESUOUPLAOVFETGEVLELQEOESTPITTIOHFOOBSERWROAIHDWEDAUENUEINYA</runcommand>
+        <runcommand>valgrind --leak-check=full -v  --track-origins=yes "${OUTPUT_PATH}" -l ES -r 2020 -w 15 -h 15 -p data/ES_2020_155.data -b  AENAXABUESITSMNYAATCPSTREUISAHDOOGOAEOAOAEIAELRISAURDAIETCVNMRNRUPOUDDDÑLFEILZBEOHGQOOECEELCSJN</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <console-type>2</console-type>

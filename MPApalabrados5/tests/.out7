@@ -1,0 +1,44 @@
+==18800== Memcheck, a memory error detector
+==18800== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==18800== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==18800== Command: /usr/bin/valgrind --leak-check=full /home/yesenia/Escritorio/MP/Entrega5/MPApalabrados/MPApalabrados5/dist/Debug/GNU-Linux/mpapalabrados5 -open data/ES_2020_155_A.match -p data/ES_2020_155_B.data
+==18800== 
+==18800== Memcheck, a memory error detector
+==18800== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==18800== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==18800== Command: /home/yesenia/Escritorio/MP/Entrega5/MPApalabrados/MPApalabrados5/dist/Debug/GNU-Linux/mpapalabrados5 -open data/ES_2020_155_A.match -p data/ES_2020_155_B.data
+==18800== 
+Opening tree file ./languages/ES.tree
+Trying to read 48428 words
+==18800== 
+==18800== Process terminating with default action of signal 15 (SIGTERM)
+==18800==    at 0x1168B0: std::remove_reference<std::shared_ptr<TrieNode>&>::type&& std::move<std::shared_ptr<TrieNode>&>(std::shared_ptr<TrieNode>&) (move.h:98)
+==18800==    by 0x1168DE: std::shared_ptr<TrieNode>::operator=(std::shared_ptr<TrieNode>&&) (shared_ptr.h:319)
+==18800==    by 0x113CA7: TrieNode::TrieNode() (wordlist.cpp:16)
+==18800==    by 0x11511C: Trie::rLoad(std::istream&, std::shared_ptr<TrieNode>, int, int&) (wordlist.cpp:284)
+==18800==    by 0x1151D9: Trie::rLoad(std::istream&, std::shared_ptr<TrieNode>, int, int&) (wordlist.cpp:286)
+==18800==    by 0x1151D9: Trie::rLoad(std::istream&, std::shared_ptr<TrieNode>, int, int&) (wordlist.cpp:286)
+==18800==    by 0x1151D9: Trie::rLoad(std::istream&, std::shared_ptr<TrieNode>, int, int&) (wordlist.cpp:286)
+==18800==    by 0x1151D9: Trie::rLoad(std::istream&, std::shared_ptr<TrieNode>, int, int&) (wordlist.cpp:286)
+==18800==    by 0x1151D9: Trie::rLoad(std::istream&, std::shared_ptr<TrieNode>, int, int&) (wordlist.cpp:286)
+==18800==    by 0x114FA2: operator>>(std::istream&, Trie&) (wordlist.cpp:260)
+==18800==    by 0x114D3F: Trie::load(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) (wordlist.cpp:237)
+==18800==    by 0x112767: Language::setLanguage(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) (language.cpp:35)
+==18800== 
+==18800== HEAP SUMMARY:
+==18800==     in use at exit: 40,442,846 bytes in 244,569 blocks
+==18800==   total heap usage: 244,620 allocs, 51 frees, 40,541,235 bytes allocated
+==18800== 
+==18800== LEAK SUMMARY:
+==18800==    definitely lost: 0 bytes in 0 blocks
+==18800==    indirectly lost: 0 bytes in 0 blocks
+==18800==      possibly lost: 0 bytes in 0 blocks
+==18800==    still reachable: 40,442,846 bytes in 244,569 blocks
+==18800==                       of which reachable via heuristic:
+==18800==                         newarray           : 37,172,720 bytes in 81,519 blocks
+==18800==         suppressed: 0 bytes in 0 blocks
+==18800== Reachable blocks (those to which a pointer was found) are not shown.
+==18800== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==18800== 
+==18800== For counts of detected and suppressed errors, rerun with: -v
+==18800== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

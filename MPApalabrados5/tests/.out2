@@ -1,0 +1,31 @@
+==18666== Memcheck, a memory error detector
+==18666== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==18666== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==18666== Command: /usr/bin/valgrind --leak-check=full /home/yesenia/Escritorio/MP/Entrega5/MPApalabrados/MPApalabrados5/dist/Debug/GNU-Linux/mpapalabrados5 -l ES -r 100 -p data/ES_100_ERROR.data -w 1 -h 15
+==18666== 
+==18666== Memcheck, a memory error detector
+==18666== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==18666== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==18666== Command: /home/yesenia/Escritorio/MP/Entrega5/MPApalabrados/MPApalabrados5/dist/Debug/GNU-Linux/mpapalabrados5 -l ES -r 100 -p data/ES_100_ERROR.data -w 1 -h 15
+==18666== 
+
+%%%OUTPUT
+Data error in file data/ES_100_ERROR.data
+==18666== 
+==18666== HEAP SUMMARY:
+==18666==     in use at exit: 9,240 bytes in 5 blocks
+==18666==   total heap usage: 75 allocs, 70 frees, 89,600 bytes allocated
+==18666== 
+==18666== LEAK SUMMARY:
+==18666==    definitely lost: 0 bytes in 0 blocks
+==18666==    indirectly lost: 0 bytes in 0 blocks
+==18666==      possibly lost: 0 bytes in 0 blocks
+==18666==    still reachable: 9,240 bytes in 5 blocks
+==18666==                       of which reachable via heuristic:
+==18666==                         newarray           : 456 bytes in 1 blocks
+==18666==         suppressed: 0 bytes in 0 blocks
+==18666== Reachable blocks (those to which a pointer was found) are not shown.
+==18666== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==18666== 
+==18666== For counts of detected and suppressed errors, rerun with: -v
+==18666== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

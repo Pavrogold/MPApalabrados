@@ -1,0 +1,61 @@
+==18691== Memcheck, a memory error detector
+==18691== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==18691== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==18691== Command: /usr/bin/valgrind --leak-check=full /home/yesenia/Escritorio/MP/Entrega5/MPApalabrados/MPApalabrados5/dist/Debug/GNU-Linux/mpapalabrados5 -open data/ES_2020_98.match -p data/EMPTY.data
+==18691== 
+==18691== Memcheck, a memory error detector
+==18691== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==18691== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==18691== Command: /home/yesenia/Escritorio/MP/Entrega5/MPApalabrados/MPApalabrados5/dist/Debug/GNU-Linux/mpapalabrados5 -open data/ES_2020_98.match -p data/EMPTY.data
+==18691== 
+Opening tree file ./languages/ES.tree
+Trying to read 48428 words
+OK 48428 words read
+Opening ./languages/ES.scrabble
+OK 25 Scrabble's letter read 
+
+OUTPUT: CONSOLE
+
+
+%%%OUTPUT
+98
+ES
+15 15
+A E A S T C D E O O A R T P C 
+B X Y R U H O A I L I U I U R 
+A I U . T I G . A E R E M R U 
+N S N . E S M . . O O D N . D 
+A T A . . P A . . . S E A . O 
+. E S . . A . . . . A . . . . 
+. . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . 
+
+7 ÑDDFLNV
+21 EILZBEOHGQOOECEELCSJN
+==18691== 
+==18691== HEAP SUMMARY:
+==18691==     in use at exit: 345 bytes in 2 blocks
+==18691==   total heap usage: 328,032 allocs, 328,030 frees, 54,340,204 bytes allocated
+==18691== 
+==18691== 345 (120 direct, 225 indirect) bytes in 1 blocks are definitely lost in loss record 2 of 2
+==18691==    at 0x4C3089F: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==18691==    by 0x111FBE: Tiles::allocate(int, int) (tiles.cpp:115)
+==18691==    by 0x111A5C: Tiles::setSize(int, int) (tiles.cpp:40)
+==18691==    by 0x10CD77: main (main.cpp:128)
+==18691== 
+==18691== LEAK SUMMARY:
+==18691==    definitely lost: 120 bytes in 1 blocks
+==18691==    indirectly lost: 225 bytes in 1 blocks
+==18691==      possibly lost: 0 bytes in 0 blocks
+==18691==    still reachable: 0 bytes in 0 blocks
+==18691==         suppressed: 0 bytes in 0 blocks
+==18691== 
+==18691== For counts of detected and suppressed errors, rerun with: -v
+==18691== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
