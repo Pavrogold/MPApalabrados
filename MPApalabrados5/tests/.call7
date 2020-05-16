@@ -1,1 +1,0 @@
-Test #7 [tests//ES_2020_155_B.test] valgrind --leak-check=full  dist/Debug/GNU-Linux/mpapalabrados5  -open data/ES_2020_155_A.match -p data/ES_2020_155_B.data 

@@ -1,1 +1,0 @@
-Test #1 [tests//CALL_ERROR.test] valgrind --leak-check=full  dist/Debug/GNU-Linux/mpapalabrados5  -r 100 -i data/ES_100_ERROR.data

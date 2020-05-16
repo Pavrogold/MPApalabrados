@@ -1,0 +1,4 @@
+2 10 juego
+1 1 hermano
+3 4 @
+

@@ -1,4 +1,4 @@
 touch tests//.timeout
-CMD="valgrind --leak-check=full  valgrind --leak-check=full /home/yesenia/Escritorio/MP/Entrega5/MPApalabrados/MPApalabrados5/dist/Debug/GNU-Linux/mpapalabrados5  -open data/ES_2020_155_A.match -p data/ES_2020_155_B.data  1> tests//.out7 2>&1"
+CMD="valgrind --leak-check=full  valgrind --leak-check=full /home/yesenia/Escritorio/MP/Entrega5/MPApalabrados/MPApalabrados5/dist/Debug/GNU-Linux/mpapalabrados5  -l ES -r 100 -w 10 -h 10 -p data/OPEN_ERROR.data 1> tests//.out12 2>&1"
 eval $CMD
 rm tests//.timeout

@@ -57,7 +57,7 @@ int Tiles::getHeight() const {
 }
 
 char Tiles::get(int r, int c) const {
-    assert(r<rows && c<columns);
+    assert(r>=0 && r<rows && c>=0 && c<columns); // assertion if r=0 and c=0 
     
     return cell[r][c];
 }
@@ -153,19 +153,19 @@ bool Tiles:: inside (const Move &m) {
 }
 
 
-/*
+//Read-print methods
 void Tiles::print(std::ostream &os) const {
     os << rows << " " << columns << endl;
     
-    if (rows > 0 && columns > 0){
+    if (rows > 0 && columns > 0)
         
         for (int i=0; i<rows; i++){
             for (int j=0; j<columns; j++)
-                os << cell[i][j] << " ";
+                os << get(i,j) << " ";
             os << endl ;
         }
-    }
 }
+
  
 bool Tiles::read(std::istream &is) {
     bool valid=true; 
@@ -179,4 +179,3 @@ bool Tiles::read(std::istream &is) {
     }
     return valid;
 }
- * */

@@ -174,21 +174,13 @@ std::istream &operator>>(std:: istream &is, Movelist &i) {
     
     i.clear();
     
-    is >> move;
-    
-    if (is.eof() || is.bad()) 
-        end=true ; 
-    else
-        i += move ;
-    
     //while ( (move.getLetters()!="@" || move.getCol()!=0 || move.getRow()!=0 || !move.isHorizontal()) && !end )
-    while ( move.getLetters()!="@" && !end ) {
+    while (move.getLetters()!="@" && !end) {
         is >> move ; 
-        i += move;
         if (is.eof() || is.bad()) {         //si se ha sobrepasado el final de fichero --> no finaliza correctamente -->
             end=true ;                      //se vacia movelist --> en main movelist.size()==0 --> data_error
             i.clear();
-        }
+        } else i += move;
     } 
     
     return is;

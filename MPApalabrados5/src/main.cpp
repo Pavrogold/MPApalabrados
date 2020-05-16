@@ -95,7 +95,8 @@ int main(int nargs, char * args[]) {
     bool restored=false;
     for (int i=1 ; i<nargs; ) {
         
-        s=args[i++];
+        s=args[i];
+        i++;
         
         if (s=="-open") {
             restored=true;
@@ -106,6 +107,7 @@ int main(int nargs, char * args[]) {
             string file_format=mfile_name.substr(len-FORMAT.size(), FORMAT.size());
             if ( file_format != FORMAT ) {
                 original.~Movelist(); rejected.~Movelist(); accepted.~Movelist(); legal.~Movelist(); tablero.~Tiles();      //Destructores
+                cerr << "Please use a matchfile:  -p <*.match>" << endl ;
                 errorBreak (ERROR_ARGUMENTS, "") ;
             }
             
@@ -206,6 +208,7 @@ int main(int nargs, char * args[]) {
             string file_format=ofilename.substr(len-FORMAT.size(), FORMAT.size());
             if (file_format != FORMAT) {
                 original.~Movelist(); rejected.~Movelist(); accepted.~Movelist(); legal.~Movelist(); tablero.~Tiles();      //Destructores
+                cerr << " >> Please use a matchfile:  -s <*.match>" << endl ;
                 errorBreak (ERROR_ARGUMENTS, "") ;
             }
             
@@ -283,14 +286,15 @@ int main(int nargs, char * args[]) {
             
             score=move.findScore(language);
             total_score += score;
-            move.setScore(score);   //@warning
+            move.setScore(score);   
             accepted += move ; 
             
             tablero.add (move);
             
             cout << "\n >> ACCEPTED!" ;
             if (!inside)
-                cout << " (out of limits)" ;
+                cout << " (out of limits). " ;
+            cout << " --> " << move.getScore() << " points" ;
             
             cout << endl << tablero ;
         }
