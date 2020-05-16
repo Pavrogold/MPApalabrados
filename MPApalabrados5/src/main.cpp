@@ -308,19 +308,18 @@ int main(int nargs, char * args[]) {
     } 
     cout << "\n\n" ;
     
+    HallOfFame(language, random, bag, player, tablero, original, legal, accepted, rejected); 
     
     //Final result:
     if (ofilename!="CONSOLE")
         *output << PASSWORD << endl ;
     else
-        cout << "%%%OUTPUT\n" ;
+        cout << "\n%%%OUTPUT\n" ;
     *output << total_score << endl ;
     *output << lang << endl;
     *output << tablero ;
     *output << endl << player.size() << " " << toUTF(player.to_string()) << endl;
     *output << bag.size() << " " << toUTF(bag.to_string()) << endl ;
-    
-    //HallOfFame(language, random, bag, player, tablero, original, legal, accepted, rejected); 
     
     if (output != &cout)
         ofile.close() ;
@@ -332,7 +331,8 @@ int main(int nargs, char * args[]) {
 void HallOfFame(const Language &l, int random, const Bag &b, const Player &p, 
         const Tiles &t, const Movelist& original,const Movelist& legal,
         const Movelist& accepted,const Movelist& rejected) {
-    cout << endl << "%%%OUTPUT" << endl << "LANGUAGE: "<<l.getLanguage()<< " ID: " << random << endl;
+    //cout << endl << "%%%OUTPUT" ;
+    cout << endl << "LANGUAGE: "<<l.getLanguage()<< " ID: " << random << endl;
     cout << "BAG ("<<b.size()<<"): " << toUTF(b.to_string()) << endl;
     cout << "PLAYER (" <<p.size() << "): " << toUTF(p.to_string());
     cout << endl << endl << "ORIGINAL ("<<original.size()<<"): "<<endl; cout << original ;
