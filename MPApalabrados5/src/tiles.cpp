@@ -23,6 +23,8 @@ Tiles::Tiles(int r, int c){
 }
 
 Tiles::Tiles(const Tiles & orig){
+    rows = 0;
+    columns = 0;
     copy(orig);
 }
 
@@ -35,7 +37,7 @@ void Tiles::setSize(int r, int c){
     rows = r;
     columns = c;
     
-    deallocate();
+    //deallocate();
     allocate(r, c);
     
     for (int i=0; i<columns; i++)
@@ -123,6 +125,8 @@ void Tiles::deallocate() {
         delete [] cell[0];
         delete [] cell;
         cell = nullptr;
+        rows = 0;
+        columns = 0;
     }
 }
 
@@ -139,6 +143,9 @@ void Tiles::copy (const Tiles &t) {
             //    same = false;    
     
     if (!same){
+        if (rows != 0 && columns != 0)
+            deallocate();
+        
         setSize(t.getHeight(), t.getWidth());
     
         for (int i=0; i < t.getHeight(); i++)
