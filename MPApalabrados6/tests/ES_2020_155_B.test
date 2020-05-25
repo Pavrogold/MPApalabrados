@@ -1,0 +1,25 @@
+
+%%%CALL -open data/ES_2020_155_A.match -p data/ES_2020_155_B.data 
+%%%VALGRIND
+%%%OUTPUT
+155
+ES
+15 15
+L V A S T C D E O O A R T P C 
+F I N R U H O A I L I U I U R 
+D E L . T I G . A E R E M R U 
+D E B O E S M . . O O D N . D 
+G O Z O . P A . . . S E A . O 
+E C H E . A . . . . A . . . . 
+L E S . . . . . . . . . . . . 
+J N . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . 
+
+3 ÑCQ
+0 
