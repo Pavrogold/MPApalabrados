@@ -78,10 +78,10 @@ void Tiles::add(const Move& m){
     
     //si no cabe -> se añade el string cortado 
     for (int i=0; i<s.length() && r<=rows && c<=columns ; i++){
-        if (get(r-1, c-1) == '.')
+        //if (get(r-1, c-1) == '.')
             set(r-1, c-1, s[i]);
-        else
-            i--;
+        //else
+            //i--;
         if (h)
             c++;
         else
