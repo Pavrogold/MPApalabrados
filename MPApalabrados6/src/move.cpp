@@ -47,7 +47,7 @@ void Move:: setLetters(const std::string &l){
         letters = l;
 }
 
-int Move:: findScore(const Language &l) const {
+int Move:: findScore(const Language &l) {
     int n = 0;
     
     if (!l.query(letters))
@@ -62,7 +62,7 @@ int Move:: findScore(const Language &l) const {
     return n;
 }
 
-void Move:: setScore(int &s){
+void Move:: setScore(int s){
     //assert(s > -2);
     score = s;
 }

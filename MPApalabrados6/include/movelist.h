@@ -166,6 +166,9 @@ public:
 	 * @return True if there was no problem reading data, false otherwise.
 	 */
 	bool read(std::istream &is);
+        
+        
+        bool repeat_word(const Move &m);
 
 
 

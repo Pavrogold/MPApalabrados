@@ -78,7 +78,10 @@ void Tiles::add(const Move& m){
     
     //si no cabe -> se añade el string cortado 
     for (int i=0; i<s.length() && r<=rows && c<=columns ; i++){
-        set(r-1, c-1, s[i]);
+        if (get(r-1, c-1) == '.')
+            set(r-1, c-1, s[i]);
+        else
+            i--;
         if (h)
             c++;
         else
@@ -155,7 +158,7 @@ void Tiles::copy (const Tiles &t) {
     }
 }
 
-bool Tiles:: inside (const Move &m) {
+bool Tiles:: inside (const Move &m) const {
     //return (m.getRow()<=rows && m.getCol()<=columns);
     int r = m.getRow(), c = m.getCol(), size = m.getLetters().size()-1;
     return (r+size<=rows && c+size<=columns);
@@ -190,7 +193,7 @@ bool Tiles::read(std::istream &is) {
 }
 
 Move Tiles::findMaxWord(int r, int c, bool hrz) const {
-    assert (r<getHeight() && r>=0 && c<getWeight() && c >=0) ;
+    assert (r < getHeight() && r>=0 && c < getWidth() && c >=0) ;
     
     Move mov;
     string word;
@@ -210,12 +213,14 @@ Move Tiles::findMaxWord(int r, int c, bool hrz) const {
     
     if (hrz && (col != 0 || get (row, 0) == '.')) 
         c = col += 1;
-    else (!hrz && (row !=0 || get (0, col) == '.') ) 
-        r = row +=1 ;
+    // else (!hrz && (row !=0 || get (0, col) == '.') )  
+    else if (!hrz && (row !=0 || get (0, col) == '.') )
+        r = row += 1;
+    
     
     //formamos la palabra a partir de las coordenadas obtenidas, y avanzamos hasta el limite del tablero o hasta que deje de haber letras
     //while (get(row,col) != '.' && row<getHeight() && col<getWeight()) {
-    while (get(row,col) != '.' && row<getHeight() && col<getWeight()) {
+    while (get(row,col) != '.' && row<getHeight() && col<getWidth()) {
         word += get (r, c);
         if (hrz)
             col++;
@@ -234,8 +239,9 @@ Movelist Tiles:: findCrosswords(Move &m, const Language &l) const {
     Move mov;
     int r = m.getRow()-1, c=m.getCol()-1, n_h, n_v, tam = m.getLetters().size();    
     bool hor = m.isHorizontal(),
-         in_tiles = inside(m), r_word;  //repeat word
-    
+         in_tiles = inside(m), 
+         r_word;  //repeat word
+   
     //mirar score del move antes (en main)
     //devolver crossword vacio (??  -  board overflow)
     //asumo que al tablero aun no se ha añadido la palabra

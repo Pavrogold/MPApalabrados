@@ -115,7 +115,7 @@ public:
     /**
      * @brief Auxiliar function: determina si las coordenadas del movimiento estan dentro del tablero
      */
-    bool inside (const Move &m) ;
+    bool inside (const Move &m) const ;
     
     /**
      * @brief Prints the matrix in an ostream
@@ -128,6 +128,21 @@ public:
      * @param is Intput stream (cin)
      */
     bool read(std::istream &is);
+    
+    /**
+	 * @brief  Given a move, it computes all the crosswords with the existing letters
+	 * in the matrix. Each crossword is stored in an instance of the class Move,
+	 * and the whole set of crosswords found in an instance of Movelist. Each crossword (move)
+	 * stored in the result must be scored according to the given language as specified in move.h
+	 * In the case that the specified movement does not fit within the bound of the matrix, it returns an 
+	 * empty list of movements.
+	 * @param m Movement 
+	 * @param l Language
+	 * @return A set of scored crosswords, each one stored as a movement within the list of movements. If the
+	 * movement does not fit within the matrix, an empty list is returned
+	 * @warning Please use only the methods set() and get() above to access to the matrix
+	 */
+    Movelist findCrosswords(Move &m, const Language &l) const;
     
     //input-output operators
     friend std::ostream& operator<<(std::ostream& os, const Tiles &t);
@@ -176,20 +191,7 @@ private:
      */
     Move findMaxWord(int r, int c, bool hrz) const;	
     
-    /**
-	 * @brief  Given a move, it computes all the crosswords with the existing letters
-	 * in the matrix. Each crossword is stored in an instance of the class Move,
-	 * and the whole set of crosswords found in an instance of Movelist. Each crossword (move)
-	 * stored in the result must be scored according to the given language as specified in move.h
-	 * In the case that the specified movement does not fit within the bound of the matrix, it returns an 
-	 * empty list of movements.
-	 * @param m Movement 
-	 * @param l Language
-	 * @return A set of scored crosswords, each one stored as a movement within the list of movements. If the
-	 * movement does not fit within the matrix, an empty list is returned
-	 * @warning Please use only the methods set() and get() above to access to the matrix
-	 */
-	Movelist findCrosswords(Move &m, const Language &l) const;
+    
 
 };
 

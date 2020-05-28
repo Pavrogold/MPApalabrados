@@ -70,12 +70,12 @@ public:
 	 * @return The sum of individual values according to the language, or -1 if the 
 	 * word does not belong to the language.
 	 */
-	int findScore(const Language &l)const;
+	int findScore(const Language &l);
 	/**
 	 * @brief Sets the value of the movement which have been calculated elsewhere 
 	 * @param s The value of the movement
 	 */
-	void setScore(int &s);
+	void setScore(int s);
 	/**
 	 * @brief Query data stored in the class
 	 * @return The value stored
