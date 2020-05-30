@@ -60,20 +60,20 @@ int main(int nargs, char * args[]) {
     ofstream ofile, *output;
     //output=&cout;
     
-    bool end=false, valid;
+    bool end=false, restored=false, valid;
     char cc;
     
     /// Check arguments
     
     cout << nargs;
-    if (nargs<1 || nargs>15 || nargs%2==0) {
-        //original.~Movelist(); rejected.~Movelist(); accepted.~Movelist(); legal.~Movelist(); tablero.~Tiles(); tablero.~Tiles();      //Destructores
+
+    /// Check arguments
+    if (nargs<3 || nargs>13 || nargs%2==0) {
+        game.~Game();                           
         errorBreak (ERROR_ARGUMENTS, "") ;
     }
-
-    // Process arguments
+    
     string s;
-    bool restored=false;
     for (int i=1 ; i<nargs; ) {
         
         s=args[i];
@@ -81,111 +81,47 @@ int main(int nargs, char * args[]) {
         
         if (s=="-open") {
             restored=true;
-            mfile_name = args[i++];
+            ifilematch = args[i++];
             
             //Comprueba formato
-            int len=mfile_name.size();
-            string file_format=mfile_name.substr(len-FORMAT.size(), FORMAT.size());
+            int len=ifilematch.size();
+            string file_format=ifilematch.substr(len-FORMAT.size(), FORMAT.size());
             if ( file_format != FORMAT ) {
-                //original.~Movelist(); rejected.~Movelist(); accepted.~Movelist(); legal.~Movelist(); tablero.~Tiles();      //Destructores
+                game.~Game();     
                 cerr << "Please use a matchfile:  -p <*.match>" << endl ;
                 errorBreak (ERROR_ARGUMENTS, "") ;
             }
-            
-            matchfile.open(mfile_name.c_str());
-            if (!matchfile) {
-                //original.~Movelist(); rejected.~Movelist(); accepted.~Movelist(); legal.~Movelist(); tablero.~Tiles();      //Destructores
-                errorBreak (ERROR_OPEN, mfile_name) ;
-            }
-            input=&matchfile;
-            
-            *input >> key ;
-            if (key != PASSWORD) {
-                //original.~Movelist(); rejected.~Movelist(); accepted.~Movelist(); legal.~Movelist(); tablero.~Tiles();      //Destructores
-                errorBreak (ERROR_DATA, mfile_name) ;
-            }
-                
-            *input >> total_score ;  
-            *input >> lang ;
-            *input >> r >> c ;
-            game.tiles.setSize(r, c);
-            
-            *input >> game.tiles;
-            
-            *input >> p_size;
-            *input >> p_secuencia ;
-            game.player.add(toISO(p_secuencia));
-            if (game.player.size() != p_size) {
-                //original.~Movelist(); rejected.~Movelist(); accepted.~Movelist(); legal.~Movelist(); tablero.~Tiles();      //Destructores
-                errorBreak (ERROR_DATA, mfile_name) ;
-            }
-               
-            
-            *input >> b_size;
-            *input >> b_secuencia;
-            game.bag.set(toISO(b_secuencia));
-            if (game.bag.size() != b_size) {
-                //original.~Movelist(); rejected.~Movelist(); accepted.~Movelist(); legal.~Movelist(); tablero.~Tiles();      //Destructores
-                errorBreak (ERROR_DATA, mfile_name) ;
-            }
-            
-            input=nullptr;
-            matchfile.close();
+        } 
+        
+        else if (s=="-l" && !restored) {
+            lang=args[i] ;
+            i++;
         }
         
-        /*
-         else if (s=="-p") {  comento el p porque no es necesario en esta práctica
-            pfile_name = args[i++];
-            playfile.open(pfile_name.c_str());
-            if (!playfile) {
-                //original.~Movelist(); rejected.~Movelist(); accepted.~Movelist(); legal.~Movelist(); tablero.~Tiles();      //Destructores
-                errorBreak (ERROR_OPEN, pfile_name) ;
-            }
-            
-            input=&playfile;
-        
-            *input >> original;o
-            if (original.size()==0) {
-                //original.~Movelist(); rejected.~Movelist(); accepted.~Movelist(); legal.~Movelist(); tablero.~Tiles();      //Destructores
-                errorBreak (ERROR_DATA, pfile_name) ;
-            }
-        
-            
-            
-            input=nullptr; 
-            playfile.close();
-        }   
-        */  
-        
-        else if (s=="-l" && !restored)
-            lang=args[i++] ;
-        
         else if (s=="-w" && !restored) {
-            if (!isdigit(*args[i])) { //? 
-                //original.~Movelist(); rejected.~Movelist(); accepted.~Movelist(); legal.~Movelist(); tablero.~Tiles();      //Destructores
-                cout << 9;
+            if (!isdigit(*args[i])) { 
+                game.~Game();
                 errorBreak (ERROR_ARGUMENTS, "") ; 
             }
-            c = atoi(args[i++]);
+            w = atoi(args[i]);
+            i++;
         }
     
         else if (s=="-h" && !restored) {
             if (!isdigit(*args[i])) {
-                //original.~Movelist(); rejected.~Movelist(); accepted.~Movelist(); legal.~Movelist(); tablero.~Tiles();      //Destructores
+                game.~Game();
                 errorBreak (ERROR_ARGUMENTS, "") ;
             }
-            r = atoi(args[i++]);
+            h = atoi(args[i]);
+            i++;
         }
         
         else if (s=="-r" && !restored) {
             if (!isdigit(*args[i])) {
-                //original.~Movelist(); rejected.~Movelist(); accepted.~Movelist(); legal.~Movelist(); tablero.~Tiles();      //Destructores
+                game.~Game();
                 errorBreak (ERROR_ARGUMENTS, "") ; 
             }
-
             random = atoi(args[i++]);
-            game.bag.setRandom(random) ;
-
         } 
     
         else if (s=="-save") {
@@ -195,55 +131,102 @@ int main(int nargs, char * args[]) {
             int len=ofilename.size();
             string file_format=ofilename.substr(len-FORMAT.size(), FORMAT.size());
             if (file_format != FORMAT) {
-                //original.~Movelist(); rejected.~Movelist(); accepted.~Movelist(); legal.~Movelist(); tablero.~Tiles();      //Destructores
-                cerr << " >> Please use a matchfile:  -s <*.match>" << endl ;
+                game.~Game();
+                cerr << " >> Please use a matchfile: -s <*.match>" << endl ;
                 errorBreak (ERROR_ARGUMENTS, "") ;
             }
-            
-            ofile.open(ofilename.c_str());
-            if (!ofile) {
-                //original.~Movelist(); rejected.~Movelist(); accepted.~Movelist(); legal.~Movelist(); tablero.~Tiles();      //Destructores
-                errorBreak (ERROR_OPEN, ofilename) ;
-            }
-            output=&ofile;
         }
         
-        else if (s=="-b") { 
-            s=args[i++];
-            b_secuencia = s ;
-            game.bag.set(toISO(b_secuencia));
-        }
+        else if (s=="-b" && !restored)
+            b_secuencia = args[i++] ;
         
         else {
-            //original.~Movelist(); rejected.~Movelist(); accepted.~Movelist(); legal.~Movelist(); tablero.~Tiles();      //Destructores
+            game.~Game();
             errorBreak (ERROR_ARGUMENTS, "") ;
         }  
     }
-
-    if (r==-1 && c==-1) {
-        //original.~Movelist(); rejected.~Movelist(); accepted.~Movelist(); legal.~Movelist(); tablero.~Tiles();      //Destructores
-        errorBreak(ERROR_ARGUMENTS, "");
-    }
-    else if (!restored)
+         
+    
+    // Process arguments and load data from file, if asked to in arguments
+    if (restored) {
+        
+        if (random != -1 || w != -1 || h != -1) {
+            game.~Game();
+            errorBreak (ERROR_ARGUMENTS, "") ;
+        }
+        
+        ifile.open(ifilematch.c_str());
+        if (!ifile) {
+            game.~Game();
+            errorBreak (ERROR_OPEN, mfile_name) ;
+        }
+        input=&ifile;
+            
+        *input >> key ;
+        if (key != PASSWORD) {
+            game.~Game();
+            errorBreak (ERROR_DATA, mfile_name) ;
+        }
+                
+        *input >> total_score ;  
+        *input >> lang ;
+        *input >> r >> c ;
         game.tiles.setSize(r, c);
+            
+        *input >> game.tiles ;
+            
+        *input >> p_size;
+        *input >> p_secuencia ;
+        game.player.add(toISO(p_secuencia));
+        if (game.player.size() != p_size) {
+            game.~Game();
+            errorBreak (ERROR_DATA, mfile_name) ;
+        }
+            
+        *input >> b_size;
+        *input >> b_secuencia;
+            
+        input=nullptr;
+        ifile.close();
+    } 
     
-    /*if (pfile_name=="") {
-        //original.~Movelist(); rejected.~Movelist(); accepted.~Movelist(); legal.~Movelist(); tablero.~Tiles();      //Destructores
-        errorBreak(ERROR_ARGUMENTS, "");
-    }*/
-    
-    if (lang == "")  {
-        //original.~Movelist(); rejected.~Movelist(); accepted.~Movelist(); legal.~Movelist(); tablero.~Tiles();      //Destructores
-        errorBreak(ERROR_ARGUMENTS, "");
-    }   
+    if (lang == "") {
+       game.~Game();
+       errorBreak (ERROR_ARGUMENTS, "") ;
+    }
     else
         game.language.setLanguage(lang);
     
-    if (b_secuencia == "")
-        game.bag.define(game.language) ;
+    if (h == -1 || w == -1) {
+        game.~Game();
+        errorBreak (ERROR_ARGUMENTS, "") ;
+    }
+    else if (!restored)
+        game.tiles.setSize(h, w);
     
-    if (p_secuencia == "")
-        game.player.add(game.bag.extract(7-game.player.size()));
+    if (b_secuencia=="") {
+        if (random != -1)
+            game.bag.setRandom(random);
+        game.bag.define(lang);
+    }
+    else {
+        game.bag.set(toISO(b_secuencia));
+        
+        if (b_size != -1)
+            if (game.bag.size() != b_size) {
+                game.~Game();
+                errorBreak (ERROR_DATA, ifilematch) ;
+            }
+    }
+    
+    if (ofilename != "") {
+        ofile.open(ofilename.c_str());
+        if (!ofile) {
+            game.~Game();
+            errorBreak (ERROR_OPEN, ofilename) ;
+        }
+        output=&ofile;
+    }
 
     // Game's main loop 
     // 1) First set the size of the window according to the size (rows & columns) of
@@ -253,11 +236,11 @@ int main(int nargs, char * args[]) {
 
 
     while (!end)  { // && cc == 'y' || cc == 'Y'
+        
         // 2) Given the inner data members, it pretty-prints the screen
         system("clear");
-        game.player.add(game.bag.extract(7-game.player.size()));
+        game.player.add(game.bag.extract(7-game.player.size())); 
         game.doPaint();
-
         
         // 3) Reads the movement from cin
         cin >> move;
@@ -270,7 +253,6 @@ int main(int nargs, char * args[]) {
 
             if (game.player.isValid(word)){ //si move esta en player
                 game.player.extract(word);
-
                 game.crosswords = game.tiles.findCrosswords(move,game.language);
                 game.showCrosswords();
                 
@@ -293,28 +275,26 @@ int main(int nargs, char * args[]) {
                         move.setScore(move.findScore(game.language));
                         game.score += game.crosswords.getScore();
                         game.acceptedmovements += move;
-                    
-                    
-                        cout << "Scored "<<move.getScore()<<" points"<<endl; 
-                        cout << game.crosswords.size() << endl;
+
                     }
                 }
                 else{  //si no es valido move
-                    cout << "Bad crosswords found"<<endl;
-                    cout << game.crosswords.size() << endl;
+                    cout << endl << " --> " << game.crosswords ;
+                    game.doBadCrosswords("Move no valido");
+                    
                     
                 }
             }
             else{ //si move no esta en player
-                
-                cout <<"Infeasible word"<<endl;
+                game.doBadCrosswords("Move no esta en player");
+
             }
             //Waits for the next move
-            cout << "Press [yY] to continue:";
-            cin >> cc;
+
             
         }
     }
+    
     // End of game
     // Save file or print screen
  

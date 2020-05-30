@@ -142,8 +142,6 @@ void Tiles::copy (const Tiles &t) {
     for (int i=0; i<t.getHeight() && same; i++)
         for (int j=0; j<t.getWidth() && same; j++)
             same = get(j, i) == t.get(j, i) ;
-            //if (get(j, i) != t.get(j, i))
-            //    same = false;    
     
     if (!same){
         if (rows != 0 && columns != 0)
@@ -204,22 +202,58 @@ Move Tiles::findMaxWord(int r, int c, bool hrz) const {
         l='h';
     
     //retrocedemos hasta el limite del tablero o hasta que deje de haber letras
-    while (get(row,col) != '.' && row>0 && col>0) {
+    /*
+    while (get(row-1,col-1) != '.' && row>0 && col>0) {
+        cerr << "Get: " << get (row-1, col-1) << " << " << endl ;
         if (hrz)
             col--;
         else
             row--;
     }
     
-    if (hrz && (col != 0 || get (row, 0) == '.')) 
-        c = col += 1;
-    // else (!hrz && (row !=0 || get (0, col) == '.') )  
-    else if (!hrz && (row !=0 || get (0, col) == '.') )
-        r = row += 1;
-    
+    if (hrz && (col != 0 || get (row, 0) == '.'))  {
+        //c = col += 1;
+        int i;
+    }
+        
+        
+    else if (!hrz && (row !=0 || get (0, col) == '.') ) {
+        //r = row += 1;
+        int i;
+    }
+    */
+    //cerr << endl << "Row: " << r << " Col " << c << endl ;
     
     //formamos la palabra a partir de las coordenadas obtenidas, y avanzamos hasta el limite del tablero o hasta que deje de haber letras
     //while (get(row,col) != '.' && row<getHeight() && col<getWeight()) {
+    
+    bool found = false;
+    
+    int limit;
+    if (hrz)
+        limit=getWidth();
+    else
+        limit = getHeight();
+    
+    for (int i=0; i<limit && !found && col<getWidth()-1 && row<getHeight()-1; i++) {
+        
+        if (get(row-1, col-1) != '.' ) {
+            found = true ;
+            word += get(row-1,col-1) ;
+            r=row; c=col;
+            
+            while (get(row,col)!= '.')
+                word += get(++row, ++col);
+            
+            //cerr << " >> Word: " << word << "  >> " ;   //@warning
+        }
+        
+        if (hrz) 
+            col++;
+        else
+            row++;
+    }
+    
     while (get(row,col) != '.' && row<getHeight() && col<getWidth()) {
         word += get (r, c);
         if (hrz)
@@ -227,7 +261,7 @@ Move Tiles::findMaxWord(int r, int c, bool hrz) const {
         else
             row++;
     }
-    
+     
     mov.set (r, c, l, word) ;
     return mov ;
 }
@@ -236,8 +270,8 @@ Move Tiles::findMaxWord(int r, int c, bool hrz) const {
 Movelist Tiles:: findCrosswords(Move &m, const Language &l) const {
     
     Movelist crosswords;        //@warning crossword vacio = moves=nullptr (??)
-    Move mov;
-    int r = m.getRow()-1, c=m.getCol()-1, n_h, n_v, tam = m.getLetters().size();    
+    Move find_mov, cross_mov;
+    int r = m.getRow(), c=m.getCol(), n_h, n_v, tam = m.getLetters().size();    
     bool hor = m.isHorizontal(),
          in_tiles = inside(m), 
          r_word;  //repeat word
@@ -246,8 +280,9 @@ Movelist Tiles:: findCrosswords(Move &m, const Language &l) const {
     //devolver crossword vacio (??  -  board overflow)
     //asumo que al tablero aun no se ha añadido la palabra
     
+    //cerr << endl << endl << "R:  " << r << "  C:  " << c << endl ;
     if (in_tiles && get(r, c) == '.' ) {
-        crosswords += m;
+        //crosswords += m;
         
         int n_h = 1, n_v = 1 ;
         if (hor) 
@@ -258,33 +293,42 @@ Movelist Tiles:: findCrosswords(Move &m, const Language &l) const {
         
         //cruces horizontales
         for (int i=0; i<n_h; i++) {
-            mov = findMaxWord (r, c, true);
-            r_word = crosswords.repeat_word(mov);       //segun ejemplo guion: si una palabra se repite en los cruces, no se tienen en cuenta estas repeticiones
+            find_mov = findMaxWord (r, c, true);   
+            
+            if (find_mov.getLetters().size()>0) {
+                cross_mov = m ;
+                string word = cross_mov.getLetters();
+                word.insert (find_mov.getCol()-1, find_mov.getLetters() );
+                cross_mov.setLetters(word);
+                cross_mov.findScore(l);                      
                 
-            if (mov.getLetters().size()>1 && mov.getLetters().size() != tam && !r_word) {
-                mov.findScore(l);                       //si no esta en diccionario: score = -2
-                crosswords += mov ;
+                //cerr << "Move: " << find_mov << endl ;
+                //cerr << " AÑAD " << cross_mov << endl ;
+                crosswords += cross_mov ;
             }
             r++;
         }
-        r=m.getRow()-1;
+        r=m.getRow();
         
         //cruces verticales
         for (int i=0; i<n_v; i++) {
-            mov = findMaxWord (r, c, false);
-            r_word = crosswords.repeat_word(mov);
+            find_mov = findMaxWord (r, c, false);
+            //r_word = crosswords.repeat_word(mov);
             
-            if (mov.getLetters().size() > 1 && mov.getLetters().size() != tam && !r_word) {
-                    mov.findScore(l);
-                    crosswords += mov ;
-            }
+            //cout << endl << mov.getLetters() << " << " << endl ;
+            //if (mov.getLetters().size() > 1 && mov.getLetters().size() != tam ) {
+                //mov.findScore(l);
+                //crosswords += mov ;
+            //}
             c++;
         }
     }
     
+    if (crosswords.size()==0) 
+        crosswords += m;
     
     /*
-    else if (!in_tiles) {           //no esta dentro del tablero --> board_overflow
+    else if (!in_tiles) {           //no esta dentro del tablero board_overflow
         m.setScore(-2);
         crossword += m ;
     }
@@ -301,6 +345,7 @@ Movelist Tiles:: findCrosswords(Move &m, const Language &l) const {
     } 
     */
         
+    //cerr << crosswords << " " << crosswords.getScore() << endl ;
     return crosswords;
 }
 

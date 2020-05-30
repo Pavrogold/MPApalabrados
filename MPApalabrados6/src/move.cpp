@@ -50,8 +50,9 @@ void Move:: setLetters(const std::string &l){
 int Move:: findScore(const Language &l) {
     int n = 0;
     
+    
     if (!l.query(letters))
-        n = NONEXISTENT_WORD ;
+        n = -3;
     
     else
         for (int i = 0; i < letters.length(); i++)

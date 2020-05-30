@@ -125,6 +125,7 @@ Game::Game() {
     f=3;
     setWindowPos(1,1);
     setDialog("","");
+    score=0;
 }
 
 Game::~Game() {

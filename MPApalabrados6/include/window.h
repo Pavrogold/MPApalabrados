@@ -79,6 +79,7 @@ public:
 	 * to layout the information
 	 */
 	void setWindowSize();
+        
 	/**
 	 *	@brief Displays the basic information of the game 
 	 * @param tiles	The set of tiles
@@ -88,6 +89,7 @@ public:
 	 * @param l			Language chosen
 	 */
 	void doPaint();
+        
 	/**
 	 * @brief Once Game.crosswords has been set, it shows the resulting crosswords
 	 * in the screen for a better understanding of the movement made by the player
@@ -95,6 +97,7 @@ public:
 	 * @return A string that concatenates the movements contained in crosswords.
 	 */	
 	std::string showCrosswords();
+        
 	/**
 	 * @brief Shows a valid crosswords in the screen and asks for confirmation to 
 	 * the player. If positive, the movement which created the crosswords is stored
