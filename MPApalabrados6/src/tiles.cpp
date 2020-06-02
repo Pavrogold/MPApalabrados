@@ -79,7 +79,7 @@ void Tiles::add(const Move& m){
     //si no cabe -> se añade el string cortado 
     for (int i=0; i<s.length() && r<=rows && c<=columns ; i++){
         //if (get(r-1, c-1) == '.')
-            set(r-1, c-1, s[i]);
+        set(r-1, c-1, s[i]);
         //else
             //i--;
         if (h)
@@ -90,8 +90,7 @@ void Tiles::add(const Move& m){
 }
 
 std::ostream& operator<<(std::ostream& os, const Tiles &t) {
-    os << t.getHeight() << " " << t.getWidth() << endl;
-    
+    //os << t.getHeight() << " " << t.getWidth() << endl;
     if (t.getHeight()>0 && t.getWidth()>0){     
         
         for (int i=0; i<t.getHeight(); i++){
@@ -100,6 +99,7 @@ std::ostream& operator<<(std::ostream& os, const Tiles &t) {
             os << endl ;
         }
     }
+    os << endl ;
 }
 
 std::istream& operator>>(std::istream& is, Tiles &t) {
@@ -196,67 +196,35 @@ Move Tiles::findMaxWord(int r, int c, bool hrz) const {
     Move mov;
     string word;
     char l='v';
-    int row=r, col=c;
+    int row=r, col=c, limit;
+    bool found ;
     
     if (hrz)
         l='h';
     
-    //retrocedemos hasta el limite del tablero o hasta que deje de haber letras
-    /*
-    while (get(row-1,col-1) != '.' && row>0 && col>0) {
-        cerr << "Get: " << get (row-1, col-1) << " << " << endl ;
-        if (hrz)
-            col--;
-        else
-            row--;
-    }
-    
-    if (hrz && (col != 0 || get (row, 0) == '.'))  {
-        //c = col += 1;
-        int i;
-    }
-        
-        
-    else if (!hrz && (row !=0 || get (0, col) == '.') ) {
-        //r = row += 1;
-        int i;
-    }
-    */
-    //cerr << endl << "Row: " << r << " Col " << c << endl ;
-    
-    //formamos la palabra a partir de las coordenadas obtenidas, y avanzamos hasta el limite del tablero o hasta que deje de haber letras
-    //while (get(row,col) != '.' && row<getHeight() && col<getWeight()) {
-    
-    bool found = false;
-    
-    int limit;
     if (hrz)
         limit=getWidth();
     else
         limit = getHeight();
     
+    //cerr << endl << "1.- Row: " << r << " Col " << c << " Get " << get (row-1,col-1) << endl ;
     for (int i=0; i<limit && !found && col<getWidth()-1 && row<getHeight()-1; i++) {
         
         if (get(row-1, col-1) != '.' ) {
             found = true ;
-            word += get(row-1,col-1) ;
             r=row; c=col;
             
-            while (get(row,col)!= '.')
-                word += get(++row, ++col);
-            
-            //cerr << " >> Word: " << word << "  >> " ;   //@warning
+            while (get(row-1,col-1)!= '.') {
+                word += get(row-1, col-1);
+                cerr << " - " << word ;
+                if (hrz)
+                    col++;
+                else
+                    row++;
+            }
         }
         
         if (hrz) 
-            col++;
-        else
-            row++;
-    }
-    
-    while (get(row,col) != '.' && row<getHeight() && col<getWidth()) {
-        word += get (r, c);
-        if (hrz)
             col++;
         else
             row++;
@@ -269,20 +237,13 @@ Move Tiles::findMaxWord(int r, int c, bool hrz) const {
 //m no constante
 Movelist Tiles:: findCrosswords(Move &m, const Language &l) const {
     
-    Movelist crosswords;        //@warning crossword vacio = moves=nullptr (??)
+    Movelist crosswords;        
     Move find_mov, cross_mov;
     int r = m.getRow(), c=m.getCol(), n_h, n_v, tam = m.getLetters().size();    
     bool hor = m.isHorizontal(),
-         in_tiles = inside(m), 
-         r_word;  //repeat word
-   
-    //mirar score del move antes (en main)
-    //devolver crossword vacio (??  -  board overflow)
-    //asumo que al tablero aun no se ha añadido la palabra
+         in_tiles = inside(m);
     
-    //cerr << endl << endl << "R:  " << r << "  C:  " << c << endl ;
-    if (in_tiles && get(r, c) == '.' ) {
-        //crosswords += m;
+    if (in_tiles && get(r-1, c-1) == '.' ) {
         
         int n_h = 1, n_v = 1 ;
         if (hor) 
@@ -295,15 +256,15 @@ Movelist Tiles:: findCrosswords(Move &m, const Language &l) const {
         for (int i=0; i<n_h; i++) {
             find_mov = findMaxWord (r, c, true);   
             
-            if (find_mov.getLetters().size()>0) {
+            if (find_mov.getLetters().size()>0 && get(r-1, c-1)=='.') {
                 cross_mov = m ;
                 string word = cross_mov.getLetters();
-                word.insert (find_mov.getCol()-1, find_mov.getLetters() );
+                int pos = find_mov.getCol()-m.getCol();
+                word.insert (pos, find_mov.getLetters() );
                 cross_mov.setLetters(word);
-                cross_mov.findScore(l);                      
-                
-                //cerr << "Move: " << find_mov << endl ;
-                //cerr << " AÑAD " << cross_mov << endl ;
+                cross_mov.findScore(l);
+                char h = 'h';
+                //cross_mov.setHorizontal(h);
                 crosswords += cross_mov ;
             }
             r++;
@@ -312,14 +273,19 @@ Movelist Tiles:: findCrosswords(Move &m, const Language &l) const {
         
         //cruces verticales
         for (int i=0; i<n_v; i++) {
-            find_mov = findMaxWord (r, c, false);
-            //r_word = crosswords.repeat_word(mov);
+            find_mov = findMaxWord (r, c, false);   
             
-            //cout << endl << mov.getLetters() << " << " << endl ;
-            //if (mov.getLetters().size() > 1 && mov.getLetters().size() != tam ) {
-                //mov.findScore(l);
-                //crosswords += mov ;
-            //}
+            if (find_mov.getLetters().size()>0 && get(r-1, c-1)=='.') {
+                cross_mov = m ;
+                string word = cross_mov.getLetters();
+                int pos = find_mov.getRow()-m.getRow();
+                word.insert (pos, find_mov.getLetters() );
+                cross_mov.setLetters(word);
+                cross_mov.findScore(l);
+                char v='v';
+                //cross_mov.setHorizontal(v);
+                crosswords += cross_mov ;
+            }
             c++;
         }
     }
