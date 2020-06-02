@@ -264,7 +264,7 @@ Movelist Tiles:: findCrosswords(Move &m, const Language &l) const {
                 cross_mov.setLetters(word);
                 cross_mov.findScore(l);
                 char h = 'h';
-                //cross_mov.setHorizontal(h);
+                cross_mov.setHorizontal(h);
                 crosswords += cross_mov ;
             }
             r++;
@@ -283,7 +283,7 @@ Movelist Tiles:: findCrosswords(Move &m, const Language &l) const {
                 cross_mov.setLetters(word);
                 cross_mov.findScore(l);
                 char v='v';
-                //cross_mov.setHorizontal(v);
+                cross_mov.setHorizontal(v);
                 crosswords += cross_mov ;
             }
             c++;
