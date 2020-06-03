@@ -7,11 +7,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/yesenia/Escritorio/MP6/MPApalabrados/MPApalabrados6/src/movelist.cpp</file>
-            <file>file:/home/yesenia/Escritorio/MP6/MPApalabrados/MPApalabrados6/src/main.cpp</file>
-            <file>file:/home/yesenia/Escritorio/MP6/MPApalabrados/MPApalabrados6/src/window.cpp</file>
-            <file>file:/home/yesenia/Escritorio/MP6/MPApalabrados/MPApalabrados6/src/move.cpp</file>
-            <file>file:/home/yesenia/Escritorio/MP6/MPApalabrados/MPApalabrados6/src/tiles.cpp</file>
+            <file>file:/home/pablo/Escritorio/MPApalabrados/MPApalabrados6/src/main.cpp</file>
+            <file>file:/home/pablo/Escritorio/MPApalabrados/MPApalabrados6/src/tiles.cpp</file>
+            <file>file:/home/pablo/Escritorio/MPApalabrados/MPApalabrados6/include/tiles.h</file>
+            <file>file:/home/pablo/Escritorio/MPApalabrados/MPApalabrados6/src/window.cpp</file>
         </group>
     </open-files>
 </project-private>

@@ -41,22 +41,22 @@ public:
 	 * @param h 'H' horizontal or 'V' vertical
 	 * @param l letters
 	 */
-	void set(int &r, int &c, char &h, const std::string  &l);
+	void set(int r, int c, char h, const std::string  &l);
 	/**
 	 * @brief Sets the main data of the class 
 	 * @param r row
 	 */
-	void setRow(int &r);
+	void setRow(int r);
 	/**
 	 * @brief Sets the main data of the class 
 	 * @param c Column
 	 */
-	void setCol(int &c);
+	void setCol(int c);
 	/**
 	 * @brief Sets the main data of the class 
 	 * @param h 'H' horizontal or 'V' vertical
 	 */
-	void setHorizontal(char &h);
+	void setHorizontal(char h);
 	/**
 	 * @brief Sets the main data of the class 
 	 * @param l Letters

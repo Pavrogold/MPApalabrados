@@ -255,7 +255,8 @@ int main(int nargs, char * args[]) {
         
         else {
 
-            if (game.player.isValid(word)){ //si move esta en player
+            //if (game.player.isValid(word)){ //si move esta en player
+            if (game.player.isValid(word) ){ //si move esta en player y existe en diccionario
                 
                 game.player.extract(word);
                 game.crosswords = game.tiles.findCrosswords(move,game.language);
@@ -278,12 +279,14 @@ int main(int nargs, char * args[]) {
                         for (int i=0; i<game.crosswords.size(); i++)
                             game.tiles.add(game.crosswords.get(i));
                         
+                        
+                        cerr << game.crosswords << endl ;
                         game.score += game.crosswords.getScore();
                         game.acceptedmovements += move;
                     }
                 }
                 else { //si no es valido move
-                    game.doBadCrosswords("Move no valido");
+                    //game.doBadCrosswords("Move no valido");
 		    game.rejectedmovements += move;
                 }
             }
@@ -292,13 +295,14 @@ int main(int nargs, char * args[]) {
             
             //Waits for the next move
         }
+        if (error != 0) 
+            game.doBadCrosswords(errorManagement(error));
+        
     }
     
     // End of game
 
-    //if (error != 0) 
-    //    game.doBadCrosswords(errorManagement(error));
-        
+    
     // Save file or print screen
     *output << game ;
         

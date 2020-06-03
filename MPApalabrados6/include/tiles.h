@@ -146,8 +146,7 @@ public:
     
     //input-output operators
     friend std::ostream& operator<<(std::ostream& os, const Tiles &t);
-    friend std::istream& operator>>(std::istream& is, Tiles &t);	
-
+    friend std::istream& operator>>(std::istream& is, Tiles &t);
     
 private:
     char ** cell; /// Dynamic 2D Matrix. Choosing another implementation is up to the student
@@ -191,7 +190,8 @@ private:
      */
     Move findMaxWord(int r, int c, bool hrz) const;	
     
-    
+    void moveBack (int &r, int &c, bool hrz) const ;
+    void moveForward (int r, int c, bool hrz, std::string &word) const ;
 
 };
 

@@ -16,24 +16,24 @@ using namespace std;
 
 Move:: Move() : row(0), column(0), ishorizontal(false), letters(""), score(0) {}
 
-void Move:: set(int &r, int &c, char &h, const std::string  &l){
+void Move:: set(int r, int c, char h, const std::string  &l){
     setRow(r);
     setCol(c);
     setHorizontal(h) ;
     setLetters(l) ;
 }
 
-void Move:: setRow(int &r){
+void Move:: setRow(int r){
     assert(r >= 0);
     row = r;
 }
 
-void Move:: setCol(int &c){
+void Move:: setCol(int c){
     assert(c >= 0);
     column = c;
 }
 
-void Move:: setHorizontal(char &h){
+void Move:: setHorizontal(char h){
     if ( h == 'H' || h == 'h')
         ishorizontal = true;
     else
