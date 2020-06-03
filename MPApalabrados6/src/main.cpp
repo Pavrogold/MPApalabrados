@@ -319,7 +319,23 @@ ostream & operator<<(ostream & os, const Game &game)  {
 }
 
 istream & operator>>(istream & is, Game &game) {
-    // To implement
+    string s;
+    int r, c;
+    
+    is >> s;
+    if (s == PASSWORD){
+        is >> game.score
+           >> s;
+        game.language.setLanguage(s);
+        game.bag.define(game.language);
+        is >> r >> c;
+        game.tiles.setSize(r, c);
+        is >> game.tiles;
+        is >> r >> s;
+        game.player.add(s);
+        is >> r >> s;
+        game.bag.set(s);
+    }
 }
 
 void errorBreak(int errorcode, const string &errordata) {
