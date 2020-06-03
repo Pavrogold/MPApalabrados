@@ -241,7 +241,6 @@ int main(int nargs, char * args[]) {
         
 	// 2) Given the inner data members, it pretty-prints the screen
         error=0 ;
-        system("clear");
         game.player.add(game.bag.extract(7-game.player.size())); 
         game.doPaint();
         
