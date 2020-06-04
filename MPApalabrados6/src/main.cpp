@@ -61,9 +61,9 @@ int main(int nargs, char * args[]) {
     Move move;
     Game game;
     Window window;
-    int w=-1, h=-1, random=-1, total_score=0, error=0, p_size, b_size=-1 ;
+    int w=-1, h=-1, random=-1, total_score=0, error=0, p_size, b_size=-1, accepted_size=0, rejected_size=0 ;
     string lang="",ifilematch="", ofilematch="", word, mfile_name="", key="", 
-            b_secuencia="", p_secuencia="", pfile_name="",ofilename="";
+            b_secuencia="", p_secuencia="", accepted_secuencia="", rejected_secuencia="", pfile_name="",ofilename="";
     const string FORMAT=".match", END="@";
     ifstream ifile, matchfile, playfile, *input;
     ofstream ofile ;
@@ -181,6 +181,7 @@ int main(int nargs, char * args[]) {
         }
                 
         *input >> total_score ;  
+        game.score = total_score;
         *input >> lang ;
         *input >> h >> w ;
         game.tiles.setSize(h, w);
@@ -201,9 +202,25 @@ int main(int nargs, char * args[]) {
         *input >> b_size;
         *input >> b_secuencia;
         
+        if (game.player.size() != p_size) {
+            game.~Game();
+            window.~Window();
+            errorBreak (ERROR_DATA, ifilematch) ;
+        }
         
-        //*input >> game;
-            
+        *input >> accepted_size;
+        
+        for (int i=0; i < accepted_size; i++){
+            *input >> move;
+            game.acceptedmovements += move;
+        }
+        
+        *input >> rejected_size;
+        
+        for (int i=0; i < rejected_size; i++){
+            *input >> move;
+            game.rejectedmovements += move;
+        }
         input=nullptr;
         ifile.close();
     } 
@@ -239,6 +256,7 @@ int main(int nargs, char * args[]) {
             }
     }
     
+    
     if (ofilename != "") {
         ofile.open(ofilename.c_str());
         if (!ofile) {
@@ -253,7 +271,7 @@ int main(int nargs, char * args[]) {
     // the new Tiles
             
     game.setWindowSize();
-    while (!end)  { // && cc == 'y' || cc == 'Y' 
+    while (!end)  {
         
 	// 2) Given the inner data members, it pretty-prints the screen
         error=0 ;
@@ -340,8 +358,8 @@ ostream & operator<<(ostream & os, const Game &game)  {
        << game.language.getLanguage() << endl 
        << game.tiles.getHeight() << " " << game.tiles.getWidth() << endl 
        << game.tiles 
-       << game.player.size() << " " << game.player.to_string() << endl
-       << game.bag.size() << " " << game.bag.to_string() << endl ;
+       << game.player.size() << " " << toUTF(game.player.to_string()) << endl
+       << game.bag.size() << " " << toUTF(game.bag.to_string()) << endl ;
     os << game.acceptedmovements.size() << endl << game.acceptedmovements << endl ;
     os << game.rejectedmovements.size() << endl << game.rejectedmovements << endl ;
 }
