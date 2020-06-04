@@ -123,8 +123,7 @@ void removeCString(char *cstr, int pos) {
 void sortCString(char *cstr) {
     int desplaza, i ;
     
-    for (int izq = 1; cstr[izq] != '\0' ; izq++) 
-    {
+    for (int izq = 1; cstr[izq] != '\0' ; izq++)  {
         desplaza = cstr[izq] ;
         
         for ( i = izq ; i > 0 && desplaza < cstr[i-1] ; i--)

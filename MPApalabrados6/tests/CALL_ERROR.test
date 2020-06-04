@@ -1,5 +1,6 @@
 %%%CALL -r 100 -i data/ES_100_ERROR.data
+%%%VALGRIND
 %%%OUTPUT
 Error in call. Please use either:
--l <language> -w <width> -h <height> -p <playfile> [-b <bag> -r <randomnumber> -save <matchfile>]
--open <matchfile> -p <playfile> [-save <matchfile>]
+-l <language> -w <width> -h <height> [-b <bag> -r <randomnumber> -save <matchfile>]
+-open <matchfile> [-save <matchfile>]

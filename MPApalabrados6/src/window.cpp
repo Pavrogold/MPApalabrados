@@ -129,6 +129,11 @@ Game::Game() {
 }
 
 Game::~Game() {
+    tiles.~Tiles();
+    acceptedmovements.~Movelist();
+    rejectedmovements.~Movelist();
+    crosswords.~Movelist();
+//    cerr << endl << "HOLAAAA" << endl << "Des" << endl << endl ;
 }
 
 void Game::setWindowSize() {

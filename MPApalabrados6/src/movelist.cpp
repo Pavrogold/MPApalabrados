@@ -202,7 +202,7 @@ std::ostream &operator<<(std::ostream & os, const Movelist &i) {
     
     for (int j=0; j<i.size(); j++) {
         m=i.get(j) ;
-        os << m << " - " ;
+        os << m << " " ;
     }
     
     return os;

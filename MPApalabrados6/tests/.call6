@@ -1,0 +1,1 @@
+Test #6 [tests//ES_100_156_F.test] valgrind --leak-check=full  dist/Debug/GNU-Linux/mpapalabrados6  -open data/ES_100_0.match -save tests/.out.match < data/ES_100_0_156.data

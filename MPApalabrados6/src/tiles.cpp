@@ -66,7 +66,6 @@ char Tiles::get(int r, int c) const {
 
 void Tiles::set(int r, int c, char l){
     assert(r>=0 && r<rows && c>=0 && c<columns);
-    
     cell[r][c] = l;
 }
 
@@ -90,7 +89,6 @@ void Tiles::add(const Move& m){
 }
 
 std::ostream& operator<<(std::ostream& os, const Tiles &t) {
-    //os << t.getHeight() << " " << t.getWidth() << endl;
     if (t.getHeight()>0 && t.getWidth()>0){     
         
         for (int i=0; i<t.getHeight(); i++){
@@ -150,9 +148,9 @@ void Tiles::copy (const Tiles &t) {
         setSize(t.getHeight(), t.getWidth());
     
         for (int i=0; i < t.getHeight(); i++)
-            for (int j=0; j < t.getWidth(); j++)
+            for (int j=0; j < t.getWidth(); j++) {
                 set (i, j, t.get(i, j));
-                //cell[i][j] = t.get(i, j);
+            }
     }
 }
 
@@ -167,42 +165,12 @@ bool Tiles:: inside (const Move &m) const {
     return (r<=rows && c<=columns);
 }
 
-
-//Read-print methods
-void Tiles::print(std::ostream &os) const {
-    os << rows << " " << columns << endl;
-    
-    if (rows > 0 && columns > 0)
-        
-        for (int i=0; i<rows; i++){
-            for (int j=0; j<columns; j++)
-                os << get(i,j) << " ";
-            os << endl ;
-        }
-}
-
- 
-bool Tiles::read(std::istream &is) {
-    bool valid=true; 
-    
-    for (int i=0; i<rows && valid; i++) {
-        valid = !is.eof() && !is.bad();
-        for (int j=0; j<columns && valid ; j++)  {
-            is >> cell[i][j] ;
-        }
-            
-    }
-    return valid;
-}
-
 void Tiles::moveBack (int &r, int &c, bool hrz)const {
     int row=r-1, col=c-1;
     
     if (hrz && c>0) {
-        while (get(row, col-1) != '.' && col>0) {
-            cerr << get(row, col-1) << " " ;
+        while (get(row, col-1) != '.' && col>0) 
             col--;
-        } 
         c=col+1;
     }
     else if (!hrz && row>0) {
@@ -220,7 +188,7 @@ void Tiles::moveForward (int r, int c, bool hrz, string &word) const {
             word += get(r, c);
         else 
             res=false;
-        cerr << " w:" << word ;
+        
         if (hrz)
             c++;
         else
@@ -243,7 +211,7 @@ Move Tiles::findMaxWord(int r, int c, bool hrz) const {
     if ( (hrz && col>1) || (!hrz && row>1))
         moveBack(row, col, hrz);     //coordenadas de inicio del posible cruce
     r=row; c=col;   
-    if ( (hrz && col==columns) || (!hrz && row==rows) );
+    if ( (hrz && col<columns) || (!hrz && row<rows) );
         moveForward (row-1, col-1, hrz, word);
     
     mov.set (r, c, l, word) ;
@@ -264,7 +232,7 @@ Movelist Tiles:: findCrosswords(Move &m, const Language &l) const {
             occupied=true;
         else {
             int row=r, col=c;
-            for (int i=0; i<m.getLetters().size();) {
+            for (int i=0; i<m.getLetters().size() && row<=rows && col<=columns;) {
                 if (get(row-1,col-1)=='.') {
                     aux.set(row-1, col-1, m.getLetters()[i++] );
                 }
@@ -273,6 +241,8 @@ Movelist Tiles:: findCrosswords(Move &m, const Language &l) const {
                 else
                     row++;
             }
+            if (row>rows+1 || col>columns+1)
+                in_tiles=false;
         }
     }
     
@@ -299,7 +269,7 @@ Movelist Tiles:: findCrosswords(Move &m, const Language &l) const {
     
     //cruces verticales
     for (int i=0; i<n_v && in_tiles; i++) {
-        if (get(r-1, c-1) == '.')
+        if (get(r-1, c-1) == '.')   //@warning
             find_mov = aux.findMaxWord (r, c, false);
         if (find_mov.getLetters().size()>1) {
             find_mov.findScore(l);      
@@ -310,7 +280,6 @@ Movelist Tiles:: findCrosswords(Move &m, const Language &l) const {
     
     if (!in_tiles) {           //no esta dentro del tablero board_overflow
         m.setScore(BOARD_OVERFLOW);
-        crosswords += m ;
     }
     
     else if (occupied) {    //empieza en posicion ocupada --> not_free
@@ -318,16 +287,6 @@ Movelist Tiles:: findCrosswords(Move &m, const Language &l) const {
         crosswords += m ;
     }
     
-    //else if (crosswords.size()==0) {     //==0  -- no se cruza con ninguna otra --> missing crosswords
-    //    m.setScore(MISSING_CROSSWORDS);
-    //    crosswords.clear();
-    //    crosswords += m;
-    //} 
-        
-    else if (crosswords.size()==0) 
-        crosswords += m;
-    
-    //cerr << crosswords << " " << crosswords.getScore() << endl ;
     return crosswords;
 }
 

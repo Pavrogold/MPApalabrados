@@ -1,5 +1,5 @@
 
-%%%CALL -l ES -r 100 -p data/ES_100_ERROR.data -w 1 -h 15 
+%%%CALL  -open data/EN_2020_0_DATAERROR.match
 %%%VALGRIND
 %%%OUTPUT
-Data error in file data/ES_100_ERROR.data
+Data error in file data/EN_2020_0_DATAERROR.match
