@@ -93,7 +93,7 @@ std::ostream& operator<<(std::ostream& os, const Tiles &t) {
         
         for (int i=0; i<t.getHeight(); i++){
             for (int j=0; j<t.getWidth(); j++)
-                os << t.get(i,j) << " ";
+                os << toUTF(t.get(i,j)) << " ";
             os << endl ;
         }
     }
@@ -258,10 +258,11 @@ Movelist Tiles:: findCrosswords(Move &m, const Language &l) const {
         if (get(r-1, c-1) == '.') {
             i++;
             find_mov = aux.findMaxWord (r, c, true);
-        }
-        if (find_mov.getLetters().size()>1) {
-            find_mov.findScore(l);      //@warning
-            crosswords += find_mov ;
+        
+            if (find_mov.getLetters().size()>1) {
+                find_mov.findScore(l);      //@warning
+                crosswords += find_mov ;
+            }
         }
         r++;
     }
@@ -269,11 +270,13 @@ Movelist Tiles:: findCrosswords(Move &m, const Language &l) const {
     
     //cruces verticales
     for (int i=0; i<n_v && in_tiles; i++) {
-        if (get(r-1, c-1) == '.')   //@warning
+        if (get(r-1, c-1) == '.'){   //@warning
             find_mov = aux.findMaxWord (r, c, false);
-        if (find_mov.getLetters().size()>1) {
-            find_mov.findScore(l);      
-            crosswords += find_mov ;
+        
+            if (find_mov.getLetters().size()>1) {
+                find_mov.findScore(l);      
+                crosswords += find_mov ;
+            }
         }
         c++;
     }
