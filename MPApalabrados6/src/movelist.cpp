@@ -175,9 +175,6 @@ bool Movelist:: repeat_word (const Move &m) {
     return same ;
 }
  
-
-
-
 std::istream &operator>>(std:: istream &is, Movelist &i) { 
     Move move ;
     bool end = false ;

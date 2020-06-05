@@ -1,1 +1,0 @@
-Test #2 [tests//DATA_ERROR.test] valgrind --leak-check=full  dist/Debug/GNU-Linux/mpapalabrados6   -open data/EN_2020_0_DATAERROR.match

@@ -69,7 +69,7 @@ void Tiles::set(int r, int c, char l){
     cell[r][c] = l;
 }
 
-void Tiles::add(const Move& m){
+Tiles& Tiles:: operator+=(const Move &m) {
     string s = m.getLetters();
     bool h = m.isHorizontal();
     int r = m.getRow();
@@ -77,15 +77,14 @@ void Tiles::add(const Move& m){
     
     //si no cabe -> se añade el string cortado 
     for (int i=0; i<s.length() && r<=rows && c<=columns ; i++){
-        //if (get(r-1, c-1) == '.')
         set(r-1, c-1, s[i]);
-        //else
-            //i--;
         if (h)
             c++;
         else
             r++;
     }
+    
+    return *this;
 }
 
 std::ostream& operator<<(std::ostream& os, const Tiles &t) {
@@ -203,7 +202,6 @@ Move Tiles::findMaxWord(int r, int c, bool hrz) const {
     string word;
     char l='v';
     int row=r, col=c ;
-    bool found ;
     
     if (hrz)
         l='h';
@@ -219,7 +217,7 @@ Move Tiles::findMaxWord(int r, int c, bool hrz) const {
 }
 
 //m no constante
-Movelist Tiles:: findCrosswords(Move &m, const Language &l) const {
+Movelist Tiles:: findCrosswords( Move &m, const Language &l) const {
     
     Tiles aux (*this);
     Movelist crosswords;        

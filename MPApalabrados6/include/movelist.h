@@ -200,7 +200,7 @@ public:
      * @param m The class to be inserted in the stream
      * @return The output stream (cout)
      */
-    std::ostream & operator<<(std::ostream & os, const Movelist &i);
+    //std::ostream & operator<<(std::ostream & os, const Movelist &i);
 
     /**
      * @brief Overload of the extraction operator
@@ -208,7 +208,7 @@ public:
      * @param m The class to be extracted from the stream
      * @return The input stream (cin)
      */
-    std::istream & operator>>(std:: istream & is, Movelist & i);
+    //std::istream & operator>>(std:: istream & is, Movelist & i);
     
 
 #endif

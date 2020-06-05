@@ -46,8 +46,12 @@ bool Player:: isValid(const std::string &s) const {
     return valid ;
 }
 
-bool Player:: extract(const std::string &s)
-{
+Player& Player:: operator -= (const std::string &s) { 
+    this->extract(s);
+    return *this;
+}
+
+bool Player:: extract(const std::string &s) {
     bool valid=true;
     char *ptr ;
     char final[MAXPLAYER+1];
@@ -68,18 +72,6 @@ bool Player:: extract(const std::string &s)
         sortCString(letters);
     }
     return valid;
-    
-    /* bool valid = isValid (s), encontrado ;
-    
-    for ( int i=0 ; i<s.size() && valid ; i++ ) {
-        encontrado = false ;
-        for (int j = 0 ; letters[j] != '\0' && !encontrado ; j++ )
-            if ( s[i] == letters[j] ) {
-                encontrado = true ;
-                removeCString(letters, j) ;
-            }
-    }
-    return valid ; */
 }
 
 void Player:: add(const string frombag){

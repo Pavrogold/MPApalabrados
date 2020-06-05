@@ -100,34 +100,11 @@ public:
      * @param l Letter to be set at that position
      */
     void set(int r, int c, char l);
-
-
-    /**
-     * @brief Add a movement to the matrix. It does not take into account
-     * whether the movement is a valid one, but it might produce an exception if
-     * the limits of the matrix are exceeded, as long as the methods set() and get() 
-     * are exclusively used to access the matrix.
-     * @param m The movement to be added
-     * @warning Please use only the methods set() and get() above to access to the matrix
-     */
-    void add(const Move&m);
     
     /**
-     * @brief Auxiliar function: determina si las coordenadas del movimiento estan dentro del tablero
+     * @brief Auxiliar: determina si las coordenadas del movimiento estan dentro del tablero
      */
     bool inside (const Move &m) const ;
-    
-    /**
-     * @brief Prints the matrix in an ostream
-     * @param os Output stream (cout)
-     */
-    void print(std::ostream &os) const;
-    
-    /**
-     * @brief Reads the matrix from an istream
-     * @param is Intput stream (cin)
-     */
-    bool read(std::istream &is);
     
     /**
 	 * @brief  Given a move, it computes all the crosswords with the existing letters
@@ -144,9 +121,29 @@ public:
 	 */
     Movelist findCrosswords(Move &m, const Language &l) const;
     
-    //input-output operators
+    
+    //Operators
+    /**
+     * @brief Prints the matrix in an ostream
+     * @param os Output stream (cout)
+     */
     friend std::ostream& operator<<(std::ostream& os, const Tiles &t);
+    
+    /**
+     * @brief Reads the matrix from an istream
+     * @param is Intput stream (cin)
+     */
     friend std::istream& operator>>(std::istream& is, Tiles &t);
+    
+    /**
+     * @brief Add a movement to the matrix. It does not take into account
+     * whether the movement is a valid one, but it might produce an exception if
+     * the limits of the matrix are exceeded, as long as the methods set() and get() 
+     * are exclusively used to access the matrix.
+     * @param m The movement to be added
+     * @warning Please use only the methods set() and get() above to access to the matrix
+     */
+    Tiles & operator+=(const Move &m);
     
 private:
     char ** cell; /// Dynamic 2D Matrix. Choosing another implementation is up to the student
@@ -160,12 +157,10 @@ private:
      */
     void allocate(int r, int c);
     
-    
     /**
      * @brief Frees the memory 
      */
     void deallocate();
-    
     
     /**
      * @brief Copy data from another object
@@ -190,20 +185,12 @@ private:
      */
     Move findMaxWord(int r, int c, bool hrz) const;	
     
+    //Métodos auxiliares
     void moveBack (int &r, int &c, bool hrz) const ;
     void moveForward (int r, int c, bool hrz, std::string &word) const ;
 
 };
 
-std::ostream& operator<<(std::ostream& os, const Tiles &t);
-std::istream& operator>>(std::istream& is, Tiles &t);
-
-
-    /**
-     * @brief Reads the matrix from an istream
-     * @param is Intput stream (cin)
-     */
-    bool read(std::istream &is);
 
 #endif /* TILES_H */
 

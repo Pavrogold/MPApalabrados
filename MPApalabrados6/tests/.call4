@@ -1,1 +1,0 @@
-Test #4 [tests//EN_2020_0.test] valgrind --leak-check=full  dist/Debug/GNU-Linux/mpapalabrados6   -w 7 -l en -r 2020 -h 7 -b TUARXRBISIIEOCEVTTEPMOEASIIOTVDONDNRLNRZTUIRLEAIORAAGTIUEFHECAEAAMNAGDGYEHLIEJBSOWDWNQSPULEFOYEKNO < data/empty.data 
