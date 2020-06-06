@@ -47,7 +47,7 @@ void errorBreak(int errorcode, const string & errorinfo);
  * @brief Lee argumentos dados. Llama a errorBreak en caso de que el formato introducido no coincida con el requerido.
  */
 void checkArguments (int nargs, char *arguments[], Game &game, string &ifilename, string &ofilename, string &lang, string &bag, 
-                     int &h, int &w, int &random, bool &res, bool &save) ;
+                     int &h, int &w, int &random, bool &load, bool &save) ;
 
 
 /**
@@ -59,13 +59,13 @@ void processArguments (Game &game, const string &lang, const string &bag, int h,
 /**
  * @brief Rellena game, a partir de un fichero .match o desde los argumentos (con processArguments), según lo indicado.
  */
-void setGame (Game &game, ifstream &ifile, const string &ifilename, istream *input, const string &lang, const string &bag, 
-               int h, int w, int random, bool load) ;
+void setGame (Game &game, ifstream &ifile, istream *input, const string &ifilename, const string &lang, const string &bag, 
+              int h, int w, int random, bool load) ;
 
-void setOutput (Game &game, bool save, ofstream &ofile, ostream *os, const string &ofilename) ;
  
 /**
- * @brief Evalua si el moviento introducido cumple las siguientes reglas: 
+ * @brief Evalua si el moviento introducido cumple las siguientes reglas: (en caso contrario devuelve su respectivo código de error)
+ *   >> Las letras están en player
  *   >> Está dentro del tablero (tanto el comienzo como el final de la palabra obtenida)
  *   >> Comienza en una posicion vacía 
  *   >> La(s) palabra(s) obtenida(s) esta(n) en diccionario 
@@ -99,7 +99,7 @@ int main(int nargs, char * args[]) {
     
     
     // Load data from file, if asked to in arguments, or set game from arguments
-    setGame (game, ifile, ifilematch, input, lang, bag, h, w, random, load) ;
+    setGame (game, ifile, input, ifilematch, lang, bag, h, w, random, load) ;
     
     
     // Set output file (save game), if asked to in arguments
@@ -137,6 +137,7 @@ int main(int nargs, char * args[]) {
 
             if (error != 0) {                       //move en player, todo crossword en diccionario, dentro del tablero y en posiciones válidas
                 game.rejectedmovements += move;
+                game.crosswords += move;
                 game.doBadCrosswords(errorManagement(error));
             }
             
@@ -164,12 +165,11 @@ int main(int nargs, char * args[]) {
 
 //Methods:
 void checkArguments (int nargs, char *arguments[], Game &game, string &ifilename, string &ofilename, string &lang, string &bag, 
-                     int &h, int &w, int &random, bool &res, bool &save) {
+                     int &h, int &w, int &random, bool &load, bool &save) {
     
     string s;
     
     if (nargs<3 || nargs>13 || nargs%2==0) {
-        cerr << endl << "numer" << endl ;
         game.~Game();                           
         errorBreak (ERROR_ARGUMENTS, "") ;
     }
@@ -180,15 +180,14 @@ void checkArguments (int nargs, char *arguments[], Game &game, string &ifilename
         
         if (s=="-open") {
             
-            if ( h != -1 || w != -1 || random != -1 || lang != "" || bag != "") {   // se ha leido -r, -h, -w (...) antes --> no compatible con el formato requerido de los argumentos
-                cerr << endl << "ERROR 1" << endl ;
+            if ( h != -1 || w != -1 || random != -1 || lang != "" || bag != "") {   // se ha leido -r, -h, -w (...) antes --> no compatible con el formato requerido de los argumento
                 game.~Game();
                 errorBreak (ERROR_ARGUMENTS, "") ;
             }
             
-            res=true;
+            load=true;
             ifilename = arguments[i++];
-            
+            //Comprueba formato
             //int len=ifilename.size();
             //string file_format=ifilename.substr(len-FORMAT.size(), FORMAT.size());
             //if ( file_format != FORMAT ) {
@@ -198,28 +197,26 @@ void checkArguments (int nargs, char *arguments[], Game &game, string &ifilename
             //}
         } 
         
-        else if (s=="-l" && !res) 
+        else if (s=="-l" && !load) 
             lang=arguments[i++] ;
         
-        else if (s=="-w" && !res) {
+        else if (s=="-w" && !load) {
             if (!isdigit(*arguments[i])) { 
-                cerr << endl << "dig w" << endl ;
                 game.~Game();
                 errorBreak (ERROR_ARGUMENTS, "") ; 
             }
             w = atoi(arguments[i++]);
         }
     
-        else if (s=="-h" && !res) {
+        else if (s=="-h" && !load) {
             if (!isdigit(*arguments[i])) {
-                cerr << endl << "dig h" << endl ;
                 game.~Game();
                 errorBreak (ERROR_ARGUMENTS, "") ;
             }
             h = atoi(arguments[i++]);
         }
         
-        else if (s=="-r" && !res) {
+        else if (s=="-r" && !load) {
             if (!isdigit(*arguments[i])) {
                 game.~Game();
                 errorBreak (ERROR_ARGUMENTS, "") ; 
@@ -229,7 +226,6 @@ void checkArguments (int nargs, char *arguments[], Game &game, string &ifilename
     
         else if (s=="-save") {
             ofilename = arguments[i++];
-            
             //Comprueba formato
             //int len=ofilename.size();
             //string file_format=ofilename.substr(len-FORMAT.size(), FORMAT.size());
@@ -240,11 +236,10 @@ void checkArguments (int nargs, char *arguments[], Game &game, string &ifilename
             //}
         }
         
-        else if (s=="-b" && !res)
+        else if (s=="-b" && !load)
             bag = arguments[i++] ;
         
         else {
-            cerr << endl << "error else" << endl ;
             game.~Game();
             errorBreak (ERROR_ARGUMENTS, "") ;
         }  
@@ -281,7 +276,7 @@ void processArguments (Game &game, const string &lang, const string &bag, int h,
 }
 
 
-void setGame (Game &game, ifstream &ifile, const string &ifilename,  istream *input, const string &lang, const string &bag, 
+void setGame (Game &game, ifstream &ifile, istream *input, const string &ifilename, const string &lang, const string &bag, 
                int h, int w, int random, bool load) {
     if (load) {
         ifile.open(ifilename.c_str());
@@ -311,23 +306,27 @@ void evaluateMove (Game &game, Move &m, int &error_code)  {
     
     if (game.player.isValid(word)) {
         game.crosswords = game.tiles.findCrosswords(m,game.language);
-        game.showCrosswords();
+        game.showCrosswords(); 
         
         cross_size =  game.crosswords.size();
-        if (cross_size==0)                                                //fuera de tablero
+        
+        if (cross_size==0)                                                    //fuera de tablero
             error_code = BOARD_OVERFLOW;
         
-        else if (game.acceptedmovements.size()>0 && cross_size==1          //no hay cruces 
-                 && game.crosswords.get(0).getLetters().size()==word.size())         
-            error_code = MISSING_CROSSWORDS ;
-        
-        else
-            for (int i = 0; i<cross_size && error_code==0; i++)          //no esta en diccionario 
-                if (game.crosswords.get(i).findScore(game.language) == NONEXISTENT_WORD)
-                    error_code = NONEXISTENT_WORD;
-    }        
-    else 
+        else if (game.acceptedmovements.size()>0 && cross_size==1)             
+            if (game.crosswords.get(0).getScore()==NOT_FREE)                  //posicion de inicio ocupada
+                error_code = NOT_FREE; 
+            else if (game.crosswords.get(0).getLetters().size()==word.size())  //no hay cruces
+                error_code = MISSING_CROSSWORDS ; 
+         
+        for (int i=0; i<cross_size && error_code==0; i++)                     //al menos una palabra no esta en diccionario 
+            if (game.crosswords.get(i).getScore() == NONEXISTENT_WORD) 
+                error_code = NONEXISTENT_WORD;
+    }
+    else {
         error_code=INFEASIBLE_WORD;
+        game.crosswords += m;
+    }
 }
 
 
@@ -343,7 +342,7 @@ ostream & operator<<(ostream & os, const Game &game)  {
 
 
 istream & operator>>(istream &is, Game &game) {
-    string key, player, bag, l;
+    string key, player, bag, lang;
     int score, h, w, size=-1 ;
     Move move;
     
@@ -354,13 +353,16 @@ istream & operator>>(istream &is, Game &game) {
     is >> score ;  
     game.score = score;
     
-    is >> l ;
-    game.language.setLanguage(l) ;
+    is >> lang ;
+    game.language.setLanguage(lang) ;
     
     is >> h >> w ;
     game.tiles.setSize(h, w);
        
-    is >> game.tiles ;
+    if (is.eof())
+        game.score = ERROR_DATA ;
+    else
+        is >> game.tiles ;
          
     is >> size;         //player size
     is >> player ;
@@ -380,10 +382,10 @@ istream & operator>>(istream &is, Game &game) {
       
     
     //Algunos de los test finalizan con 0 0 (indicando que la lista de aceptados y rechazados guardados está vacía), y otros (EN_2020_0.match)
-    //acaban directamente --> no saltará error data por coherencia con los test
+    //acaban directamente --> no saltará error_data por coherencia con los test
     if (!is.eof()) {
         is >> size;     //accepted size
-        for (int i=0; i < size && !is.eof(); i++)
+        for (int i=0; i<size && !is.eof(); i++)
             if (!is.eof()) {
                 is >> move;
                 game.acceptedmovements += move;

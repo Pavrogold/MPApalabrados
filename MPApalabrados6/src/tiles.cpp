@@ -268,7 +268,6 @@ Movelist Tiles:: findCrosswords(const Move &m, const Language &l) const {
             //cruces horizontales
             for (int i=0; i<n_h; r++) 
                 if (get(r-1, c-1) == '.'){
-                    cerr << endl << i << endl ;
                     i++;
                     find_mov = aux.findMaxWord (r, c, true);
         
@@ -290,6 +289,7 @@ Movelist Tiles:: findCrosswords(const Move &m, const Language &l) const {
                         crosswords += find_mov ;
                     }
                 }
+
         }
         else {      //not free
             find_mov.setScore(NOT_FREE);
