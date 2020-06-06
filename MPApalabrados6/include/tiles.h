@@ -119,7 +119,7 @@ public:
 	 * movement does not fit within the matrix, an empty list is returned
 	 * @warning Please use only the methods set() and get() above to access to the matrix
 	 */
-    Movelist findCrosswords(Move &m, const Language &l) const;
+    Movelist findCrosswords(const Move &m, const Language &l) const;
     
     
     //Operators
@@ -188,6 +188,7 @@ private:
     //Métodos auxiliares
     void moveBack (int &r, int &c, bool hrz) const ;
     void moveForward (int r, int c, bool hrz, std::string &word) const ;
+    void addCross (Move &m, bool horizontal, const Language &lang, int n, int r, int c) const ;
 
 };
 

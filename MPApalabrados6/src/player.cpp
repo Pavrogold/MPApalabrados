@@ -74,12 +74,9 @@ bool Player:: extract(const std::string &s) {
     return valid;
 }
 
-void Player:: add(const string frombag){
-    
+Player& Player:: operator += (const std::string &frombag) {
     int n = size() ;
-    
-    if ( frombag.length() <= MAXPLAYER-size() ) {     //If the set of additional letters is too large, it does nothing
-    
+    if (frombag.length() <= MAXPLAYER-size() ) {     //If the set of additional letters is too large, it does nothing
         for(int i=0; i<frombag.length() ; i++) {
             letters[n] = frombag[i];
             n++;
@@ -97,7 +94,6 @@ void Player:: add(const string frombag){
  * @return The cstring is modified
  * @warning To be fully implemented
  */
-
 void removeCString(char *cstr, int pos) {
     
     assert ( pos >= 0 && pos<strlen(cstr) ) ;

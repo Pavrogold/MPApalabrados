@@ -62,15 +62,6 @@ public:
 	 */
 	bool isValid(const std::string &s) const; 
         
-        
-	/**
-	 * @brief Adds a set of additional letters to the existing letters whenever there
-	 * is room for them. If the set of additional letters is too large, it does nothing
-	 * @param frombag Set of letters to add
-	 */
-	void add(std::string frombag);
-        
-        
         /**
 	 * @brief Remove the set of letters of the movement, including possible repetitions, from the set of stored letters
 	 * @param m The string that is to be removed
@@ -78,6 +69,15 @@ public:
 	 */
         bool extract(const std::string &s) ;
         Player& operator -= (const std::string &s) ;
+        
+        Player& operator += (const std:: string &frombag) ;
+        
+        /**
+	 * @brief Adds a set of additional letters to the existing letters whenever there
+	 * is room for them. If the set of additional letters is too large, it does nothing
+	 * @param frombag Set of letters to add
+	 */
+        
 };
 
 #endif /* PLAYER_H */

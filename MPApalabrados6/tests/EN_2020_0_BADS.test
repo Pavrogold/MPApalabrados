@@ -1,5 +1,5 @@
-%%%CALL -open data/EN_2020_0.match -save data/out.match < data/EN_2020_0_47_BADS.data 
-%%%FROMFILE data/out.match
+%%%CALL -open data/EN_2020_0.match -save data/.out.match < data/EN_2020_0_47_BADS.data 
+%%%FROMFILE data/.out.match
 %%%VALGRIND
 %%%OUTPUT
 MPALABRADOS-V2

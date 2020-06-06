@@ -72,18 +72,16 @@ void Tiles::set(int r, int c, char l){
 Tiles& Tiles:: operator+=(const Move &m) {
     string s = m.getLetters();
     bool h = m.isHorizontal();
-    int r = m.getRow();
-    int c = m.getCol();
+    int r = m.getRow(), c = m.getCol();
     
-    //si no cabe -> se añade el string cortado 
-    for (int i=0; i<s.length() && r<=rows && c<=columns ; i++){
-        set(r-1, c-1, s[i]);
+    for (int i=0; i<s.length() && r<=rows && c<=columns; ){
+        if (get(r-1,c-1)=='.' || i==0) 
+            set(r-1, c-1, s[i++] );
         if (h)
             c++;
         else
             r++;
     }
-    
     return *this;
 }
 
@@ -154,12 +152,27 @@ void Tiles::copy (const Tiles &t) {
 }
 
 bool Tiles:: inside (const Move &m) const {
-    int r = m.getRow(), c = m.getCol(), size = m.getLetters().size()-1;
+    int r = m.getRow(), c = m.getCol(), word_size = m.getLetters().size(), n=0, p=0 ;
     
-    if (m.isHorizontal())
-        c += size;
-    else
-        r +=size ;
+    while (r<=rows && c<=columns) {
+        if (get(r-1, c-1) != '.') 
+            n++;            //letras encontradas
+        else 
+            p++;            //huecos encontrados (donde estarían las letras del mov)
+        
+        if (p==word_size)   //si se encuentran tantos huecos como letras tiene el mov, la palabra cabe y se sale del bucle
+            break;
+        
+        if (m.isHorizontal()) 
+            c++;
+        else 
+            r++;
+    }
+    
+    if (m.isHorizontal()) 
+            c = m.getCol() + n + word_size-1;    //columna final del mov
+    else 
+            r = m.getRow() + n + word_size-1;    //fila final del mov
     
     return (r<=rows && c<=columns);
 }
@@ -216,78 +229,72 @@ Move Tiles::findMaxWord(int r, int c, bool hrz) const {
     return mov ;
 }
 
+void Tiles:: addCross (Move &m, bool horizontal, const Language &lang, int n, int r, int c) const {
+    for (int i=0; i<n ; ) {
+        if (get(r-1, c-1) == '.') {
+            i++;
+            m = findMaxWord (r, c, true);
+                
+            if (m.getLetters().size()>1) 
+                m.findScore(lang);
+        }
+        if (horizontal)
+            r++;
+        else
+            c++;
+    }
+}
+
 //m no constante
-Movelist Tiles:: findCrosswords( Move &m, const Language &l) const {
-    
+Movelist Tiles:: findCrosswords(const Move &m, const Language &l) const {
     Tiles aux (*this);
     Movelist crosswords;        
     Move find_mov ;
     int r = m.getRow(), c=m.getCol(), n_h=1, n_v=1 ;    
-    bool hor = m.isHorizontal(), in_tiles = inside(m), occupied=false;
+    bool hor = m.isHorizontal(), in_tiles = inside(m),occupied=false ;
     
-    if (in_tiles) {
-        if (get (r-1,c-1)!='.')
-            occupied=true;
-        else {
-            int row=r, col=c;
-            for (int i=0; i<m.getLetters().size() && row<=rows && col<=columns;) {
-                if (get(row-1,col-1)=='.') {
-                    aux.set(row-1, col-1, m.getLetters()[i++] );
-                }
-                if (hor)
-                    col++;
-                else
-                    row++;
-            }
-            if (row>rows+1 || col>columns+1)
-                in_tiles=false;
-        }
-    }
     
-    r=m.getRow() ; c=m.getCol();
-    
+    //numero posibles cruces verticales y horizontaes
     if (hor) 
         n_v = m.getLetters().size();
     else
         n_h = m.getLetters().size();
     
-    //cruces horizontales
-    for (int i=0; i<n_h && in_tiles; ) {
-        if (get(r-1, c-1) == '.') {
-            i++;
-            find_mov = aux.findMaxWord (r, c, true);
+    
+    if (in_tiles) {                 //dentro de tablero
+        if (get (r-1, c-1)=='.') {  //pos no ocupada
+            aux += m;
+            
+            //cruces horizontales
+            for (int i=0; i<n_h; r++) 
+                if (get(r-1, c-1) == '.'){
+                    cerr << endl << i << endl ;
+                    i++;
+                    find_mov = aux.findMaxWord (r, c, true);
         
-            if (find_mov.getLetters().size()>1) {
-                find_mov.findScore(l);      //@warning
-                crosswords += find_mov ;
-            }
-        }
-        r++;
-    }
-    r=m.getRow();
+                    if (find_mov.getLetters().size()>1) {
+                        find_mov.findScore(l);      
+                        crosswords += find_mov ;
+                    }
+                }
+            r=m.getRow();
     
-    //cruces verticales
-    for (int i=0; i<n_v && in_tiles; i++) {
-        if (get(r-1, c-1) == '.'){   //@warning
-            find_mov = aux.findMaxWord (r, c, false);
+            //cruces verticales
+            for (int i=0; i<n_v; c++) 
+                if (get(r-1, c-1) == '.'){  
+                    i++,
+                    find_mov = aux.findMaxWord (r, c, false);
         
-            if (find_mov.getLetters().size()>1) {
-                find_mov.findScore(l);      
-                crosswords += find_mov ;
-            }
+                    if (find_mov.getLetters().size()>1) {
+                        find_mov.findScore(l);      
+                        crosswords += find_mov ;
+                    }
+                }
         }
-        c++;
+        else {      //not free
+            find_mov.setScore(NOT_FREE);
+            crosswords += find_mov ;
+        }
     }
-    
-    if (!in_tiles) {           //no esta dentro del tablero board_overflow
-        m.setScore(BOARD_OVERFLOW);
-    }
-    
-    else if (occupied) {    //empieza en posicion ocupada --> not_free
-        m.setScore(NOT_FREE);
-        crosswords += m ;
-    }
-    
     return crosswords;
 }
-

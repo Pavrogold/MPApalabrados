@@ -53,16 +53,24 @@ void checkArguments (int nargs, char *arguments[], Game &game, string &ifilename
 /**
  * @brief Configura game a partir de los argumentos dados por el usuario.
  */
-void setGame (Game &game, string &lang, string &bag, int h, int w, int random);
+void processArguments (Game &game, const string &lang, const string &bag, int h, int w, int random);
 
 
+/**
+ * @brief Rellena game, a partir de un fichero .match o desde los argumentos (con processArguments), según lo indicado.
+ */
+void setGame (Game &game, ifstream &ifile, const string &ifilename, istream *input, const string &lang, const string &bag, 
+               int h, int w, int random, bool load) ;
+
+void setOutput (Game &game, bool save, ofstream &ofile, ostream *os, const string &ofilename) ;
+ 
 /**
  * @brief Evalua si el moviento introducido cumple las siguientes reglas: 
  *   >> Está dentro del tablero (tanto el comienzo como el final de la palabra obtenida)
  *   >> Comienza en una posicion vacía 
  *   >> La(s) palabra(s) obtenida(s) esta(n) en diccionario 
  */
-void evaluateMove (Game &game, Move &m, Player &player, int &error_code) ;
+void evaluateMove (Game &game, Move &m, int &error_code) ;
 
 string errorManagement(int errorcode) ;
 
@@ -90,26 +98,8 @@ int main(int nargs, char * args[]) {
     checkArguments (nargs, args, game, ifilematch, ofilematch, lang, bag, h, w, random, load, save) ;
     
     
-    // Load data from file, if asked to in arguments
-    if (load) {
-        ifile.open(ifilematch.c_str());
-        if (!ifile) {
-            game.~Game();
-            errorBreak (ERROR_OPEN, ifilematch) ; 
-        }
-        input=&ifile;
-            
-        *input >> game;
-        if (game.score == ERROR_DATA) {
-            game.~Game();
-            errorBreak (ERROR_DATA, ifilematch) ;
-        }
-        
-        input=nullptr;
-        ifile.close();
-    } 
-    else    // Set game from arguments
-        setGame (game, lang, bag, h, w, random);
+    // Load data from file, if asked to in arguments, or set game from arguments
+    setGame (game, ifile, ifilematch, input, lang, bag, h, w, random, load) ;
     
     
     // Set output file (save game), if asked to in arguments
@@ -117,14 +107,13 @@ int main(int nargs, char * args[]) {
         ofile.open(ofilematch.c_str());
         if (!ofile) {
             game.~Game();
-            errorBreak (ERROR_OPEN, ifilematch) ; //
+            errorBreak (ERROR_OPEN, ofilematch) ; 
         }
         output=&ofile;
     }
-    
 
-    // Game's main loop.
     
+    // Game's main loop.
     // 1) Set the size of the window according to the size (rows & columns) of the new Tiles
     game.setWindowSize();
     
@@ -132,7 +121,7 @@ int main(int nargs, char * args[]) {
         
 	// 2) Given the inner data members, it pretty-prints the screen
         error=0 ;
-        game.player.add(game.bag.extract(7-game.player.size())); 
+        game.player += game.bag.extract(7-game.player.size()); 
         game.doPaint();
         
         // 3) Reads the movement from cin
@@ -144,29 +133,26 @@ int main(int nargs, char * args[]) {
             end=true;
         
         else {   
-            evaluateMove(game, move, game.player, error);
+            evaluateMove(game, move, error);
 
-            if (error!=0) {                       //move en plater, todo crossword está en diccionario, dentro del tablero y en posiciones válidas
+            if (error != 0) {                       //move en player, todo crossword en diccionario, dentro del tablero y en posiciones válidas
                 game.rejectedmovements += move;
                 game.doBadCrosswords(errorManagement(error));
             }
             
             else if (game.doConfirmCrosswords("Confirm movement?")) {
                 game.player -= word;
-                        
-                for (int i=0; i<game.crosswords.size(); i++)
-                    game.tiles += game.crosswords.get(i) ;
-                        
-                game.score += game.crosswords.getScore();
+                game.tiles += move;
                 game.acceptedmovements += move ;
+                game.score += game.crosswords.getScore();
             }    
         }  
     }
     
-    // End of game
-    // Save file or print screen
+    
+    // End of game. Save file or print screen
     if (output == &cout) 
-        *output << endl << "%%%OUTPUT" << endl;     //test
+        *output << endl << "%%%OUTPUT" << endl;     //test!
     else
         *output << PASSWORD2 << endl ;
         
@@ -175,6 +161,8 @@ int main(int nargs, char * args[]) {
     return 0;
 }
 
+
+//Methods:
 void checkArguments (int nargs, char *arguments[], Game &game, string &ifilename, string &ofilename, string &lang, string &bag, 
                      int &h, int &w, int &random, bool &res, bool &save) {
     
@@ -267,7 +255,7 @@ void checkArguments (int nargs, char *arguments[], Game &game, string &ifilename
 }
 
 
-void setGame (Game &game, string &lang, string &bag, int h, int w, int random) {
+void processArguments (Game &game, const string &lang, const string &bag, int h, int w, int random) {
     
     if (lang == "") {
         game.~Game();
@@ -293,32 +281,53 @@ void setGame (Game &game, string &lang, string &bag, int h, int w, int random) {
 }
 
 
+void setGame (Game &game, ifstream &ifile, const string &ifilename,  istream *input, const string &lang, const string &bag, 
+               int h, int w, int random, bool load) {
+    if (load) {
+        ifile.open(ifilename.c_str());
+        if (!ifile) {
+            game.~Game();
+            errorBreak (ERROR_OPEN, ifilename) ; 
+        }
+        input=&ifile;
+            
+        *input >> game;
+        if (game.score == ERROR_DATA) {
+            game.~Game();
+            errorBreak (ERROR_DATA, ifilename) ;
+        }
+        
+        input=nullptr;
+        ifile.close();
+    } 
+    else    // Set game from arguments
+        processArguments (game, lang, bag, h, w, random);
+}
 
-void evaluateMove (Game &game, Move &m, Player &player, int &error_code)  {
-    bool valid=true ;
+
+void evaluateMove (Game &game, Move &m, int &error_code)  {
+    int cross_size;
     string word=m.getLetters();
     
-    if (player.isValid(word)) {
-        game.crosswords = game.tiles.findCrosswords(m,game.language);    
+    if (game.player.isValid(word)) {
+        game.crosswords = game.tiles.findCrosswords(m,game.language);
         game.showCrosswords();
+        
+        cross_size =  game.crosswords.size();
+        if (cross_size==0)                                                //fuera de tablero
+            error_code = BOARD_OVERFLOW;
+        
+        else if (game.acceptedmovements.size()>0 && cross_size==1          //no hay cruces 
+                 && game.crosswords.get(0).getLetters().size()==word.size())         
+            error_code = MISSING_CROSSWORDS ;
+        
+        else
+            for (int i = 0; i<cross_size && error_code==0; i++)          //no esta en diccionario 
+                if (game.crosswords.get(i).findScore(game.language) == NONEXISTENT_WORD)
+                    error_code = NONEXISTENT_WORD;
     }        
     else 
         error_code=INFEASIBLE_WORD;
-        
-    if (game.crosswords.size()==0) {                                                        //valid=false --> fuera de tablero
-        valid=false;
-        error_code = BOARD_OVERFLOW;
-    }
-    else if (game.acceptedmovements.size()>0 && game.crosswords.size()<1 && valid) {        //valid=false --> no hay cruces 
-        valid = false;
-        error_code = MISSING_CROSSWORDS ;
-    }
-    else
-        for (int i = 0; i<game.crosswords.size() && valid; i++) {
-            valid = game.crosswords.get(i).findScore(game.language) != NONEXISTENT_WORD ;   //valid=false --> no esta en diccionario
-            if (!valid)
-                error_code = NONEXISTENT_WORD;
-        } 
 }
 
 
@@ -332,7 +341,7 @@ ostream & operator<<(ostream & os, const Game &game)  {
     os << game.rejectedmovements.size() << endl << game.rejectedmovements << endl ;
 }
 
-//si cuando salidos de >>, game está vacio --> error data !!
+
 istream & operator>>(istream &is, Game &game) {
     string key, player, bag, l;
     int score, h, w, size=-1 ;
@@ -356,35 +365,38 @@ istream & operator>>(istream &is, Game &game) {
     is >> size;         //player size
     is >> player ;
     player = toISO(player);
-    if (is.eof() || player.size() != size )     
-        game.score = ERROR_DATA;
+    if (is.eof() || player.size() != size ) 
+        game.score = ERROR_DATA ;
     else
-        game.player.add(player);
+        game.player += player;
             
     is >> size;         // bag size
     is >> bag;
     bag = toISO(bag);
-    if (is.eof() || bag.size() != size ) {
+    if (is.eof() || bag.size() != size ) 
         game.score = ERROR_DATA;
-    }
-        
     else
         game.bag.set(bag);
-        
-    size=-1;
-    if (!is.eof())
-        is >> size;     //accepted size
-    for (int i=0; i < size; i++){
-        is >> move;
-        game.acceptedmovements += move;
-    }
+      
     
-    size=-1;
-    if (!is.eof())
+    //Algunos de los test finalizan con 0 0 (indicando que la lista de aceptados y rechazados guardados está vacía), y otros (EN_2020_0.match)
+    //acaban directamente --> no saltará error data por coherencia con los test
+    if (!is.eof()) {
+        is >> size;     //accepted size
+        for (int i=0; i < size && !is.eof(); i++)
+            if (!is.eof()) {
+                is >> move;
+                game.acceptedmovements += move;
+            } else game.score = ERROR_DATA; 
+    }
+
+    if (!is.eof()) {
         is >> size;     //rejected size
-    for (int i=0; i < size; i++){
-        is >> move;
-        game.rejectedmovements += move;
+        for (int i=0; i < size && !is.eof(); i++)
+            if (!is.eof()) {
+                is >> move;
+                game.rejectedmovements += move;
+            } else game.score = ERROR_DATA; 
     }
 }
 

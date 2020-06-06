@@ -187,6 +187,12 @@ public:
 	 */
 	Movelist & operator+=(const Move &mov);
 
+        /**
+         * @brief Overload of the insertion operator
+         * @param os Output stream (cout)
+         * @param m The class to be inserted in the stream
+         * @return The output stream (cout)
+         */
 	friend std::ostream & operator<<(std::ostream & os, const Movelist  &i);
 	friend std::istream & operator>>(std:: istream & is, Movelist  &i);
 
@@ -194,13 +200,7 @@ public:
 	
 };
 
-    /**
-     * @brief Overload of the insertion operator
-     * @param os Output stream (cout)
-     * @param m The class to be inserted in the stream
-     * @return The output stream (cout)
-     */
-    //std::ostream & operator<<(std::ostream & os, const Movelist &i);
+    
 
     /**
      * @brief Overload of the extraction operator
